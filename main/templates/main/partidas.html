@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Partidas - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Partidas - FFBVI{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja as partidas da FFBVI.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Partidas - FFBVI{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja as partidas da FFBVI.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja as partidas da FFBVI.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:partidas' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:partidas' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:partidas' %}{% endblock canonical %}
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center mt-3 g-2">
+        <div class="col-12 col-md-9">
+            <h1 class="display-1 text-center my-2">Partidas</h1>
+        </div>
+        <div class="col-12 col-md-9 list-group border border-secondary p-0">
+            {% for partida in partidas %}
+                <a href="{% url 'main:partida' partida.id %}" class="fs-6 list-group-item list-group-item-action list-group-item-light d-flex justify-content-between {% if partida == partida_proxima %}active" aria-current="true" {% else %}"{% endif %}>
+                    {{ partida.data }} às {{ partida.hora }}
+                    {% if partida == partida_proxima %}
+                        <span class="badge text-bg-success ms-2" style="width: 70px;">Aberta</span>
+                    {% elif partida.data|date:"Y-m-d" > now|date:"Y-m-d" and partida != partida_proxima %}
+                        <span class="badge text-bg-danger ms-2" style="width: 70px;">Fechada</span>
+                    {% elif partida.data|date:"Y-m-d" < now|date:"Y-m-d" %}
+                        <span class="badge text-bg-secondary ms-2" style="width: 70px;">Disputada</span>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>
+{% endblock content %}

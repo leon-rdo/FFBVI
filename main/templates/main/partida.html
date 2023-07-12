@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block title %}Partida - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Partida em {{ object.data }} às {{ object.hora }}{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja os detalhes desta partida!{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Partida{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja os detalhes desta partida!{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja os detalhes desta partida!{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:partida' object.id %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:partida' object.id %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:partida' object.id %}{% endblock canonical %}
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center mt-3 g-2">
+        <div class="col-12 col-md-10">
+            <h1 class="display-1 text-center my-2">Partida</h1>
+        </div>
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="col-12 col-md-10">
+            {% if now|date:"Y-m-d" < object.data|date:"Y-m-d" %}
+            <h2 class="display-6 text-center">Esta partida ocorrerá em {{ object.data }} às {{ object.hora }}</h2>
+                {% if object == partida_proxima %}
+                    {% if not pagamento_usuario %}
+                    <div class="w-100 d-flex justify-content-center mt-3">
+                        <a class="btn btn-success btn-lg" role="button" href="{% url 'main:pagamento' object.slug %}">Pagar Taxa</a>
+                    </div>
+                    {% else %}
+                    <form method="post" class="w-100 d-flex justify-content-center mt-3">
+                        {% csrf_token %}
+                        <button class="btn btn-lg btn-success" type="submit" name="confirmar_presenca">Confirmar Presença</button>
+                    </form>                    
+                    {% endif %}
+                {% else %}
+                <div class="w-100 d-flex justify-content-center mt-3">
+                    <button class="btn btn-secondary btn-lg" type="button" disabled>Partida Fechada</button>
+                </div>
+                {% endif %}
+            {% elif now|date:"Y-m-d" == object.data|date:"Y-m-d" %}
+            <h2 class="display-6 text-center">Esta partida ocorrerá hoje às {{ object.hora }}!</h2>
+            {% if not pagamento_usuario %}
+            <div class="w-100 d-flex justify-content-center mt-3">
+                <a class="btn btn-success btn-lg" role="button" href="{% url 'main:pagamento' object.slug %}">Pagar Taxa</a>
+            </div>
+            {% else %}
+            <form method="post" class="w-100 d-flex justify-content-center mt-3">
+                {% csrf_token %}
+                <button class="btn btn-lg btn-success" type="submit">Confirmar Presença</button>
+            </form>
+            {% endif %}
+        {% else %}
+            <h2 class="display-6 text-center">Esta partida ocorreu em {{ object.data }} às {{ object.hora }}</h2>
+        {% endif %}
+        </div>
+        {% if not object.sorteada %}
+        <div class="row justify-content-center align-items-top mt-4 g-2">
+            <div class="col-12 col-md-10 border border-secondary rounded-3 mt-3 p-2">
+                <ul class="list-group list-group-flush">
+                    <h3 class="text-seconadry text-center" id="timeVerdeTitle">Relacionados</h3>
+                    {% for jogador in object.relacionados.all %}
+                    <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
+                            class="badge rounded-pill text-bg-seconadry text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% if object.sorteada %}
+            <div class="col-12 col-md-4 p-2 time">
+                <ul class="list-group list-group-flush border border-success rounded-3">
+                    <h3 class="text-success text-center" id="timeVerdeTitle">Time Verde</h3>
+                    {% for jogador in object.time_verde.all %}
+                    <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
+                            class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-4 p-2 time">
+                <ul class="list-group list-group-flush border border-danger rounded-3">
+                    <h3 class="text-danger text-center" id="timeVermelhoTitle">Time Vermelho</h3>
+                    {% for jogador in object.time_vermelho.all %}
+                    <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-4 p-2 time">
+                <ul class="list-group list-group-flush border border-primary rounded-3">
+                    <h3 class="text-primary text-center text" id="timeAzulTitle">Time Azul</h3>
+                    {% for jogador in object.time_azul.all %}
+                    <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% if user in object.relacionados.all and now.date|date:'Y-m-d' >= dia_anterior|date:'Y-m-d' %}
+            <div class="col-12 d-flex justify-content-center mt-4">
+                <a class="btn btn-primary" role="button" href="{% url 'main:convidado_existente' object.slug %}">
+                    Adicionar Convidado
+                </a>
+            </div>
+            {% endif %}
+            <!--
+            <div class="col-12 d-flex justify-content-center align-items-center mt-4">
+                <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
+                    Enviar no WhatsApp<img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
+                </button>
+            </div>
+            -->
+        </div>
+        {% if now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %} <div
+            class="col-12 col-md-10 d-flex justify-content-evenly mt-5">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar"
+                aria-controls="offcanvasEditar">
+                Editar
+            </button>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEditar"
+                aria-labelledby="offcanvasEditarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasEditarLabel">Editar partida</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div>
+                        <form class="form-floating" method="post">
+                            {% csrf_token %}
+                            <div class="form-floating mb-3">
+                                {{ form.data }}
+                                {{ form.data.label_tag }}
+                            </div>
+                            <div class="form-floating mb-3">
+                                {{ form.hora }}
+                                {{ form.hora.label_tag }}
+                            </div>
+                            <button class="btn btn-success" type="submit">Salvar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <a class="btn btn-success" href="{% url 'main:pagamentos' object.slug %}">
+                Pagamentos &#128176;
+            </a>
+
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#excluir">
+                Excluir
+            </button>
+
+            <div class="modal fade" id="excluir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="excluirLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="excluirLabel">Realmente excluir esta partida?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Esta ação não é reversível.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form action="{% url 'main:excluir_partida' object.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Sim, desejo excluir.</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock content %}
+
+{% block more_script %}
+<!--
+<script>
+    function shareOnWhatsApp() {
+        var timeVerde = '{% for jogador in object.time_verde.all %}- {{ jogador.nome_jogador}}\n{% endfor %}';
+        var timeVermelho = '{% for jogador in object.time_vermelho.all %}- {{ jogador.nome_jogador}}\n{% endfor %}';
+        var timeAzul = '{% for jogador in object.time_azul.all %}- {{ jogador.nome_jogador}}\n{% endfor %}';
+
+        var shareText = 'Escalação dos times:\n\n' + 'Time Verde:\n' + timeVerde + '\n\n' + 'Time Vermelho:\n' + timeVermelho + '\n\n' + 'Time Azul:\n' + timeAzul + '\n\n';
+
+        var whatsappUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText);
+        window.open(whatsappUrl, '_blank');
+    }
+</script>
+-->
+{% endblock more_script %}

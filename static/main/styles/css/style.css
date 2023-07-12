@@ -1,0 +1,113 @@
+.display-1,
+.display-3,
+.display-4 {
+  color: #012070;
+}
+
+.card {
+  transition: all 0.5s ease-out;
+}
+
+.cols-cards:hover .card {
+  transform: scale(1.2);
+}
+.cols-cards:hover .card .img-1 {
+  display: none;
+}
+
+.card-animation {
+  transform: scale(1.2);
+}
+
+#img-1 {
+  opacity: 1;
+}
+
+.cols-cards {
+  max-width: 300px;
+  max-height: 400px;
+}
+
+.carousel-federados {
+  overflow: hidden;
+}
+.carousel-federados .carousel-inner {
+  overflow: visible;
+}
+.carousel-federados button {
+  z-index: 999;
+}
+
+.card-body {
+  z-index: 3;
+  bottom: 12px;
+  left: 25px;
+}
+
+.moldura {
+  z-index: 2;
+  background-size: cover;
+  opacity: 1;
+}
+
+.row-federados {
+  overflow-x: scroll;
+}
+
+.patrocinador figure img {
+  width: 60px;
+  transition: all 0.2s ease-out;
+}
+.patrocinador figure img:hover {
+  transform: translateY(-10px);
+  border: 1px blue solid;
+}
+.patrocinador figure figcaption {
+  width: 76px;
+  /* ou qualquer outra largura desejada */
+  overflow-wrap: break-word;
+  /* ou */
+  word-wrap: break-word;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #012070;
+  width: 6px;
+  height: 6px;
+}
+
+@media (max-width: 370px) {
+  .badge {
+    display: none;
+  }
+}
+.box-money-mouth-face {
+  position: absolute;
+  top: 50%;
+  right: 20%;
+  will-change: transform;
+  animation: move-emoji 10s infinite linear both alternate;
+}
+
+.box-money-mouth-face img {
+  width: 100px;
+  animation: rotate-emoji 100s infinite linear both alternate;
+}
+
+@keyframes rotate-emoji {
+  100% {
+    -webkit-transform: rotate(-720deg);
+    transform: rotate(-720deg);
+  }
+}
+@keyframes move-emoji {
+  100% {
+    -webkit-transform: translate(-200px, -100px);
+    transform: translate(-100px, -100px);
+  }
+}

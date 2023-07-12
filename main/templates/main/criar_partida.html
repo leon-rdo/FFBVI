@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Mudar Senha - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Criar Partida{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Crie uma nova partida.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Criar Partida{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Crie uma nova partida.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Crie uma nova partida.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:criar_partida' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:criar_partida' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:criar_partida' %}{% endblock canonical %}
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center align-items-center mt-3 g-2">
+        <div class="col-12 col-md-8 col-lg-5 mt-md-5">
+            <h2>Atualize seus dados:</h2>
+
+            {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <form method="post" class="mb-2">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-floating mb-3">
+                    {{ field }}
+                    {{ field.label_tag }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success w-100" id="salvar_senha" >Criar</button>
+            </form>
+        </div>
+            
+    </div>
+</div>
+{% endblock content %}

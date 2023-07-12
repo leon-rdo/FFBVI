@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Adicionar Convidado{% endblock title %}
+{% block meta_titulo_og %}Adicionar Convidado Existente  à Partida{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Adicione um convidado à partida.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Adicionar Convidado Existente  à Partida{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Adicione um convidado à partida.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Adicione um convidado à partida.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:convidado_existente' partida.slug %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:convidado_existente' partida.slug %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:convidado_existente' partida.slug %}{% endblock canonical %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center align-items-center my-3">
+        <div class="col-12 col-md-10 col-lg-6">
+            <h3 class="display-3 text-center">Adicionar Convidado Existente à Partida</h3>
+        </div>
+    </div>
+
+    <div class="row g-2 mt-3 d-flex justify-content-center">
+        <form class="col-12 col-md-10 col-lg-6" method="post">
+            {% if messages %}
+            <div class="col-12 col-md-10">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+        </form>
+    </div>
+    <div class="row g-2 mt-3 d-flex justify-content-center">
+        <a href="{% url 'main:adicionar_convidado' partida.slug %}" class="text-center">Seu convidado não aparece na lista? Clique aqui para adicioná-lo.</a>
+    </div>
+</div>
+{% endblock content %}

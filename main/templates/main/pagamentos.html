@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Pagamentos - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Pagamentos - FFBVI{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja os pagamentos da partida.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Pagamentos - FFBVI{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja os pagamentos da partida.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja os pagamentos da partida.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:pagamentos' partida.slug %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:pagamentos' partida.slug %}{% endblock twt_url %}
+{% block canonical %}{% endblock canonical %}
+{% block content %}
+<div class="container-sm">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 justify-content-evenly align-items-center mt-3 g-2">
+        {% if pagamentos %}
+        {% for pagamento in pagamentos %}
+        {% if pagamento.em_dinheiro %}
+        <div class="col">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h5 class="card-title text-center h5">Pagamento feito em dinheiro</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title text-center h6">Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}</h6>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col">
+            <div class="card" style="max-width: 18rem;">
+                <a class="ratio" style="--bs-aspect-ratio: 160%;" data-bs-toggle="modal" data-bs-target="#imagemModal{{ pagamento.id }}">
+                    <img class="card-img-top img-fluid object-fit-cover" src="{{ pagamento.comprovante.url }}" alt="Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}">
+                </a>
+                <div class="card-body">
+                    <h6 class="card-title text-center h6">Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="imagemModal{{ pagamento.id }}" tabindex="-1" aria-labelledby="imagemModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" style="max-width: 26rem;">
+                <div class="modal-content">
+                    <div class="modal-header p-2">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <div class="d-flex justify-content-center">
+                            <img class="img-fluid" src="{{ pagamento.comprovante.url }}" alt="Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}">
+                        </div>
+                    </div>
+                    <div class="modal-footer p-0">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <h2 class="display-2">Não há pagamentos registrados.</h2>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock content %}

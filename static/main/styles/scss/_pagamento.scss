@@ -1,0 +1,26 @@
+.box-money-mouth-face {
+    position: absolute;
+    top: 50%;
+    right: 20%;
+    will-change: transform;
+    animation: move-emoji 10s infinite linear both alternate
+}
+
+.box-money-mouth-face img {
+    width: 100px;
+    animation: rotate-emoji 100s infinite linear both alternate
+}
+
+@keyframes rotate-emoji {
+    100% {
+        -webkit-transform: rotate(-720deg);
+        transform: rotate(-720deg)
+    }
+}
+
+@keyframes move-emoji {
+    100% {
+        -webkit-transform: translate(-200px, -100px);
+        transform: translate(-100px, -100px)
+    }
+}

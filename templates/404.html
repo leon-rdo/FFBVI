@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 - Página Não Encontrada</title>
+    <link rel="stylesheet" href="{% static 'main/styles/css/404.css' %}">
+    <style>body{background: url({% static 'main/images/icons/overlay.svg' %}) left top repeat, linear-gradient(to right bottom, #a9347e, #4b32a7);}</style>
+</head>
+
+<body>
+    <main>
+        <div class="message" style="background-color: rgba(0, 0, 0, 0.426); padding: 2%;">
+            <strong>404</strong>
+            <p class="title">Parece que você isolou a bola!</p>
+            <p class="message-text">
+                A página que você procura não existe ou não está disponível no momento.
+            </p>
+            <a href="{% url 'main:homepage' %}" class="button">Devolver bola.</a>
+        </div>
+        <div class="box-soccer-ball">
+            <img src="{% static 'main/images/soccer-ball.png' %}" alt="Bola de Futebol" style="width: 200px;" />
+        </div>
+    </main>
+
+</body>
+
+</html>

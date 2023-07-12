@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Meu Perfil da FFBVI{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja e edite seus dados.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Meu Perfil da FFBVI{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja e edite seus dados.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja e edite seus dados.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:meu_perfil' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:meu_perfil' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:meu_perfil' %}{% endblock canonical %}
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center align-items-center mt-3 g-2">
+        <div class="col-12 col-md-8">
+            <h2>Atualize seus dados:</h2>
+            {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <form method="post" class="mb-2 row g-2">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="col-12 col-md-6 form-floating mb-1 mb-md-3">
+                    {{ field }}
+                    {{ field.label_tag }}
+                </div>
+                {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+                {% endfor %}
+                <div class="col-12 col-md-6 form-floating mb-1 mb-md-3">
+                    <input type="text" readonly class="form-control-plaintext" id="idade" placeholder="dummy" value="{{ user.idade }}">
+                    <label for="floatingPlaintextInput">Idade:</label>
+                </div>
+                <div class="col-12 col-md-6 form-floating mb-1 mb-md-3">
+                    <input type="number" readonly class="form-control-plaintext" id="idade" placeholder="dummy" value="{{ user.partidas_jogadas }}">
+                    <label for="floatingPlaintextInput">Partidas jogadas:</label>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Salvar</button>
+            </form>
+            <a class="text-primary" href="{% url 'main:mudar_senha' %}">Deseja mudar sua senha?</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

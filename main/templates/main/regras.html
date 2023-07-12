@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Regras{% endblock title %}
+{% block meta_titulo_og %}Regras da FFBVI{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Esteja ciente das regras da FFBVI{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Regras da FFBVI{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Esteja ciente das regras da FFBVI{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Esteja ciente das regras da FFBVI{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:regras' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:regras' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:regras' %}{% endblock canonical %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <h1 class="display-1">Regras</h1>
+    <div class="row justify-content-center mt-5">
+        <div class="col-12 fs-4">
+            {{ regras.regras_federacao | linebreaks }}
+        </div>
+    </div>
+</div>
+{% endblock content %}

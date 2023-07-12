@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}FFBVI{% endblock title %}
+{% block meta_titulo_og %}Federação de Futebol Bela Vista I{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Página Inicial do site da FFBVI.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Federação de Futebol Bela Vista I{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Página Inicial do site da FFBVI.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Página Inicial do site da FFBVI.{% endblock meta_descricao %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center align-items-center my-3">
+        <h1 class="display-1 text-center">Federação de Futebol Bela Vista I</h1>
+    </div>
+    <div class="row justify-content-center align-items-center my-3">
+        <div id="carousel-federados-lg" class="carousel carousel-federados slide d-none d-lg-block mt-3" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for federado in users %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
+                    <div class="row row-cols-4 d-flex justify-content-evenly">
+                {% endif %}
+                        <div class="col cols-cards position-relative p-0 overflow-hidden">
+                            <div
+                                class="card-body text-dark position-absolute text-white d-flex align-items-center justify-content-between w-100 pe-5">
+                                <div>
+                                    <h5 class="card-title text-capitalize m-0 fs-6">{{ federado.nome_jogador }}</h5>
+                                    <p class="card-text text-capitalize m-0 fs-6">{{ federado.posicao }}</p>
+                                </div>
+                                <div class="text-end">
+                                    {% if federado.cidade_nascimento and federado.uf_nascimento and federado.data_nascimento %}
+                                    <h4 class="m-0 fs-6">{{ federado.cidade_nascimento }}-{{ federado.uf_nascimento }}</h4>
+                                    <small class="card-text small m-0 fs-6">{{ federado.data_nascimento|date:"d/m/Y" }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="moldura position-absolute top-0 start-0 w-100 h-100"
+                                style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
+                            </div>
+                            <div class="card">
+                                <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Foto Temporária.png' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
+                                <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Foto Temporária.png' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
+                            </div>
+                        </div>
+                {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-federados-lg"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-federados-lg"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+        <div id="carousel-federados-md" class="carousel carousel-federados slide d-none d-md-block d-lg-none mt-3" data-bs-ride="carousel" >
+            <div class="carousel-inner">
+                {% for federado in users %}
+                {% if forloop.counter0|divisibleby:3 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
+                    <div class="row row-cols-3 justify-content-evenly flex-nowrap">
+                {% endif %}
+                        <div class="col cols-cards position-relative p-0 overflow-hidden">
+                            <div
+                                class="card-body text-dark position-absolute text-white d-flex align-items-center justify-content-between w-100 pe-5">
+                                <div>
+                                    <h5 class="card-title text-capitalize m-0 fs-6">{{ federado.nome_jogador }}</h5>
+                                    <p class="card-text text-capitalize m-0 fs-6">{{ federado.posicao }}</p>
+                                </div>
+                                <div class="text-end">
+                                    {% if federado.cidade_nascimento and federado.uf_nascimento and federado.data_nascimento %}
+                                    <h4 class="m-0 fs-6">{{ federado.cidade_nascimento }}-{{ federado.uf_nascimento }}</h4>
+                                    <small class="card-text small m-0 fs-6">{{ federado.data_nascimento|date:"d/m/Y" }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="moldura position-absolute top-0 start-0 w-100 h-100"
+                                style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
+                            </div>
+                            <div class="card">
+                                <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Foto Temporária.png' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
+                                <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Foto Temporária.png' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
+                            </div>
+                        </div>
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-federados-md"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-federados-md"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+        <div id="carousel-federados-sm" class="carousel carousel-federados slide d-block d-md-none d-lg-none mt-3" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for federado in users %}
+                {% if forloop.counter0|divisibleby:1 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
+                    <div class="row row-cols-1 g-2 d-flex justify-content-center">
+                {% endif %}
+                        <div class="col cols-cards position-relative p-0 overflow-hidden">
+                            <div
+                                class="card-body text-dark position-absolute text-white d-flex align-items-center justify-content-between w-100 pe-5">
+                                <div>
+                                    <h5 class="card-title text-capitalize m-0 fs-6">{{ federado.nome_jogador }}</h5>
+                                    <p class="card-text text-capitalize m-0 fs-6">{{ federado.posicao }}</p>
+                                </div>
+                                <div class="text-end">
+                                    {% if federado.cidade_nascimento and federado.uf_nascimento and federado.data_nascimento %}
+                                    <h4 class="m-0 fs-6">{{ federado.cidade_nascimento }}-{{ federado.uf_nascimento }}</h4>
+                                    <small class="card-text small m-0 fs-6">{{ federado.data_nascimento|date:"d/m/Y" }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="moldura position-absolute top-0 start-0 w-100 h-100"
+                                style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
+                            </div>
+                            <div class="card">
+                                <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Foto Temporária.png' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
+                                <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Foto Temporária.png' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
+                            </div>
+                        </div>
+                {% if forloop.counter|divisibleby:1 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-federados-sm"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-federados-sm"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+    </div>
+    {% if partida %}
+    {% if partida.sorteada %}
+    <div class="row justify-content-center my-3">
+        <h3 class="display-3 text-start d-none d-md-block px-0">Confira a escalação de hoje!</h3>
+        <h4 class="display-4 text-start d-block d-md-none px-0">Escalação de hoje!</h4>
+        <div class="col-12 col-md-4 p-2 time">
+            <ul class="list-group list-group-flush border border-success rounded-3">
+                <h3 class="text-success text-center" id="timeVerdeTitle">Time Verde</h3>
+                {% for jogador in partida.time_verde.all %}
+                <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
+                        class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-12 col-md-4 p-2 time">
+            <ul class="list-group list-group-flush border border-danger rounded-3">
+                <h3 class="text-danger text-center" id="timeVermelhoTitle">Time Vermelho</h3>
+                {% for jogador in partida.time_vermelho.all %}
+                <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
+                        class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-12 col-md-4 p-2 time">
+            <ul class="list-group list-group-flush border border-primary rounded-3">
+                <h3 class="text-primary text-center text" id="timeAzulTitle">Time Azul</h3>
+                {% for jogador in partida.time_azul.all %}
+                <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
+                        class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block more_scripts %}
+<script>
+    // Obtém todas as imagens dos cartões
+    var cards = document.getElementsByClassName('card');
+    var cardImgs = document.querySelectorAll('.card .img-1');
+
+    // Define os intervalos de tempo
+    var intervalo = 2000;
+
+    // Função para alternar as imagens
+    function alternarImagem() {
+        // Adiciona e remove as classes de animação em todos os cartões e imagens
+        for (var i = 0; i < cards.length; i++) {
+            cards[i].classList.toggle('card-animation');
+            cardImgs[i].classList.toggle('d-none');
+        }
+    }
+
+    // Inicia o intervalo para alternar as imagens
+    setInterval(alternarImagem, intervalo);
+</script>
+{% endblock more_scripts %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Gerenciar Federados{% endblock title %}
+{% block meta_titulo_og %}Gerenciar Federados{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja os dados dos federados da FFBVI.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Gerenciar Federados{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja os dados dos federados da FFBVI.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja os dados dos federados da FFBVI.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:gerenciar_federados' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:gerenciar_federados' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:gerenciar_federados' %}{% endblock canonical %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center align-items-center my-3">
+        <h1 class="display-1 text-center">Gerenciar Federados</h1>
+    </div>
+    <div class="row g-2 mt-3 d-flex justify-content-center">
+        <div class="col-12 col-md-10 col-lg-6">
+            <table class="table table-light table-hover table-bordered caption-top table-striped-columns d-none d-md-table">
+                <caption>Lista dos Federados</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Jogador</th>
+                        <th scope="col">Posição</th>
+                        <th scope="col">Aniversário</th>
+                        <th scope="col">Telefone</th>
+                        <th scope="col">Ver mais</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for federado in users %}
+                    <tr>
+                        <td class="text-capitalize">{{ federado.nome_jogador }}</td>
+                        <td class="text-capitalize">{{ federado.posicao }}</td>
+                        <td class="">{% if federado.data_nascimento %}{{ federado.data_nascimento }}{% else %}---------{% endif %}</td>
+                        <td class="text-capitalize">{% if federado.telefone %}{{ federado.telefone }}{% else %}---------{% endif %}</td>
+                        <td><a href="{% url 'main:gerenciar_federado' federado.slug %}"><img src="{% static 'main/images/icons/gear.svg' %}"></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <ul class="list-group d-block d-md-none">
+                {% for federado in users %}
+                <li class="list-group-item d-flex justify-content-between align-items-center fs-5">{{ federado.nome_jogador }}<a href="{% url 'main:gerenciar_federado' federado.slug %}"><img src="{% static 'main/images/icons/gear.svg' %}"></a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}

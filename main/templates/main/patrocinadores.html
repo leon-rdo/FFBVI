@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Patrocinadores da FFBVI{% endblock title %}
+{% block meta_titulo_og %}Patrocinadores - FFBVI{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja os patrocinadores da FFBVI.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Patrocinadores - FFBVI{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja os patrocinadores da FFBVI.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:patrocinadores' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:patrocinadores' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:patrocinadores' %}{% endblock canonical %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <h1 class="display-1">Patrocinadores</h1>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2 d-flex justify-content-center mt-3">
+        {% for patrocinador in patrocinadores %}
+        <div class="card my-2 mx-2 border border-primary overflow-hidden p-0" style="width: 18rem;">
+            <div class="bg-secondary w-100">
+                <img class="card-img-top object-fit-cover" src="{{ patrocinador.logo.url }}" alt="Logomarca de {{ patrocinador.nome }}">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{ patrocinador.nome }}</h4>
+                <a href="{{ patrocinador.link }}" class="card-text text-decoration-none">Veja mais aqui!</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ object.nome_jogador }}{% endblock title %}
+{% block meta_titulo_og %}{{ object.nome_jogador }}{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja os dados de {{ object.nome_jogador }}.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}{{ object.nome_jogador }}{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja os dados de {{ object.nome_jogador }}.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja os dados de {{ object.nome_jogador }}.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:gerenciar_federado' object.id %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:gerenciar_federado' object.id %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:gerenciar_federado' object.id %}{% endblock canonical %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center align-items-center my-3">
+        <h1 class="display-1 text-center">{{ object.nome_jogador }}</h1>
+    </div>
+    <div class="row g-2 mt-3 d-flex justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 table-responsive-sm">
+          <table class="table table-light table-hover table-bordered caption-top table-striped-columns">
+            <caption class="small">Dados de {{ object.nome_completo }}</caption>
+            <tbody>
+              <tr>
+                <th scope="row">Nome completo:</th>
+                <td class="text-capitalize">{% if object.nome_completo %}{{ object.nome_completo }}{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Posição:</th>
+                <td class="text-capitalize">{{ object.posicao }}</td>
+              </tr>
+              <tr>
+                <th scope="row">E-mail:</th>
+                <td>{% if object.email %}{{ object.email }}{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Telefone:</th>
+                <td class="text-capitalize">{% if object.telefone %}{{ object.telefone }}{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Time:</th>
+                <td class="text-capitalize">{% if object.time_coracao %}{{ object.time_coracao }}{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Idade:</th>
+                <td>{% if object.data_nascimento %}{{ object.idade }} anos{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Aniversário:</th>
+                <td>{% if object.data_nascimento %}{{ object.data_nascimento }}{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Origem:</th>
+                <td>{% if object.cidade_nascimento and object.uf_nascimento %}{{ object.cidade_nascimento }}-{{ object.uf_nascimento }}{% else %}---------{% endif %}</td>
+              </tr>
+              <tr>
+                <th scope="row">Altura:</th>
+                <td>{% if object.altura %}{{ object.altura }}{% else %}---------{% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}

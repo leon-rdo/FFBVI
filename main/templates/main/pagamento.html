@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Pagamento - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Pagamento da taxa da partida.{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Pague a taxa da partida.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Pagamento da taxa da partida.{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Pague a taxa da partida.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Pague a taxa da partida.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:pagamento' partida.slug %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:pagamento' partida.slug %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:pagamento' partida.slug %}{% endblock canonical %}
+{% block content %}
+{% load static %}
+<div class="container">
+    {% if object == partida_proxima %}
+        {% if not pagamento_usuario %}
+            <div class="row justify-content-center align-items-center g-2">
+                <div class="col d-flex justify-content-center flex-wrap">
+                    <h1 class="display-1 text-center w-100">Pagamento</h1>
+                    <figure class="text-center">
+                        <img src="{% static 'main/images/qrcode-pix.png' %}" class="img-fluid m-0" alt="QR para Pagamento">
+                        <figcaption class="small text-secondary m-Z0">Chave Pix: <b>91984333291</b></figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <form class="col-12 col-md-6" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.comprovante.label_tag }}
+                    {{ form.comprovante }}
+                    <div class="form-check form-switch my-2">
+                        {{ form.em_dinheiro.label_tag }}
+                        {{ form.em_dinheiro }}
+                    </div>
+                    <button class="btn btn-success" type="submit" id="btnPagamento" disabled>Enviar</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="row justify-content-center mt-5">
+                <div class="col-12 d-flex justify-content-center align-items-center">
+                    <h1 class="display-1 text-center">Você já pagou a taxa dessa partida!</h1>
+                </div>
+                <div class="row justify-content-center align-items-center flex-wrap">
+                    <div class="col-12 col-sm-10 col-md-8 col-lg-4 my-3">
+                        <a class="btn btn-lg btn-primary w-100 fs-6" href="{% url 'main:homepage' %}" role="button">Retornar à Página Inicial</a>
+                    </div>
+                </div>
+                <img src="https://static-00.iconduck.com/assets.00/money-mouth-face-emoji-2048x2048-jdg88fs2.png" alt="Carinha com olhos de cifrão e dinheiro saindo da boca" class="img-fluid" style="max-width: 400px;">
+            </div>
+        {% endif %}
+    {% endif %}
+    <div class="box-money-mouth-face border border-success rounded-circle p-0 z-n1 d-none d-md-block">
+        <img src="https://static-00.iconduck.com/assets.00/money-mouth-face-emoji-2048x2048-jdg88fs2.png" alt="Carinha com olhos de cifrão e dinheiro saindo da boca">
+    </div>
+</div>
+{% endblock content %}
+
+{% block more_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const comprovanteInput = document.getElementById('comprovante');
+        const selectBoxEmDinheiro = document.getElementById('id_em_dinheiro');
+        const btnPagamento = document.getElementById('btnPagamento');
+
+        function verificarPagamento() {
+            if (comprovanteInput.value || selectBoxEmDinheiro.checked) {
+                btnPagamento.disabled = false;
+                comprovanteInput.disabled = selectBoxEmDinheiro.checked; // Desativa o campo de comprovante se o checkbox estiver marcado
+            } else {
+                btnPagamento.disabled = true;
+                comprovanteInput.disabled = false; // Habilita o campo de comprovante se o checkbox não estiver marcado
+            }
+        }
+
+        comprovanteInput.addEventListener('change', verificarPagamento);
+        selectBoxEmDinheiro.addEventListener('click', verificarPagamento);
+
+        const checkBoxEmDinheiroLabel = document.querySelector('label[for="id_em_dinheiro"]');
+        if (checkBoxEmDinheiroLabel) {
+            checkBoxEmDinheiroLabel.classList.add('form-check-label');
+        }
+    });
+
+
+</script>
+{% endblock more_scripts %}

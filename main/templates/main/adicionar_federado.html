@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil - FFBVI{% endblock title %}
+{% block meta_titulo_og %}Adicionar Federado{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Acicione um novo Federado.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Adicionar Federado{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Acicione um novo Federado.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Acicione um novo Federado.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:adicionar_federado' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:adicionar_federado' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:adicionar_federado' %}{% endblock canonical %}
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center align-items-center mt-3 g-2">
+        <div class="col-12 col-md-8 col-lg-5">
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Algo deu errado, talvez um usuário com este nome já exista!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            <h2>Adicione um Novo Federado:</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-floating mb-3">
+                        {{ form.nome_jogador }}
+                        {{ form.nome_jogador.label_tag }}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.posicao }}
+                        {{ form.posicao.label_tag }}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Salvar</button>
+                </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

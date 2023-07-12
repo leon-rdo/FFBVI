@@ -1,0 +1,32 @@
+.patrocinador {
+    figure {
+        img {
+            width: 60px;
+            transition: all 0.2s ease-out;
+
+            &:hover {
+                transform: translateY(-10px);
+                border: 1px blue solid;
+            }
+        }
+
+        figcaption {
+            width: 76px;
+            /* ou qualquer outra largura desejada */
+            overflow-wrap: break-word;
+            /* ou */
+            word-wrap: break-word;
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $color1;
+    width: 6px;
+    height: 6px;
+}
