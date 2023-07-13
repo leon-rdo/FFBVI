@@ -207,11 +207,13 @@ class PartidaView(DetailView, FormView):
         if not user.is_authenticated:
             user = None
         pagamento_usuario = Pagamento.objects.filter(jogador=user, partida=partida).exists()
-        now = datetime.datetime.today()
-        dia_anterior = partida.data - datetime.timedelta(days=1)
-        context["now"] = datetime.datetime.today()
         context["pagamento_usuario"] = pagamento_usuario
+        now = datetime.datetime.today()
+        context["now"] = datetime.datetime.today()
+        dia_anterior = partida.data - datetime.timedelta(days=1)
         context["dia_anterior"] = dia_anterior
+        porcentagem_lotacao = (partida.relacionados.count() / 18) * 100
+        context["porcentagem"] = int(porcentagem_lotacao)
         partida_proxima = None
         try:
             partida_proxima = Partida.objects.filter(data__gte=now).order_by('data')[0]

@@ -86,6 +86,10 @@
     display: none;
   }
 }
+#lotacao-title, #lotacao {
+  transition: all 0.6s ease;
+}
+
 .box-money-mouth-face {
   position: absolute;
   top: 50%;
