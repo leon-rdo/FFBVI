@@ -9,7 +9,7 @@
 {% load static %}
 <div class="container">
     <div class="row justify-content-center align-items-center my-3">
-        {% if alerta %}
+        {% if not alerta.alerta_mensagem is None %}
         <div class="alert alert-{{ alerta.alerta_cor }} alert-dismissible fade show d-flex align-items-center" role="alert">
             {% if alerta.alerta_icon %}
             <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
