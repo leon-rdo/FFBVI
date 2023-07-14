@@ -369,10 +369,32 @@ class Pagamento(models.Model):
     
 class Configuracao(models.Model):
 
+    ALERTA_CORES = (
+        ('warning', 'Amarelo'),
+        ('danger', 'Vermelho'),
+        ('success', 'Verde'), 
+        ('dark', 'Preto'),
+        ('primary', 'Azul'),
+        ('info', 'Azul-Claro'),
+        ('secondary', 'Cinza'),
+        ('light', 'Branco')
+    )
+    
+    ALERTA_ICONES = (
+        ('#exclamation-triangle-fill', 'Triângulo com Exclamação'),
+        ('#info-fill', 'Círculo com "i"'),
+        ('#check-circle-fill', 'Círculo com "check"')
+    )
+
     telefone_diretor = models.CharField(max_length=100)
     email_diretor = models.EmailField()
     qr_code_pagamento = models.ImageField(upload_to='main/images/')
     regras_federacao = models.TextField()
+    alerta_mensagem = models.CharField(max_length=100, blank=True, null=True)
+    alerta_link = models.URLField(max_length=200, blank=True, null=True)
+    alerta_texto_link = models.CharField(max_length=50, blank=True, null=True)
+    alerta_cor = models.CharField(default='warning', max_length=50, choices=ALERTA_CORES, blank=True, null=True)
+    alerta_icon = models.CharField(default=None, max_length=50, choices=ALERTA_ICONES, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Configurações'

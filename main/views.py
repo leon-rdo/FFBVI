@@ -30,6 +30,7 @@ class IndexView(ListView):
         except IndexError:
             pass
         context['partida'] = partida
+        context['alerta'] = Configuracao.objects.first()
         return context
    
 
