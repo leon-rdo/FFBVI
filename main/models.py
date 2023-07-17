@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 
 class Patrocinador(models.Model):
 
-    nome = models.CharField(max_length=50, default='')
+    nome = models.CharField(max_length=18, default='')
     logo = models.ImageField(upload_to='main/images/patrocinadores')
     link = models.URLField(max_length=200, default='')
 
