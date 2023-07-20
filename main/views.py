@@ -243,11 +243,10 @@ class PartidaView(DetailView, FormView):
         if partida.relacionados.filter(id=user.id).exists():
             messages.warning(request, 'Você já está relacionado.')
             return self.get(request, *args, **kwargs)
-
-        partida.relacionados.add(user)
-        partida.save()
-
-        messages.success(request, 'Você foi adicionado aos relacionados.')
+        else:
+            partida.relacionados.add(user)
+            partida.save()
+            messages.success(request, 'Você foi adicionado aos relacionados.')
 
         return self.get(request, *args, **kwargs)
 

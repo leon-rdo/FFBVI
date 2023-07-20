@@ -55,7 +55,7 @@
                 {% if object.relacionados.count < 18 %}
                     <form method="post" class="w-100 d-flex justify-content-center mt-3">
                         {% csrf_token %}
-                        <button class="btn btn-lg btn-success" type="submit">Confirmar Presença</button>
+                        <button class="btn btn-lg btn-success" type="submit" name="confirmar_presenca">Confirmar Presença</button>
                     </form>
                 {% endif %}
             {% endif %}
