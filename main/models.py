@@ -1,24 +1,13 @@
 from datetime import date
 from uuid import uuid4
 from django.db import models
+from django.forms import ValidationError
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
-
-class Patrocinador(models.Model):
-
-    nome = models.CharField(max_length=18, default='')
-    logo = models.ImageField(upload_to='main/images/patrocinadores')
-    link = models.URLField(max_length=200, default='')
-
-    def __str__(self):
-        return self.nome
-
-    class Meta:
-        verbose_name = 'Patrocinador'
-        verbose_name_plural = 'Patrocinadores'
+from django.utils.deconstruct import deconstructible    
 
 class Administrador(BaseUserManager):
     def _create_user(self, nome_jogador, password, is_staff, is_superuser, **extra_fields):
@@ -366,7 +355,60 @@ class Pagamento(models.Model):
     class Meta:
         verbose_name = 'Pagamento'
         verbose_name_plural = 'Pagamentos'
+
+@deconstructible
+class MediaTypeUploadTo:
+    def __call__(self, instance, filename):
+        media_type = self.get_media_type(filename)
+        if media_type == 'image':
+            return f"main/images/noticias/{filename}"
+        elif media_type == 'video':
+            return f"main/videos/noticias/{filename}"
+        else:
+            return f"main/media/{filename}"
+
+    def get_media_type(self, filename):
+        extension = filename.split('.')[-1].lower()
+        if extension in ['jpg', 'jpeg', 'png', 'gif']:
+            return 'image'
+        elif extension in ['mp4', 'avi', 'mov', 'm4a']:
+            return 'video'
+        else:
+            return 'other'
+        
+def validate_media_file(value):
+    extension = value.name.split('.')[-1].lower()
+    if extension not in ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'avi', 'mov', 'm4a']:
+        raise ValidationError("O arquivo deve ser uma imagem (jpg, jpeg, png, gif) ou um vídeo (mp4, avi, mov, m4a).")
+
+class Noticia(models.Model):
+    titulo = models.CharField('Título:', max_length=100)
+    texto = models.CharField('Texto da Notícia:', max_length=255)
+    midia = models.FileField('Imagem ou vídeo:', upload_to=MediaTypeUploadTo(), validators=[validate_media_file])
+    duracao_video = models.PositiveSmallIntegerField('Duração do vídeo (em milissegundos):', null=True, blank=True)
+    desc_imagem = models.CharField('Descrição da Imagem:', max_length=100, blank=True, null=True)
     
+    class Meta:
+        verbose_name = 'Noticía'
+        verbose_name_plural = 'Noticías'
+
+    def __str__(self):
+        return self.titulo
+
+    
+class Patrocinador(models.Model):
+
+    nome = models.CharField(max_length=18, default='')
+    logo = models.ImageField(upload_to='main/images/patrocinadores')
+    link = models.URLField(max_length=200, default='')
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = 'Patrocinador'
+        verbose_name_plural = 'Patrocinadores'
+        
 class Configuracao(models.Model):
 
     ALERTA_CORES = (

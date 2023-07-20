@@ -34,7 +34,7 @@
         <h1 class="display-1 text-center">Federação de Futebol Bela Vista I</h1>
     </div>
     <div class="row justify-content-center align-items-center my-3">
-        <div id="carousel-federados-lg" class="carousel carousel-federados slide d-none d-lg-block mt-3" data-bs-ride="carousel">
+        <div id="carousel-federados-lg" class="carousel carousel-federados slide d-none d-lg-block my-3" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {% for federado in users %}
                 {% if forloop.counter0|divisibleby:4 %}
@@ -80,7 +80,7 @@
                 <span class="visually-hidden">Próximo</span>
             </button>
         </div>
-        <div id="carousel-federados-md" class="carousel carousel-federados slide d-none d-md-block d-lg-none mt-3" data-bs-ride="carousel" >
+        <div id="carousel-federados-md" class="carousel carousel-federados slide d-none d-md-block d-lg-none my-3" data-bs-ride="carousel" >
             <div class="carousel-inner">
                 {% for federado in users %}
                 {% if forloop.counter0|divisibleby:3 %}
@@ -126,7 +126,7 @@
                 <span class="visually-hidden">Próximo</span>
             </button>
         </div>
-        <div id="carousel-federados-sm" class="carousel carousel-federados slide d-block d-md-none d-lg-none mt-3" data-bs-ride="carousel">
+        <div id="carousel-federados-sm" class="carousel carousel-federados slide d-block d-md-none d-lg-none my-3" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {% for federado in users %}
                 {% if forloop.counter0|divisibleby:1 %}
@@ -173,11 +173,66 @@
             </button>
         </div>
     </div>
+    {% if noticias %}      
+    <div class="row align-items-center my-3">
+        <div class="col-12">
+            <h3 class="display-2 px-0">Últimas notícias!</h3>
+        </div>
+        <div id="carouselNoticias" class="carousel slide col-12 col-md-8" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              {% for noticia in noticias %}
+                <button type="button" data-bs-target="#carouselNoticias" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+              {% endfor %}
+            </div>
+            <div class="carousel-inner">
+              {% for noticia in noticias %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval='{% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}{{ noticia.duracao_video }}{% else %}5000{% endif %}'>
+                    <div class="ratio ratio-16x9 w-100">
+                        {% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}
+                        <video autoplay muted loop>
+                            <source src="{{ noticia.midia.url }}" type="video/mp4">
+                            Seu navegador não suporta a reprodução de vídeo.
+                        </video>                            
+                        {% else %}
+                            <img src="{{ noticia.midia.url }}" class="d-block object-fit-cover" alt="{{ noticia.desc_imagem }}">
+                        {% endif %}
+                    </div>
+                    <div class="carousel-caption d-none d-md-block rounded-pill" style="background-color: #000000dd;">
+                        <h5>{{ noticia.titulo }}</h5>
+                        <p>{{ noticia.texto }}</p>
+                    </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselNoticias" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselNoticias" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+        <div class="col-12 d-md-none text-center carousel-outside-captions">
+            {% for noticia in noticias %}
+            <div class="carousel-outside-caption border border-primary-subtle px-1 pt-1 {% if forloop.counter != 1 %}d-none{% endif %}" id="carousel-outside-caption-{{ forloop.counter }}" style="min-height: 105px;">
+                <h5>{{ noticia.titulo }}</h5>
+                <p>{{ noticia.texto }}</p>
+            </div>
+            {% endfor %}
+        </div>  
+        <div class="col-4 d-none d-md-flex justify-content-center align-items-center">
+            <img src="{% static 'main/images/icons/FFBVI - Logo.svg' %}" class="img-fluid">
+        </div>
+    </div>
+    {% endif %}
     {% if partida %}
     {% if partida.sorteada %}
     <div class="row justify-content-center my-3">
-        <h3 class="display-3 text-start d-none d-md-block px-0">Confira a escalação de hoje!</h3>
-        <h4 class="display-4 text-start d-block d-md-none px-0">Escalação de hoje!</h4>
+        <div class="col-12">
+            <h3 class="display-3 text-center d-none d-md-block px-0">Confira a escalação de hoje!</h3>
+            <h4 class="display-3 text-center d-block d-md-none px-0">Escalação de hoje</h4>
+        </div>
         <div class="col-12 col-md-4 p-2 time">
             <ul class="list-group list-group-flush border border-success rounded-3">
                 <h3 class="text-success text-center" id="timeVerdeTitle">Time Verde</h3>
@@ -233,5 +288,21 @@
 
     // Inicia o intervalo para alternar as imagens
     setInterval(alternarImagem, intervalo);
+
+    // Exibe as legendas abaixo do 'carouselNoticias' em telas pequenas
+    document.addEventListener('DOMContentLoaded', function() {
+        var carousel = document.getElementById('carouselNoticias');
+        var captionsContainer = document.querySelector('.carousel-outside-captions');
+        var captions = captionsContainer.querySelectorAll('.carousel-outside-caption');
+
+        carousel.addEventListener('slide.bs.carousel', function(event) {
+            var activeSlideIndex = event.to;
+            captions.forEach(function(caption) {
+                caption.classList.add('d-none');
+            });
+            captions[activeSlideIndex].classList.remove('d-none');
+        });
+    });
 </script>
+
 {% endblock more_scripts %}

@@ -31,6 +31,7 @@ class IndexView(ListView):
             pass
         context['partida'] = partida
         context['alerta'] = Configuracao.objects.first()
+        context['noticias'] = Noticia.objects.all()
         return context
    
 
