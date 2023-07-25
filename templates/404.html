@@ -7,10 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>404 - Página Não Encontrada</title>
     <link rel="stylesheet" href="{% static 'main/styles/css/404.css' %}">
-    <style>body{background: url({% static 'main/images/icons/overlay.svg' %}) left top repeat, linear-gradient(to right bottom, #a9347e, #4b32a7);}</style>
+    <style>
+        body {
+            background: url({% static 'main/images/icons/overlay.svg' %}) left top repeat, linear-gradient(to right bottom, #a9347e, #4b32a7);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 100% 100%;
+        }
+        }
+    </style>
 </head>
 
 <body>
+    <div id="particles-js"></div>
     <main>
         <div class="message" style="background-color: rgba(0, 0, 0, 0.426); padding: 2%;">
             <strong>404</strong>
@@ -24,7 +48,8 @@
             <img src="{% static 'main/images/soccer-ball.png' %}" alt="Bola de Futebol" style="width: 200px;" />
         </div>
     </main>
-
+    <script src="{% static 'main/scripts/particles.js' %}"></script>
+    <script src="{% static 'main/scripts/app-star.js' %}"></script>
 </body>
 
 </html>
