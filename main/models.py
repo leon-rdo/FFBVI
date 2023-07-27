@@ -9,6 +9,51 @@ from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.utils.deconstruct import deconstructible    
 
+class Configuracao(models.Model):
+
+    ALERTA_CORES = (
+        ('warning', 'Amarelo'),
+        ('danger', 'Vermelho'),
+        ('success', 'Verde'), 
+        ('dark', 'Preto'),
+        ('primary', 'Azul'),
+        ('info', 'Azul-Claro'),
+        ('secondary', 'Cinza'),
+        ('light', 'Branco')
+    )
+    
+    ALERTA_ICONES = (
+        ('#exclamation-triangle-fill', 'Triângulo com Exclamação'),
+        ('#info-fill', 'Círculo com "i"'),
+        ('#check-circle-fill', 'Círculo com "check"')
+    )
+
+    # Do Diretor
+    telefone_diretor = models.CharField(max_length=100)
+    email_diretor = models.EmailField()
+    # Do Pagamento
+    qr_code_pagamento = models.ImageField(upload_to='main/images/')
+    chave_pix = models.CharField(max_length=50, blank=True, null=True)
+    # Do Site
+    regras_federacao = models.TextField()
+    alerta_mensagem = models.CharField(max_length=100, blank=True, null=True)
+    alerta_link = models.URLField(max_length=200, blank=True, null=True)
+    alerta_texto_link = models.CharField(max_length=50, blank=True, null=True)
+    alerta_cor = models.CharField(default='warning', max_length=50, choices=ALERTA_CORES, blank=True, null=True)
+    alerta_icon = models.CharField(default=None, max_length=50, choices=ALERTA_ICONES, blank=True, null=True)
+    
+    def __str__(self):
+        return 'Configurações'
+    
+    class Meta:
+        verbose_name = 'Configurações'
+        verbose_name_plural = 'Configurações'
+
+    def save(self, *args, **kwargs):
+        if not self.pk and Configuracao.objects.exists():
+            return Configuracao.objects.first()
+        return super().save(*args, **kwargs)
+
 class Administrador(BaseUserManager):
     def _create_user(self, nome_jogador, password, is_staff, is_superuser, **extra_fields):
         now = timezone.now()
@@ -408,40 +453,3 @@ class Patrocinador(models.Model):
     class Meta:
         verbose_name = 'Patrocinador'
         verbose_name_plural = 'Patrocinadores'
-        
-class Configuracao(models.Model):
-
-    ALERTA_CORES = (
-        ('warning', 'Amarelo'),
-        ('danger', 'Vermelho'),
-        ('success', 'Verde'), 
-        ('dark', 'Preto'),
-        ('primary', 'Azul'),
-        ('info', 'Azul-Claro'),
-        ('secondary', 'Cinza'),
-        ('light', 'Branco')
-    )
-    
-    ALERTA_ICONES = (
-        ('#exclamation-triangle-fill', 'Triângulo com Exclamação'),
-        ('#info-fill', 'Círculo com "i"'),
-        ('#check-circle-fill', 'Círculo com "check"')
-    )
-
-    telefone_diretor = models.CharField(max_length=100)
-    email_diretor = models.EmailField()
-    qr_code_pagamento = models.ImageField(upload_to='main/images/')
-    regras_federacao = models.TextField()
-    alerta_mensagem = models.CharField(max_length=100, blank=True, null=True)
-    alerta_link = models.URLField(max_length=200, blank=True, null=True)
-    alerta_texto_link = models.CharField(max_length=50, blank=True, null=True)
-    alerta_cor = models.CharField(default='warning', max_length=50, choices=ALERTA_CORES, blank=True, null=True)
-    alerta_icon = models.CharField(default=None, max_length=50, choices=ALERTA_ICONES, blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Configurações'
-
-    def save(self, *args, **kwargs):
-        if not self.pk and Configuracao.objects.exists():
-            return Configuracao.objects.first()
-        return super().save(*args, **kwargs)

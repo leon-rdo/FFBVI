@@ -17,8 +17,8 @@
                 <div class="col d-flex justify-content-center flex-wrap">
                     <h1 class="display-1 text-center w-100">Pagamento</h1>
                     <figure class="text-center">
-                        <img src="{% static 'main/images/qrcode-pix.png' %}" class="img-fluid m-0" alt="QR para Pagamento">
-                        <figcaption class="small text-secondary m-Z0">Chave Pix: <b>91984333291</b></figcaption>
+                        <img src="{{ config.qr_code_pagamento.url }}" class="img-fluid m-0" alt="QR para Pagamento">
+                        <figcaption class="small text-secondary m-Z0">Chave Pix: <b>{{ config.chave_pix }}</b></figcaption>
                     </figure>
                 </div>
             </div>

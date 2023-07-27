@@ -298,6 +298,7 @@ class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         pagamento_usuario = Pagamento.objects.filter(jogador=user, partida=partida).exists()
         context["pagamento_usuario"] = pagamento_usuario
         context['partida'] = partida
+        context['config'] = Configuracao.objects.first()
         return context
 
     def get_success_url(self):
@@ -451,6 +452,7 @@ class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView
         context = super().get_context_data(**kwargs)
         context['partida'] = self.get_partida()
         context['convidado'] = self.convidado
+        context['config'] = Configuracao.objects.first()
         return context
 
     def get_success_url(self):
