@@ -212,11 +212,11 @@
     };
 
     function shareOnWhatsApp() {
-        var timeVerde = '{% for jogador in object.time_verde.all %}- {{ jogador.nome_jogador}}\n{% endfor %}';
-        var timeVermelho = '{% for jogador in object.time_vermelho.all %}- {{ jogador.nome_jogador}}\n{% endfor %}';
-        var timeAzul = '{% for jogador in object.time_azul.all %}- {{ jogador.nome_jogador}}\n{% endfor %}';
+        var timeVerde = "{% for jogador in object.time_verde.all %}{% if jogador.posicao == 'goleiro' and jogador.tipo == 'convidado' %}- {{ jogador.nome_jogador}}* *(G)*{% elif jogador.posicao == 'goleiro' and jogador.tipo != 'convidado' %}- {{ jogador.nome_jogador}} *(G)*{% elif jogador.tipo == 'convidado' and jogador.posicao != 'goleiro' %}- {{ jogador.nome_jogador}}*{% else %}- {{ jogador.nome_jogador}}{% endif %}\n{% endfor %}";
+        var timeVermelho = "{% for jogador in object.time_vermelho.all %}{% if jogador.posicao == 'goleiro' and jogador.tipo == 'convidado' %}- {{ jogador.nome_jogador}}* *(G)*{% elif jogador.posicao == 'goleiro' and jogador.tipo != 'convidado' %}- {{ jogador.nome_jogador}} *(G)*{% elif jogador.tipo == 'convidado' and jogador.posicao != 'goleiro' %}- {{ jogador.nome_jogador}}*{% else %}- {{ jogador.nome_jogador}}{% endif %}\n{% endfor %}";
+        var timeAzul = "{% for jogador in object.time_azul.all %}{% if jogador.posicao == 'goleiro' and jogador.tipo == 'convidado' %}- {{ jogador.nome_jogador}}* *(G)*{% elif jogador.posicao == 'goleiro' and jogador.tipo != 'convidado' %}- {{ jogador.nome_jogador}} *(G)*{% elif jogador.tipo == 'convidado' and jogador.posicao != 'goleiro' %}- {{ jogador.nome_jogador}}*{% else %}- {{ jogador.nome_jogador}}{% endif %}\n{% endfor %}";
 
-        var shareText = '*Escalação dos times*\n\n' + '*Time Verde:*\n' + timeVerde + '\n\n' + '*Time Vermelho:*\n' + timeVermelho + '\n\n' + '*Time Azul:*\n' + timeAzul;
+        var shareText = '*Escalação dos times*\n\n' + '*Time Verde:*\n' + timeVerde + '\n\n' + '*Time Vermelho:*\n' + timeVermelho + '\n\n' + '*Time Azul:*\n' + timeAzul + '\n\n_Legenda:_\n_Convidado*_\n_Goleiro (G)_';
 
         var whatsappUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText);
         window.open(whatsappUrl, '_blank');
