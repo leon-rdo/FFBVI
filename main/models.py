@@ -29,18 +29,18 @@ class Configuracao(models.Model):
     )
 
     # Do Diretor
-    telefone_diretor = models.CharField(max_length=100)
-    email_diretor = models.EmailField()
+    telefone_diretor = models.CharField(_('Telefone do Diretor:'), max_length=100)
+    email_diretor = models.EmailField(_('E-mail do Diretor:'))
     # Do Pagamento
-    qr_code_pagamento = models.ImageField(upload_to='main/images/')
-    chave_pix = models.CharField(max_length=50, blank=True, null=True)
+    qr_code_pagamento = models.ImageField(_('QR Para pagamentos:'), upload_to='main/images/')
+    chave_pix = models.CharField(_('Chave pix para pagamentos:'), max_length=50, blank=True, null=True)
     # Do Site
-    regras_federacao = models.TextField()
-    alerta_mensagem = models.CharField(max_length=100, blank=True, null=True)
-    alerta_link = models.URLField(max_length=200, blank=True, null=True)
-    alerta_texto_link = models.CharField(max_length=50, blank=True, null=True)
-    alerta_cor = models.CharField(default='warning', max_length=50, choices=ALERTA_CORES, blank=True, null=True)
-    alerta_icon = models.CharField(default=None, max_length=50, choices=ALERTA_ICONES, blank=True, null=True)
+    regras_federacao = models.TextField(_('Regras da Federação:'))
+    alerta_mensagem = models.CharField(_('Mensagem do Alerta:'), max_length=100, blank=True, null=True)
+    alerta_link = models.URLField(_('Link do Alerta:'), max_length=200, blank=True, null=True)
+    alerta_texto_link = models.CharField(_('Texto do link do Alerta:'), max_length=50, blank=True, null=True)
+    alerta_cor = models.CharField(_('Cor do Alerta:'), default='warning', max_length=50, choices=ALERTA_CORES, blank=True, null=True)
+    alerta_icon = models.CharField(_('Ícone do Alerta:'), default=None, max_length=50, choices=ALERTA_ICONES, blank=True, null=True)
     
     def __str__(self):
         return 'Configurações'
@@ -290,28 +290,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     # Informações de Login
-    nome_jogador = models.CharField(default='', max_length=50, unique=True)
-    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
-    is_active = models.BooleanField(_('active'), default=True, help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'))
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    tipo = models.CharField(default='federado', max_length=50, choices=TIPO)
+    nome_jogador = models.CharField(_('Nome de Jogador:'), default='', max_length=50, unique=True)
+    is_staff = models.BooleanField(_('É administrador?'), default=False, help_text=_('Isso define se o usuário tem ou não acesso à esta administração do site.'))
+    is_active = models.BooleanField(_('Está ativo?'), default=True, help_text=_('Isso defino se o usuário é ativo no sistema.'))
+    date_joined = models.DateTimeField(_('Data de Registro:'), default=timezone.now)
+    tipo = models.CharField(_('Tipo:'), default='federado', max_length=50, choices=TIPO)
     # Informações de Contato
-    email = models.EmailField(max_length=254, null=True, blank=True)
-    telefone = models.CharField(max_length=20, validators=[telefone_validator], null=True, blank=True)
+    email = models.EmailField(_('E-mail:'), max_length=254, null=True, blank=True)
+    telefone = models.CharField(_('Telefone:'), max_length=20, validators=[telefone_validator], null=True, blank=True)
     # Informações Físicas
-    foto_principal = models.ImageField(upload_to='main/foto_jogador', null=True, blank=True)
-    foto_secundaria = models.ImageField(upload_to='main/foto_jogador', null=True, blank=True)
-    altura = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
+    foto_principal = models.ImageField(_('Foto principal:'), upload_to='main/foto_jogador', null=True, blank=True)
+    foto_secundaria = models.ImageField(_('Foto com colete:'), upload_to='main/foto_jogador', null=True, blank=True)
+    altura = models.DecimalField(_('Altura:'), max_digits=3, decimal_places=2, null=True, blank=True)
     # Informações de Nascimento
-    nome_completo = models.CharField(max_length=100, null=True, blank=True)
-    data_nascimento = models.DateField(null=True, blank=True)
-    uf_nascimento = models.CharField(max_length=20, choices=UF_CHOICES, null=True, blank=True)
-    cidade_nascimento = models.CharField(max_length=50, null=True, blank=True)
+    nome_completo = models.CharField(_('Nome completo:'), max_length=100, null=True, blank=True)
+    data_nascimento = models.DateField(_('Data de nascimento:'), null=True, blank=True)
+    uf_nascimento = models.CharField(_('Estado natal:'), max_length=20, choices=UF_CHOICES, null=True, blank=True)
+    cidade_nascimento = models.CharField(_('Cidade natal:'), max_length=50, null=True, blank=True)
     # Informações de Futebol
-    posicao = models.CharField(max_length=50, choices=POSICOES)
-    time_coracao = models.CharField(max_length=50, choices=TIMES, null=True, blank=True)
-    gols_marcados = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
-    pontos = models.SmallIntegerField(default=0, null=True, blank=True)
+    posicao = models.CharField(_('Posição:'), max_length=50, choices=POSICOES)
+    time_coracao = models.CharField(_('Time do Coração:'), max_length=50, choices=TIMES, null=True, blank=True)
+    gols_marcados = models.PositiveSmallIntegerField(_('Gols marcados:'), default=0, null=True, blank=True)
+    pontos = models.SmallIntegerField(_('Pontos:'), default=0, null=True, blank=True)
 
     slug = models.SlugField(max_length=50, unique=True, editable=False)
 
@@ -364,13 +364,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Partida(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
-    data = models.DateField(auto_now=False, auto_now_add=False, null=True)
-    hora = models.TimeField(auto_now=False, auto_now_add=False, null=True)
-    relacionados = models.ManyToManyField(User, related_name='relacionados', blank=True)
-    time_verde = models.ManyToManyField(User, related_name='partidas_timeA', blank=True)
-    time_vermelho = models.ManyToManyField(User, related_name='partidas_timeB', blank=True)
-    time_azul = models.ManyToManyField(User, related_name='partidas_timeC', blank=True)
-    sorteada = models.BooleanField(default=False)
+    data = models.DateField(_('Data:'), auto_now=False, auto_now_add=False, null=True)
+    hora = models.TimeField(_('Horário:'), auto_now=False, auto_now_add=False, null=True)
+    relacionados = models.ManyToManyField(_('Relacioandos:'), User, related_name='relacionados', blank=True)
+    time_verde = models.ManyToManyField(_('Time Verde:'), User, related_name='partidas_timeA', blank=True)
+    time_vermelho = models.ManyToManyField(_('Time Vermelho:'), User, related_name='partidas_timeB', blank=True)
+    time_azul = models.ManyToManyField(_('Time Azul:'), User, related_name='partidas_timeC', blank=True)
+    sorteada = models.BooleanField(_('Foi sorteada?'), default=False)
 
     slug = models.SlugField(max_length=50, unique=True, editable=False, default='')
 
@@ -389,10 +389,10 @@ class Partida(models.Model):
         
 class Pagamento(models.Model):
 
-    comprovante = models.ImageField(upload_to='main/images/pagamentos', blank=True, null=True)
-    jogador = models.ForeignKey(User, on_delete=models.CASCADE)
-    partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
-    em_dinheiro = models.BooleanField(default=False)
+    comprovante = models.ImageField(_('Comprovante:'), upload_to='main/images/pagamentos', blank=True, null=True)
+    jogador = models.ForeignKey(_('Jogador:'), User, on_delete=models.CASCADE)
+    partida = models.ForeignKey(_('Partida:'), Partida, on_delete=models.CASCADE)
+    em_dinheiro = models.BooleanField(_('Pagamento em dinheiro?:'), default=False)
 
     def __str__(self):
         return self.jogador.nome_jogador
@@ -427,11 +427,11 @@ def validate_media_file(value):
         raise ValidationError("O arquivo deve ser uma imagem (jpg, jpeg, png, gif) ou um vídeo (mp4, avi, mov, m4a).")
 
 class Noticia(models.Model):
-    titulo = models.CharField('Título:', max_length=100)
-    texto = models.CharField('Texto da Notícia:', max_length=255)
-    midia = models.FileField('Imagem ou vídeo:', upload_to=MediaTypeUploadTo(), validators=[validate_media_file])
-    duracao_video = models.PositiveSmallIntegerField('Duração do vídeo (em milissegundos):', null=True, blank=True)
-    desc_imagem = models.CharField('Descrição da Imagem:', max_length=100, blank=True, null=True)
+    titulo = models.CharField(_('Título:'), max_length=100)
+    texto = models.CharField(_('Texto da Notícia:'), max_length=255)
+    midia = models.FileField(_('Imagem ou vídeo:'), upload_to=MediaTypeUploadTo(), validators=[validate_media_file])
+    duracao_video = models.PositiveSmallIntegerField(_('Duração do vídeo (em milissegundos):'), null=True, blank=True)
+    desc_imagem = models.CharField(_('Descrição da Imagem:'), max_length=100, blank=True, null=True)
     
     class Meta:
         verbose_name = 'Noticía'
@@ -443,9 +443,9 @@ class Noticia(models.Model):
     
 class Patrocinador(models.Model):
 
-    nome = models.CharField(max_length=18, default='')
-    logo = models.ImageField(upload_to='main/images/patrocinadores')
-    link = models.URLField(max_length=200, default='')
+    nome = models.CharField(_('Nome:'), max_length=18, default='')
+    logo = models.ImageField(_('Logo:'), upload_to='main/images/patrocinadores')
+    link = models.URLField(_('Link:'), max_length=200, default='')
 
     def __str__(self):
         return self.nome
