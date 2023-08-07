@@ -366,10 +366,10 @@ class Partida(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     data = models.DateField(_('Data:'), auto_now=False, auto_now_add=False, null=True)
     hora = models.TimeField(_('Horário:'), auto_now=False, auto_now_add=False, null=True)
-    relacionados = models.ManyToManyField(_('Relacioandos:'), User, related_name='relacionados', blank=True)
-    time_verde = models.ManyToManyField(_('Time Verde:'), User, related_name='partidas_timeA', blank=True)
-    time_vermelho = models.ManyToManyField(_('Time Vermelho:'), User, related_name='partidas_timeB', blank=True)
-    time_azul = models.ManyToManyField(_('Time Azul:'), User, related_name='partidas_timeC', blank=True)
+    relacionados = models.ManyToManyField(User, related_name='relacionados', blank=True)
+    time_verde = models.ManyToManyField(User, related_name='partidas_timeA', blank=True)
+    time_vermelho = models.ManyToManyField(User, related_name='partidas_timeB', blank=True)
+    time_azul = models.ManyToManyField(User, related_name='partidas_timeC', blank=True)
     sorteada = models.BooleanField(_('Foi sorteada?'), default=False)
 
     slug = models.SlugField(max_length=50, unique=True, editable=False, default='')
@@ -390,8 +390,8 @@ class Partida(models.Model):
 class Pagamento(models.Model):
 
     comprovante = models.ImageField(_('Comprovante:'), upload_to='main/images/pagamentos', blank=True, null=True)
-    jogador = models.ForeignKey(_('Jogador:'), User, on_delete=models.CASCADE)
-    partida = models.ForeignKey(_('Partida:'), Partida, on_delete=models.CASCADE)
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE)
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
     em_dinheiro = models.BooleanField(_('Pagamento em dinheiro?:'), default=False)
 
     def __str__(self):
