@@ -64,10 +64,8 @@
   border: 1px blue solid;
 }
 .patrocinador figure figcaption {
-  width: 76px;
-  /* ou qualquer outra largura desejada */
+  width: 100px;
   overflow-wrap: break-word;
-  /* ou */
   word-wrap: break-word;
 }
 
