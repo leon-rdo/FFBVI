@@ -80,8 +80,12 @@
   height: 6px;
 }
 
+.badge-partidas {
+  min-width: 6rem;
+}
+
 @media (max-width: 370px) {
-  .badge {
+  .badge-partidas {
     display: none;
   }
 }
