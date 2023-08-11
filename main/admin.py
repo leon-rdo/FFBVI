@@ -9,8 +9,8 @@ class PagamentoInline(admin.TabularInline):
 @admin.register(Partida)
 class PartidaAdmin(admin.ModelAdmin):
     ordering = ['-data']
-    list_filter = ['data']
-    list_display = ['__str__', 'sorteada']
+    list_filter = ['data', 'anulada']
+    list_display = ['__str__', 'sorteada', 'anulada']
     
     inlines = [PagamentoInline]
 
