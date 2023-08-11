@@ -18,7 +18,9 @@
             {% for partida in partidas %}
                 <a href="{% url 'main:partida' partida.id %}" class="fs-6 list-group-item list-group-item-action list-group-item-light d-flex justify-content-between {% if partida == partida_proxima %}active" aria-current="true" {% else %}"{% endif %}>
                     {{ partida.data }} às {{ partida.hora }}
-                    {% if partida == partida_proxima %}
+                    {% if partida.anulada %}
+                        <span class="badge badge-partidas text-bg-warning ms-2">Cancelada</span>
+                    {% elif partida == partida_proxima %}
                         <span class="badge badge-partidas text-bg-success ms-2">Aberta</span>
                     {% elif partida.data|date:"Y-m-d" > now|date:"Y-m-d" and partida != partida_proxima %}
                         <span class="badge badge-partidas text-bg-danger ms-2">Fechada</span>

@@ -371,6 +371,8 @@ class Partida(models.Model):
     time_vermelho = models.ManyToManyField(User, related_name='partidas_timeB', blank=True)
     time_azul = models.ManyToManyField(User, related_name='partidas_timeC', blank=True)
     sorteada = models.BooleanField(_('Foi sorteada?'), default=False)
+    anulada = models.BooleanField(_('Foi anulada?'), default=False)
+    razao_anulacao = models.TextField(_("Qual a razão da anulação?"), blank=True)
 
     slug = models.SlugField(max_length=50, unique=True, editable=False, default='')
 

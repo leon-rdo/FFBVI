@@ -17,16 +17,17 @@
         {% if messages %}
         <div class="col-12 col-md-10">
             {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
         </div>
         {% endif %}
+        {% if not partida.anulada %}
         <div class="col-12 col-md-10">
-            {% if now|date:"Y-m-d" < object.data|date:"Y-m-d" %}
-            <h2 class="display-6 text-center">Esta partida ocorrerá em {{ object.data }} às {{ object.hora }}</h2>
+            {% if now|date:"Y-m-d" < object.data|date:"Y-m-d" %} <h2 class="display-6 text-center">Esta partida ocorrerá em {{ object.data }} às {{ object.hora }}</h2>
                 {% if object == partida_proxima %}
                     {% if not pagamento_usuario and object.relacionados.count < 18 %}
                     <div class="w-100 d-flex justify-content-center mt-3">
@@ -37,7 +38,7 @@
                         <form method="post" class="w-100 d-flex justify-content-center mt-3">
                             {% csrf_token %}
                             <button class="btn btn-lg btn-success" type="submit" name="confirmar_presenca">Confirmar Presença</button>
-                        </form>                    
+                        </form>
                         {% endif %}
                     {% endif %}
                 {% else %}
@@ -47,29 +48,32 @@
                 {% endif %}
             {% elif now|date:"Y-m-d" == object.data|date:"Y-m-d" %}
             <h2 class="display-6 text-center">Esta partida ocorrerá hoje às {{ object.hora }}!</h2>
-            {% if not pagamento_usuario and object.relacionados.count < 18 %}
-            <div class="w-100 d-flex justify-content-center mt-3">
-                <a class="btn btn-success btn-lg" role="button" href="{% url 'main:pagamento' object.slug %}">Pagar Taxa</a>
-            </div>
-            {% else %}
-                {% if object.relacionados.count < 18 %}
+                {% if not pagamento_usuario and object.relacionados.count < 18 %}
+                <div class="w-100 d-flex justify-content-center mt-3">
+                    <a class="btn btn-success btn-lg" role="button" href="{% url 'main:pagamento' object.slug %}">Pagar Taxa</a>
+                </div>
+                {% else %}
+                    {% if object.relacionados.count < 18 %}
                     <form method="post" class="w-100 d-flex justify-content-center mt-3">
                         {% csrf_token %}
                         <button class="btn btn-lg btn-success" type="submit" name="confirmar_presenca">Confirmar Presença</button>
                     </form>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        {% else %}
+            {% else %}
             <h2 class="display-6 text-center">Esta partida ocorreu em {{ object.data }} às {{ object.hora }}</h2>
-        {% endif %}
+            {% endif %}
         </div>
         <div class="row justify-content-center align-items-top mt-4 g-2">
-        {% if not object.sorteada %}
+            {% if not object.sorteada %}
             <div class="col-12 col-md-10 border border-secondary rounded-3 mt-3 p-2">
                 <ul class="list-group list-group-flush">
                     <h3 class="text-secondary text-center" id="timeVerdeTitle">Relacionados</h3>
                     {% for jogador in object.relacionados.all %}
-                    <li class="list-group-item d-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">{{ jogador.nome_jogador }} <span class="badge rounded-pill text-bg-secondary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                        <li class="list-group-item d-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
+                            {{ jogador.nome_jogador }}
+                            <span class="badge rounded-pill text-bg-secondary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -82,13 +86,15 @@
                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-{% if porcentagem == 100 %}danger{% elif porcentagem >= 76 %}danger{% elif porcentagem >= 51 %}warning{% elif porcentagem >= 26 %}info{% elif porcentagem >= 0 %}success{% endif %}" style="width: {{ porcentagem }}%" id="lotacao-progress-bar">{{ porcentagem }}%</div>
                 </div>
             </div>
-        {% else %}
+            {% else %}
             <div class="col-12 col-md-4 p-2 time">
                 <ul class="list-group list-group-flush border border-success rounded-3">
                     <h3 class="text-success text-center" id="timeVerdeTitle">Time Verde</h3>
                     {% for jogador in object.time_verde.all %}
-                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">{{ jogador.nome_jogador }} <span
-                            class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
+                        {{ jogador.nome_jogador }}
+                        <span class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -97,7 +103,10 @@
                 <ul class="list-group list-group-flush border border-danger rounded-3">
                     <h3 class="text-danger text-center" id="timeVermelhoTitle">Time Vermelho</h3>
                     {% for jogador in object.time_vermelho.all %}
-                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">{{ jogador.nome_jogador }} <span class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
+                        {{ jogador.nome_jogador }}
+                        <span class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -106,21 +115,25 @@
                 <ul class="list-group list-group-flush border border-primary rounded-3">
                     <h3 class="text-primary text-center text" id="timeAzulTitle">Time Azul</h3>
                     {% for jogador in object.time_azul.all %}
-                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">{{ jogador.nome_jogador }} <span class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
+                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
+                        {{ jogador.nome_jogador }}
+                        <span class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
 
             <small class="text-end text-secondary text-decoration-underline mt-1">*Convidados sublinhados</small>
 
-            {% if user.tipo == 'admin' %}
-            <div class="col-12 d-flex justify-content-center align-items-center mt-4">
-                <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
-                    Enviar no WhatsApp<img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
-                </button>
-            </div>
+                {% if user.tipo == 'admin' %}
+                <div class="col-12 d-flex justify-content-center align-items-center mt-4">
+                    <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
+                        Enviar no WhatsApp
+                        <img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
+                    </button>
+                </div>
+                {% endif %}
             {% endif %}
-        {% endif %}
             {% if user in object.relacionados.all and now.date|date:'Y-m-d' >= dia_anterior|date:'Y-m-d' and object.relacionados.count < 18 %}
             <div class="col-12 d-flex justify-content-center mt-4">
                 <a class="btn btn-primary" role="button" href="{% url 'main:convidado_existente' object.slug %}">
@@ -129,78 +142,83 @@
             </div>
             {% endif %}
         </div>
-        {% if now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
-                <button class="btn btn-primary m-1 m-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar"
-                    aria-controls="offcanvasEditar">
-                    Editar
-                </button>
+            {% if now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
+                    <button class="btn btn-primary m-1 m-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar" aria-controls="offcanvasEditar">
+                        Editar
+                    </button>
 
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEditar"
-                    aria-labelledby="offcanvasEditarLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasEditarLabel">Editar partida</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <div>
-                            <form class="form-floating" method="post">
-                                {% csrf_token %}
-                                <div class="form-floating mb-3">
-                                    {{ form.data }}
-                                    {{ form.data.label_tag }}
-                                </div>
-                                <div class="form-floating mb-3">
-                                    {{ form.hora }}
-                                    {{ form.hora.label_tag }}
-                                </div>
-                                <button class="btn btn-success" type="submit">Salvar</button>
-                            </form>
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEditar"
+                        aria-labelledby="offcanvasEditarLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasEditarLabel">Editar partida</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div>
+                                <form class="form-floating" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-floating mb-3">
+                                        {{ form.data }}
+                                        {{ form.data.label_tag }}
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        {{ form.hora }}
+                                        {{ form.hora.label_tag }}
+                                    </div>
+                                    <button class="btn btn-success" type="submit">Salvar</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <a class="btn btn-success m-1 m-md-0" href="{% url 'main:pagamentos' object.slug %}">
-                    Pagamentos &#128176;
-                </a>
+                    <a class="btn btn-success m-1 m-md-0" href="{% url 'main:pagamentos' object.slug %}">
+                        Pagamentos &#128176;
+                    </a>
 
-                <button type="button" class="btn btn-danger m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#excluir">
-                    Excluir
-                </button>
+                    <button type="button" class="btn btn-danger m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#excluir">
+                        Excluir
+                    </button>
 
-                <div class="modal fade" id="excluir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                    aria-labelledby="excluirLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="excluirLabel">Realmente excluir esta partida?</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Esta ação não é reversível.
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <form action="{% url 'main:excluir_partida' object.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">Sim, desejo excluir.</button>
-                                </form>
+                    <div class="modal fade" id="excluir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                        aria-labelledby="excluirLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="excluirLabel">Realmente excluir esta partida?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Esta ação não é reversível.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <form action="{% url 'main:excluir_partida' object.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Sim, desejo excluir.</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
+        {% else %}
+        <div class="col-12 col-md-10 d-flex flex-column align-items-center">
+            <h2 class="display-3 text-warning mb-3">Esta partida foi anulada.</h2>
+            <h3 class="display-5">{{ partida.razao_anulacao | safe }}</h3>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
 </div>
 {% endblock content %}
 
 {% block more_scripts %}
 <script>
-    window.onload = function() {
-        setTimeout(function() {
+    window.onload = function () {
+        setTimeout(function () {
             if (document.getElementById('lotacao').getAttribute('aria-valuenow') == '100') {
                 document.getElementById('lotacao').classList.add('d-none');
                 document.getElementById('lotacao-title').innerHTML = 'Partida Lotada!';
