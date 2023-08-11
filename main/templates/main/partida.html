@@ -27,7 +27,8 @@
         {% endif %}
         {% if not partida.anulada %}
         <div class="col-12 col-md-10">
-            {% if now|date:"Y-m-d" < object.data|date:"Y-m-d" %} <h2 class="display-6 text-center">Esta partida ocorrerá em {{ object.data }} às {{ object.hora }}</h2>
+            {% if now|date:"Y-m-d" < object.data|date:"Y-m-d" %}
+            <h2 class="display-6 text-center">Esta partida ocorrerá em <time>{{ object.data }} às {{ object.hora }}</time></h2>
                 {% if object == partida_proxima %}
                     {% if not pagamento_usuario and object.relacionados.count < 18 %}
                     <div class="w-100 d-flex justify-content-center mt-3">
@@ -47,7 +48,7 @@
                 </div>
                 {% endif %}
             {% elif now|date:"Y-m-d" == object.data|date:"Y-m-d" %}
-            <h2 class="display-6 text-center">Esta partida ocorrerá hoje às {{ object.hora }}!</h2>
+            <h2 class="display-6 text-center">Esta partida ocorrerá hoje às <time>{{ object.hora }}</time>!</h2>
                 {% if not pagamento_usuario and object.relacionados.count < 18 %}
                 <div class="w-100 d-flex justify-content-center mt-3">
                     <a class="btn btn-success btn-lg" role="button" href="{% url 'main:pagamento' object.slug %}">Pagar Taxa</a>
@@ -61,7 +62,7 @@
                     {% endif %}
                 {% endif %}
             {% else %}
-            <h2 class="display-6 text-center">Esta partida ocorreu em {{ object.data }} às {{ object.hora }}</h2>
+            <h2 class="display-6 text-center">Esta partida ocorreu em <time>{{ object.data }} às {{ object.hora }}</time></h2>
             {% endif %}
         </div>
         <div class="row justify-content-center align-items-top mt-4 g-2">
@@ -207,8 +208,12 @@
             {% endif %}
         {% else %}
         <div class="col-12 col-md-10 d-flex flex-column align-items-center">
-            <h2 class="display-3 text-warning mb-3">Esta partida foi anulada.</h2>
-            <h3 class="display-5">{{ partida.razao_anulacao | safe }}</h3>
+            <h3 class="display-6">Esta partida ocorreria em <time>{{ object.data }} às {{ object.hora }}</time>.</h3>
+            <h2 class="display-3 text-warning">Partida anulada.</h2>
+            <h3 class="display-5">
+                <span class="text-secondary fs-3">Razão do cancelamento:</span>
+                <br>
+                {{ partida.razao_anulacao | safe }}</h3>
         </div>
         {% endif %}
     </div>
