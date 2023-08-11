@@ -1,9 +1,13 @@
 .badge-partidas {
-    min-width: 6rem;
-}
+    width: 5.6rem;
+    height: 1.6rem;
 
-@media (max-width: 370px) {
-    .badge-partidas {
+    @media (max-width: 329px) {
+        display: none;
+    }
+}
+.hora-partida {
+    @media (max-width: 391px) {
         display: none;
     }
 }

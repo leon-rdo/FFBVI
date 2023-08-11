@@ -17,7 +17,7 @@
         <div class="col-12 col-md-9 list-group border border-secondary p-0">
             {% for partida in partidas %}
                 <a href="{% url 'main:partida' partida.id %}" class="fs-6 list-group-item list-group-item-action list-group-item-light d-flex justify-content-between {% if partida == partida_proxima %}active" aria-current="true" {% else %}"{% endif %}>
-                    {{ partida.data }} às {{ partida.hora }}
+                    <time class="d-flex">{{ partida.data }}<span class="hora-partida ms-1">às {{ partida.hora }}</span></time>
                     {% if partida.anulada %}
                         <span class="badge badge-partidas text-bg-warning ms-2">Cancelada</span>
                     {% elif partida == partida_proxima %}

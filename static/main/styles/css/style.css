@@ -81,14 +81,21 @@
 }
 
 .badge-partidas {
-  min-width: 6rem;
+  width: 5.6rem;
+  height: 1.6rem;
 }
-
-@media (max-width: 370px) {
+@media (max-width: 329px) {
   .badge-partidas {
     display: none;
   }
 }
+
+@media (max-width: 391px) {
+  .hora-partida {
+    display: none;
+  }
+}
+
 #lotacao-title, #lotacao {
   transition: all 0.6s ease;
 }
