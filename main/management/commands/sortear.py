@@ -69,7 +69,7 @@ class Command(BaseCommand):
                     time_escolhido = choice(times)
                     time_escolhido.add(goleiro)
                         
-                self.stdout.write(self.style.WARNING('Há mais de três goleiros.'))
+                self.stdout.write(self.style.WARNING(f'Há {len(relacionados)} relacionados, e mais de quatro goleiros.'))
 
             # Atribua os jogadores restantes aos times, de acordo com a lotação
             for jogador in jogadores:
