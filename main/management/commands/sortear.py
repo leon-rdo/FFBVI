@@ -17,6 +17,7 @@ class Command(BaseCommand):
             # Separe os jogadores de posição "goleiro" dos jogadores restantes
             goleiros = []
             jogadores = []
+            
             for relacionado in relacionados:
                 if relacionado.posicao == 'goleiro':
                     goleiros.append(relacionado)
@@ -27,59 +28,88 @@ class Command(BaseCommand):
             shuffle(goleiros)
             shuffle(jogadores)
 
-            # Verifique se há 3 goleiros na lista
-            if len(goleiros) == 3:
-                # Redistribua os goleiros nos três times
-                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
-                shuffle(times)
-                times[0].set([goleiros[0]])
-                times[1].set([goleiros[1]])
-                times[2].set([goleiros[2]])
-                self.stdout.write(self.style.WARNING('Há três goleiros.'))
+            if len(relacionados) <= 12:
                 
-            # Verifique se há 2 goleiros para sortear
-            elif len(goleiros) == 2:
-                # Atribua os goleiros aleatoriamente a dois dos times
-                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
-                shuffle(times)
-                times_escolhidos = [times[0], times[1]]
-                times_escolhidos[0].set([goleiros[0]])
-                times_escolhidos[1].set([goleiros[1]])
-                self.stdout.write(self.style.WARNING('Há dois goleiros.'))
-
-            # Verifique se há 1 goleiros para sortear
-            elif len(goleiros) == 1:
-                # Atribua o único goleiro aleatoriamente a um dos times
-                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
-                time_escolhido = choice(times)
-                time_escolhido.set([goleiros[0]])
-                self.stdout.write(self.style.WARNING('Há um goleiro.'))
+                self.stdout.write(self.style.WARNING('Há doze ou menos jogadores!'))
                 
-            # Verifique se há mais de 3 goleiros para sortear
-            elif len(goleiros) > 3:
-                # Redistribua os goleiros nos três primeiros times
-                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
-                shuffle(times)
-                times[0].set([goleiros[0]])
-                times[1].set([goleiros[1]])
-                times[2].set([goleiros[2]])
-
-                # Distribua os goleiros restantes aleatoriamente nos times
-                for goleiro in goleiros[3:]:
-                    time_escolhido = choice(times)
-                    time_escolhido.add(goleiro)
+                if len(goleiros) == 2:
+                    # Atribui os goleiros aleatoriamente a dois dos times
+                    times = [partida.time_verde, partida.time_vermelho]
+                    shuffle(times)
+                    times_escolhidos = [times[0], times[1]]
+                    times_escolhidos[0].set([goleiros[0]])
+                    times_escolhidos[1].set([goleiros[1]])
+                    self.stdout.write(self.style.WARNING('Há dois goleiros.'))
                     
-                self.stdout.write(self.style.WARNING('Há mais de três goleiros.'))
+                # Atribua os jogadores restantes aos times, de acordo com a
+                for jogador in jogadores:
+                    if partida.time_verde.count() < 6:
+                        partida.time_verde.add(jogador)
+                    else:
+                        partida.time_vermelho.add(jogador)
 
-            # Divida a lista em três partes iguais
-            terco = len(jogadores) // 3
-            partida.time_verde.add(*jogadores[:terco])
-            partida.time_vermelho.add(*jogadores[terco:2 * terco])
-            partida.time_azul.add(*jogadores[2 * terco:])
+                # Marca a partida como sorteada
+                partida.sorteada = True
+                partida.save()
+                self.stdout.write(self.style.SUCCESS('Os relacionados foram distribuídos entre os times!'))
+            
+            else:
+                # Verifica se há 3 goleiros na lista
+                if len(goleiros) == 3:
+                    # Distribui os goleiros nos três times
+                    times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                    shuffle(times)
+                    times[0].set([goleiros[0]])
+                    times[1].set([goleiros[1]])
+                    times[2].set([goleiros[2]])
+                    self.stdout.write(self.style.WARNING('Há três goleiros.'))
+                    
+                # Verifica se há 2 goleiros na lista
+                elif len(goleiros) == 2:
+                    # Atribui os goleiros aleatoriamente a dois dos times
+                    times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                    shuffle(times)
+                    times_escolhidos = [times[0], times[1]]
+                    times_escolhidos[0].set([goleiros[0]])
+                    times_escolhidos[1].set([goleiros[1]])
+                    self.stdout.write(self.style.WARNING('Há dois goleiros.'))
 
-            # Marque a partida como sorteada
-            partida.sorteada = True
-            partida.save()
-            self.stdout.write(self.style.SUCCESS('Os relacionados foram distribuídos entre os times!'))
+                # Verifica se há apenas um goleiro na lista
+                elif len(goleiros) == 1:
+                    # Atribui o único goleiro aleatoriamente a um dos times
+                    times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                    time_escolhido = choice(times)
+                    time_escolhido.set([goleiros[0]])
+                    self.stdout.write(self.style.WARNING('Há um goleiro.'))
+                    
+                # Verifica se há mais de 3 goleiros na lista
+                elif len(goleiros) > 3:
+                    # Distribui os goleiros nos três primeiros times
+                    times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                    shuffle(times)
+                    times[0].set([goleiros[0]])
+                    times[1].set([goleiros[1]])
+                    times[2].set([goleiros[2]])
+
+                    # Distribui os goleiros restantes aleatoriamente nos times
+                    for goleiro in goleiros[3:]:
+                        time_escolhido = choice(times)
+                        time_escolhido.add(goleiro)
+                        
+                    self.stdout.write(self.style.WARNING('Há mais de três goleiros.'))
+
+                # Atribua os jogadores restantes aos times, de acordo com a lotação
+                for jogador in jogadores:
+                    if partida.time_verde.count() < 6:
+                        partida.time_verde.add(jogador)
+                    elif partida.time_vermelho.count() < 6:
+                        partida.time_vermelho.add(jogador)
+                    else:
+                        partida.time_azul.add(jogador)
+
+                # Marca a partida como sorteada
+                partida.sorteada = True
+                partida.save()
+                self.stdout.write(self.style.SUCCESS('Os relacionados foram distribuídos entre os times!'))
         else:
             self.stdout.write(self.style.ERROR('Não há partida agendada para hoje ou ela já foi sorteada.'))
