@@ -1,10 +1,16 @@
 from django.contrib import admin
 from main.models import *
 
+@admin.register(Pagamento)
+class PagamentoAdmin(admin.ModelAdmin):
+    list_display = ['data_hora', 'jogador', 'partida', 'confirmado']
+    ordering = ['-data_hora']
+    readonly_fields = ['data_hora']
+
 class PagamentoInline(admin.TabularInline):
     model = Pagamento
     extra = 0
-    readonly_fields = ['jogador']
+    readonly_fields = ['jogador', 'data_hora']
 
 @admin.register(Partida)
 class PartidaAdmin(admin.ModelAdmin):
