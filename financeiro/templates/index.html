@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}FFBVI - Financeiro{% endblock title %}
+{% block style %}
+<style>
+    .acao {
+        min-width: 80%;
+    }
+</style>
+{% endblock style %}
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row justify-content-end align-items-center">
+        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
+            <span class="btn btn-primary me-2">Saldo: R$ 100,00</span>
+        </div>
+    </div>
+    <div class="row flex-column-reverse flex-md-row justify-content-center px-md-3 g-2">
+        <div class="col-12 col-md-6 col-lg-4 border entradas">
+            <h3 class="text-success text-center">Entradas</h3>
+            <ul class="list-group list-group-flush">
+                {% for pagamento in pagamentos %}
+                {% if forloop.counter < 8 %}
+                <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento.jogador.nome_jogador }}<span class="text-success">+ R$ 10,00 </span></li>
+                {% endif %}
+                {% endfor %}
+                <li class="list-group-item text-center"><a href="#">Ver mais...</a></li>
+            </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 border saidas">
+            <h3 class="text-danger text-center">Saídas</h3>
+            <ul class="list-group list-group-flush">
+                {% for partida in partidas %}
+                {% if not partida.anulada %}
+                {% if forloop.counter < 8 %}
+                <li class="list-group-item d-flex justify-content-between">Aluguel da Quadra<span class="text-danger">- R$ 140,00</span></li>            
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between">Aluguel da Quadra<span class="text-danger">- R$ 140,00</span></li>
+                <li class="list-group-item text-center"><a href="#">Ver mais...</a></li>
+            </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 border acoes">
+            <h3 class="text-primary text-center">Ações</h3>
+            <ul class="list-group list-group-flush text-center">
+                <li class="list-group-item"><a class="btn btn-primary acao" href="#" role="button">Confirmar Pagamentos</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="#" role="button">Pagamentos Pendentes</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="#" role="button">Lançar despesa</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

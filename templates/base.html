@@ -47,10 +47,12 @@
         flex: 1;
       }
   </style>
+  {% block style %}{% endblock style %}
 </head>
 
 <body>
   <header>
+    {% url 'financeiro:menu_financeiro' as financeiro_url %}
     {% url 'main:homepage' as homepage_url %}
     {% url 'main:federados' as federados_url %}
     {% url 'main:partidas' as partidas_url %}
@@ -58,10 +60,10 @@
     {% url 'main:regras' as regras_url %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center text-white fs-4" href="{% url 'main:homepage' %}">
+        <a class="navbar-brand d-flex align-items-center text-white fs-4" href="{% if request.path == financeiro_url %}{% url 'financeiro:menu_financeiro' %}{% endif %}">
           <img class="me-2" src="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" alt="Logo" width="40"
             height="40" class="d-inline-block align-text-top">
-          FFBVI
+          FFBVI{% if request.path == financeiro_url %}<span class="ms-1 d-none d-sm-block">- Financeiro</span>{% endif %}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
           aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +90,10 @@
             <li class="nav-item me-2">
               <a class="nav-link {% if request.path == patrocinadores_url %}active{% endif %}"
                 href="{% url 'main:patrocinadores' %}">Patrocinadores</a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == financeiro_url %}active{% endif %}"
+                href="{% url 'financeiro:menu_financeiro' %}">Financeiro</a>
             </li>
           </ul>
           {% if user.is_authenticated %}
@@ -137,7 +143,9 @@
               <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a></li>
             </ul>
             {% else %}
-            <a class="btn btn-light" href="{% url 'login' %}" role="button">Entrar</a>
+            <div class="d-flex justify-content-end">
+              <a class="btn btn-light" href="{% url 'login' %}" role="button">Entrar</a>
+            </div>
             {% endif %}
           </div>
         </div>
