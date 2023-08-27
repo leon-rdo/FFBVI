@@ -1,39 +1,9 @@
-{% extends "base.html" %}
+{% extends "financeiro/base_pagamento_arquivo.html" %}
 
-{% block title %}FFBVI - Financeiro{% endblock title %}
-{% block content %}
-<div class="container-fluid p-0">
-    <div class="row justify-content-end align-items-center">
-        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
-            <span class="btn btn-primary me-2">Saldo: R$ 100,00</span>
-        </div>
-    </div>
-    <div class="row flex-column-reverse flex-md-row justify-content-center px-md-3 g-2">
-        {% if messages %}
-        <div class="col-12 col-md-10">
-            {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
-                role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <div class="col-12 col-md-6 border entradas">
-            <h3 class="text-success text-center d-flex justify-content-between">
-                <a class="btn btn-sm btn-secondary m-2">{{ previous_month|date:'F' }}</a>
-                Pagamentos de {{ month|date:"F" }}
-                <a class="btn btn-sm btn-secondary m-2">{{ next_month|date:'F' }}</a>
-            </h3>
-            <ul class="list-group list-group-flush">
-                {% for pagamento in pagamentos %}
-                <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento.jogador.nome_jogador }} em {{ pagamento.data }}<span class="text-success">+ R$ {{ pagamento.valor }}</span></li>
-                {% empty %}
-                <li class="list-group-item">Não há pagamentos para esta data!</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-</div>
-{% endblock content %}
+{% block title %}Pagamentos em {{ month|date:'F' }}{% endblock title %}
+
+{% block url_previous_date %}{% url 'financeiro:pagamento_month' previous_month|date:'Y' previous_month|date:'m' %}{% endblock url_previous_date %}
+{% block url_next_date %}{% url 'financeiro:pagamento_month' next_month|date:'Y' next_month|date:'m' %}{% endblock url_next_date %}
+{% block previous_date %}{{ previous_month|date:'F' }}{% endblock previous_date %}
+{% block current_date %}{{ month|date:"F" }} de {{ month|date:'Y' }}{% endblock current_date %}
+{% block next_date %}{{ next_month|date:'F' }}{% endblock next_date %}

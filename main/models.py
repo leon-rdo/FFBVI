@@ -398,7 +398,7 @@ class Pagamento(models.Model):
     em_dinheiro = models.BooleanField(_('Pagamento em dinheiro?'), default=False)
     valor = models.DecimalField(decimal_places=2, max_digits=5, default=10.00)
     confirmado = models.BooleanField(_('Pagamento confirmado?'), default=False)
-    data = models.DateField(_("Data e hora do pagamento"), auto_now_add=True, null=True)
+    data = models.DateField(_("Data do pagamento"), auto_now_add=True, null=True)
     
     def __str__(self):
         return self.jogador.nome_jogador
