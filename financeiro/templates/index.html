@@ -15,7 +15,18 @@
             <span class="btn btn-primary me-2">Saldo: R$ 100,00</span>
         </div>
     </div>
-    <div class="row flex-column-reverse flex-md-row justify-content-center px-md-3 g-2">
+    <div class="row justify-content-center px-md-3 g-2">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <div class="col-12 col-md-6 col-lg-4 border entradas">
             <h3 class="text-success text-center">Entradas</h3>
             <ul class="list-group list-group-flush">
@@ -30,6 +41,12 @@
         <div class="col-12 col-md-6 col-lg-4 border saidas">
             <h3 class="text-danger text-center">Saídas</h3>
             <ul class="list-group list-group-flush">
+                {% for saida in saidas %}
+                <li class="list-group-item d-flex justify-content-between">
+                    {{ saida.descricao }}
+                    <span class="text-danger">- R$ {{ saida.valor }}</span>
+                </li>
+                {% endfor %}
                 {% for partida in partidas %}
                 {% if not partida.anulada %}
                 {% if forloop.counter < 8 %}
@@ -45,7 +62,7 @@
             <h3 class="text-primary text-center">Ações</h3>
             <ul class="list-group list-group-flush text-center">
                 <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamentos_pendentes' %}" role="button">Pagamentos a Confirmar</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="#" role="button">Lançar Saída</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:lancar_saida' %}" role="button">Lançar Saída</a></li>
             </ul>
         </div>
     </div>

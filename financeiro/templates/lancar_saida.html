@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}FFBVI - Lançar Saída{% endblock title %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row justify-content-end align-items-center">
+        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
+            <span class="btn btn-primary me-2">Saldo: {{ saldo }}</span>
+        </div>
+    </div>
+    <div class="row justify-content-center px-md-3 g-2">
+        <div class="col-12 col-md-6 col-lg-4 border entradas">
+            <h3 class="text-danger text-center">Lançar Saída</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-outline-danger" type="submit">Lançar</button>
+            </form>
+        </div>
+</div>
+{% endblock content %}

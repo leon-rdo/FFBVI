@@ -1,7 +1,9 @@
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, YearArchiveView, MonthArchiveView
+from django.views.generic import TemplateView, ListView, YearArchiveView, MonthArchiveView, CreateView
 from main.models import Pagamento, Partida
+from .models import Saida
 from django.contrib import messages
 
 class IndexView(TemplateView):
@@ -11,6 +13,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["pagamentos"] = Pagamento.objects.all()
         context["partidas"] = Partida.objects.all()
+        context['saidas'] = Saida.objects.all()
         return context
     
 class PagamentosPendentesView(ListView):
@@ -29,7 +32,18 @@ class ConfirmarPagamentoView(View):
         pagamento.save()
         messages.success(self.request, f'Pagamento de {pagamento.jogador.nome_jogador} em {pagamento.data} confirmado!')
         return redirect('financeiro:pagamentos_pendentes')
+
+
+class SaidaCreateView(CreateView):
+    model = Saida
+    template_name = "lancar_saida.html"
+    fields = ['descricao', 'valor']
+    success_url = reverse_lazy('financeiro:menu_financeiro')
     
+    def form_valid(self, form):
+        messages.success(self.request, f'Saída lançada!')
+        return super().form_valid(form)
+
 
 class PagamentoYearArchiveView(YearArchiveView):
     queryset = Pagamento.objects.all()
