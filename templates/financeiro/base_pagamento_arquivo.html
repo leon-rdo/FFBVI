@@ -20,6 +20,9 @@
             {% endfor %}
         </div>
         {% endif %}
+        <div class="col-12 d-flex justify-content-center">
+            {% block ver_por %}{% endblock ver_por %}
+        </div>
         <div class="col-12 col-md-6 border entradas">
             <h3 class="text-success text-center d-flex justify-content-between">
                 <a href="{% block url_previous_date %}{% endblock url_previous_date %}" class="btn btn-sm btn-secondary m-2">{% block previous_date %}{% endblock previous_date %}</a>

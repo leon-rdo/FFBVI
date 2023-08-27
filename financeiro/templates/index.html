@@ -35,7 +35,7 @@
                 <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento.jogador.nome_jogador }}<span class="text-success">+ R$ {{ pagamento.valor }} </span></li>
                 {% endif %}
                 {% endfor %}
-                <li class="list-group-item text-center"><a href="#">Ver mais...</a></li>
+                <li class="list-group-item text-center"><a href="{% url 'financeiro:pagamento_year' current_year %}">Ver mais...</a></li>
             </ul>
         </div>
         <div class="col-12 col-md-6 col-lg-4 border saidas">
@@ -55,6 +55,8 @@
             <ul class="list-group list-group-flush text-center">
                 <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamentos_pendentes' %}" role="button">Pagamentos a Confirmar</a></li>
                 <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:lancar_saida' %}" role="button">Lançar Saída</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamento_year' current_year %}" role="button">Pagamentos deste ano</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamento_month' current_year current_month %}" role="button">Pagamentos deste mês</a></li>
             </ul>
         </div>
     </div>

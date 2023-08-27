@@ -7,3 +7,5 @@
 {% block previous_date %}{{ previous_month|date:'F' }}{% endblock previous_date %}
 {% block current_date %}{{ month|date:"F" }} de {{ month|date:'Y' }}{% endblock current_date %}
 {% block next_date %}{{ next_month|date:'F' }}{% endblock next_date %}
+
+{% block ver_por %}<a class="btn btn-primary btn-sm" href="{% url 'financeiro:pagamento_year' month|date:'Y' %}">Ver por ano</a>{% endblock ver_por %}

@@ -1,8 +1,9 @@
+import datetime
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, YearArchiveView, MonthArchiveView, CreateView
-from main.models import Pagamento, Partida
+from main.models import Pagamento
 from .models import Saida
 from django.contrib import messages
 
@@ -11,9 +12,10 @@ class IndexView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["pagamentos"] = Pagamento.objects.all()
-        context["partidas"] = Partida.objects.all()
-        context['saidas'] = Saida.objects.all()
+        context["pagamentos"] = Pagamento.objects.order_by('-data')[:8]
+        context["saidas"] = Saida.objects.order_by('-data')[:8]
+        context["current_year"] = datetime.datetime.today().year
+        context["current_month"] = datetime.datetime.today().month
         return context
     
 class PagamentosPendentesView(ListView):
@@ -53,6 +55,11 @@ class PagamentoYearArchiveView(YearArchiveView):
     allow_empty = True
     template_name = 'arquivo/pagamentos_por_ano.html'
     context_object_name = 'pagamentos'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_month"] = datetime.datetime.today().month
+        return context
 
 class PagamentoMonthArchiveView(MonthArchiveView):
     queryset = Pagamento.objects.all()

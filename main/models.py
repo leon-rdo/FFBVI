@@ -7,7 +7,10 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
-from django.utils.deconstruct import deconstructible    
+from django.utils.deconstruct import deconstructible
+from django.db.models import Sum
+from financeiro.models import Saida    
+
 
 class Configuracao(models.Model):
 
@@ -45,7 +48,9 @@ class Configuracao(models.Model):
     # Do Financeiro
     @property
     def saldo(self):
-        saldo = 0
+        pagamentos_confirmados = Pagamento.objects.filter(confirmado=True).aggregate(total=Sum('valor'))['total']
+        saidas_total = Saida.objects.aggregate(total=Sum('valor'))['total']
+        saldo = pagamentos_confirmados - saidas_total if pagamentos_confirmados is not None and saidas_total is not None else '[ERRO!]'
         return saldo
     
     # Metadados
