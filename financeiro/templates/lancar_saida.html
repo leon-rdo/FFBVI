@@ -11,11 +11,28 @@
     <div class="row justify-content-center px-md-3 g-2">
         <div class="col-12 col-md-6 col-lg-4 border entradas">
             <h3 class="text-danger text-center">Lançar Saída</h3>
-            <form method="post">
+            <form class="form text-center" method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {% for field in form %}
+                <div class="form-floating mb-3">
+                    {{ field }}
+                    {{ field.label_tag }}
+                </div>
+                {% endfor %}
                 <button class="btn btn-outline-danger" type="submit">Lançar</button>
             </form>
         </div>
-</div>
+    </div>
 {% endblock content %}
+
+{% block more_scripts %}
+<script>
+    const pre_inputs = document.getElementsByTagName('input');
+    const inputs = Array.from(pre_inputs)
+    inputs.push(document.getElementById('id_partida'));
+    inputs.forEach(input => {
+        input.classList.add('form-control');
+        input.setAttribute('placeholder', 'dummy');
+    });
+</script>
+{% endblock more_scripts %}
