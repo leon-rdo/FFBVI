@@ -37,7 +37,7 @@ class ConfirmarPagamentoView(View):
 class SaidaCreateView(CreateView):
     model = Saida
     template_name = "lancar_saida.html"
-    fields = ['descricao', 'valor']
+    fields = ['descricao', 'valor', 'partida']
     success_url = reverse_lazy('financeiro:menu_financeiro')
     
     def form_valid(self, form):

@@ -366,7 +366,6 @@ class Partida(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     data = models.DateField(_('Data:'), auto_now=False, auto_now_add=False, null=True)
     hora = models.TimeField(_('Horário:'), auto_now=False, auto_now_add=False, null=True)
-    valor_aluguel = models.DecimalField(decimal_places=2, max_digits=5, default=140.00)
     relacionados = models.ManyToManyField(User, related_name='relacionados', blank=True)
     time_verde = models.ManyToManyField(User, related_name='partidas_timeA', blank=True)
     time_vermelho = models.ManyToManyField(User, related_name='partidas_timeB', blank=True)

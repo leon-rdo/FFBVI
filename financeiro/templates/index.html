@@ -43,18 +43,10 @@
             <ul class="list-group list-group-flush">
                 {% for saida in saidas %}
                 <li class="list-group-item d-flex justify-content-between">
-                    {{ saida.descricao }}
+                    {{ saida.descricao }} {% if saida.partida %}({{ saida.partida.data }}){% endif %}
                     <span class="text-danger">- R$ {{ saida.valor }}</span>
                 </li>
                 {% endfor %}
-                {% for partida in partidas %}
-                {% if not partida.anulada %}
-                {% if forloop.counter < 8 %}
-                <li class="list-group-item d-flex justify-content-between">Aluguel da Quadra<span class="text-danger">- R$ {{ partida.valor_aluguel }}</span></li>            
-                {% endif %}
-                {% endif %}
-                {% endfor %}
-                <li class="list-group-item d-flex justify-content-between">Aluguel da Quadra<span class="text-danger">- R$ 140,00</span></li>
                 <li class="list-group-item text-center"><a href="#">Ver mais...</a></li>
             </ul>
         </div>
