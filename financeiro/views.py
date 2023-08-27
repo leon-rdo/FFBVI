@@ -27,7 +27,7 @@ class ConfirmarPagamentoView(View):
         pagamento = Pagamento.objects.get(pk=pk)
         pagamento.confirmado = True
         pagamento.save()
-        messages.success(self.request, f'Pagamento de {pagamento.jogador.nome_jogador} confirmado!')
+        messages.success(self.request, f'Pagamento de {pagamento.jogador.nome_jogador} em {pagamento.data} confirmado!')
         return redirect('financeiro:pagamentos_pendentes')
     
 
