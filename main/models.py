@@ -395,7 +395,7 @@ class Pagamento(models.Model):
     jogador = models.ForeignKey(User, on_delete=models.CASCADE)
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
     em_dinheiro = models.BooleanField(_('Pagamento em dinheiro?'), default=False)
-    valor = models.DecimalField(decimal_places=2, max_digits=5, default=10.00)
+    valor = models.DecimalField(_('Valor do pagamento:'), decimal_places=2, max_digits=5, default=10.00)
     confirmado = models.BooleanField(_('Pagamento confirmado?'), default=False)
     data = models.DateField(_("Data do pagamento"), auto_now_add=True, null=True)
     
