@@ -1,8 +1,4 @@
-from main.models import User, Patrocinador
-
-def federados(request):
-    federados = User.objects.all()
-    return {'users': federados}
+from main.models import Patrocinador
 
 def patrocinadores(request):
     patrocinadores = Patrocinador.objects.all()

@@ -42,13 +42,21 @@ class Configuracao(models.Model):
     alerta_cor = models.CharField(_('Cor do Alerta:'), default='warning', max_length=50, choices=ALERTA_CORES, blank=True, null=True)
     alerta_icon = models.CharField(_('Ícone do Alerta:'), default=None, max_length=50, choices=ALERTA_ICONES, blank=True, null=True)
     
+    # Do Financeiro
+    @property
+    def saldo(self):
+        saldo = 0
+        return saldo
+    
+    # Metadados
     def __str__(self):
         return 'Configurações'
     
     class Meta:
         verbose_name = 'Configurações'
         verbose_name_plural = 'Configurações'
-
+        
+    # Restrição para um só objeto
     def save(self, *args, **kwargs):
         if not self.pk and Configuracao.objects.exists():
             return Configuracao.objects.first()
