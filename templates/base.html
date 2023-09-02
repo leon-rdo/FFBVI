@@ -91,10 +91,12 @@
               <a class="nav-link {% if request.path == patrocinadores_url %}active{% endif %}"
                 href="{% url 'main:patrocinadores' %}">Patrocinadores</a>
             </li>
+          {% if user.tipo == 'admin' %}
             <li class="nav-item me-2">
               <a class="nav-link {% if request.path == financeiro_url %}active{% endif %}"
                 href="{% url 'financeiro:menu_financeiro' %}">Financeiro</a>
             </li>
+          {% endif %}
           </ul>
           {% if user.is_authenticated %}
           <div class="d-flex justify-content-end">
