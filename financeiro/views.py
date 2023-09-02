@@ -52,6 +52,7 @@ class LancarEntradaView(CreateView):
     template_name = 'lancar_pagamento.html'
     model = Pagamento
     fields = ['comprovante', 'jogador', 'partida', 'em_dinheiro', 'valor']
+    success_url = reverse_lazy('financeiro:pagamentos_pendentes')
     
     def form_valid(self, form):
         if not form.cleaned_data.get('comprovante'):
@@ -61,7 +62,7 @@ class LancarEntradaView(CreateView):
         if not form.cleaned_data.get('partida'):
             form.instance.partida = None
 
-        messages.success(self.request, 'Entrada lançada!')
+        messages.success(self.request, 'Entrada lançada! Confirme-a.')
 
         return super().form_valid(form)
     
