@@ -414,7 +414,10 @@ class Pagamento(models.Model):
     descricao = models.CharField(_("Descrição do Pagamento:"), max_length=255, blank=True, null=True)
     
     def __str__(self):
-        return self.jogador.nome_jogador
+        if self.jogador is not None:
+            return f'Pagamento de {self.jogador.nome_jogador} em {self.data}'
+        else:
+            return f'Pagamento em {self.data}'
 
     class Meta:
         verbose_name = 'Pagamento'

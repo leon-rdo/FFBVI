@@ -1,0 +1,11 @@
+{% extends "financeiro/base_pagamento_arquivo.html" %}
+
+{% block title %}Saída em {{ month|date:'F' }}{% endblock title %}
+
+{% block url_previous_date %}{% url 'financeiro:pagamento_month' previous_month|date:'Y' previous_month|date:'m' %}{% endblock url_previous_date %}
+{% block url_next_date %}{% url 'financeiro:pagamento_month' next_month|date:'Y' next_month|date:'m' %}{% endblock url_next_date %}
+{% block previous_date %}{{ previous_month|date:'F' }}{% endblock previous_date %}
+{% block current_date %}{{ month|date:"F" }} de {{ month|date:'Y' }}{% endblock current_date %}
+{% block next_date %}{{ next_month|date:'F' }}{% endblock next_date %}
+
+{% block ver_por %}<a class="btn btn-primary btn-sm" href="{% url 'financeiro:pagamento_year' month|date:'Y' %}">Ver por ano</a>{% endblock ver_por %}

@@ -25,7 +25,7 @@ class PagamentosPendentesView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["pagamentos"] = Pagamento.objects.filter(confirmado=False)
+        context["pagamentos"] = Pagamento.objects.filter(confirmado=False).order_by('-data')
         return context
 
 class ConfirmarPagamentoView(View):
@@ -33,7 +33,10 @@ class ConfirmarPagamentoView(View):
         pagamento = Pagamento.objects.get(pk=pk)
         pagamento.confirmado = True
         pagamento.save()
-        messages.success(self.request, f'Pagamento de {pagamento.jogador.nome_jogador} em {pagamento.data} confirmado!')
+        if pagamento.jogador is not None:
+            messages.success(self.request, f'Pagamento de {pagamento.jogador.nome_jogador} em {pagamento.data} confirmado!')
+        else:
+            messages.success(self.request, f'Pagamento em {pagamento.data} confirmado!')
         return redirect('financeiro:pagamentos_pendentes')
 
 

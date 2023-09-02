@@ -26,8 +26,17 @@
                 {% for pagamento in pagamentos %}
                 <li class="list-group-item">
                     <div class="d-flex justify-content-between">
-                        <div>
-                            Pagamento de {{ pagamento.jogador.nome_jogador }} em {{ pagamento.data }}
+                        <div class="p-2">
+                            {% if pagamento.jogador %}
+                            <p class="m-0">Pagamento de {{ pagamento.jogador.nome_jogador }} em {{ pagamento.data }}</p>
+                            {% else %}
+                            <p class="m-0">Entrada em {{ pagamento.data }}</p>
+                                {% if pagamento.descricao %}
+                                <details>
+                                    <strong>{{ pagamento.descricao }}</strong>
+                                </details>
+                                {% endif %}
+                            {% endif %}
                         </div>
                         <span class="text-success">
                             + R$ {{ pagamento.valor }}
@@ -35,7 +44,6 @@
                     </div>
                     <a class="btn btn-outline-success btn-sm w-100 mt-1" href="{% url 'financeiro:confirmar_pagamento' pagamento.id %}" role="button">Confirmar Pagamento</a>
                 </li>
-                
                 {% endfor %}
             </ul>
         </div>

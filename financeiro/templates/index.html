@@ -31,9 +31,14 @@
             <h3 class="text-success text-center">Entradas</h3>
             <ul class="list-group list-group-flush">
                 {% for pagamento in pagamentos %}
-                {% if forloop.counter < 8 %}
-                <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento.jogador.nome_jogador }}<span class="text-success">+ R$ {{ pagamento.valor }} </span></li>
-                {% endif %}
+                <li class="list-group-item d-flex justify-content-between">
+                    {% if pagamento.jogador %}
+                        <p class="m-0 {% if not pagamento.confirmado %}mark{% endif %}">Pagamento de {{ pagamento.jogador.nome_jogador }}</p>
+                    {% else %}
+                        <p class="m-0 {% if not pagamento.confirmado %}mark{% endif %}">Entrada em {{ pagamento.data }}</p>
+                    {% endif %}
+                    <span class="text-success">+ R$ {{ pagamento.valor }} </span>
+                </li>
                 {% endfor %}
                 <li class="list-group-item text-center"><a href="{% url 'financeiro:pagamento_year' current_year %}">Ver mais...</a></li>
             </ul>
