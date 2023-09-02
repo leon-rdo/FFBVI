@@ -9,5 +9,6 @@ urlpatterns = [
     path('confirmar-pagamento/<int:pk>', ConfirmarPagamentoView.as_view(), name='confirmar_pagamento'),
     path('pagamentos/ano/<int:year>/', PagamentoYearArchiveView.as_view(), name='pagamento_year'),
     path('pagamentos/mes/<int:year>/<int:month>/', PagamentoMonthArchiveView.as_view(month_format="%m"), name='pagamento_month'),
+    path('lancar-entrada/', LancarEntradaView.as_view(), name='lancar_entrada'),
 ]
 

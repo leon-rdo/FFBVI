@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, ListView, YearArchiveView, MonthA
 from main.models import Pagamento
 from .models import Saida
 from django.contrib import messages
+from main.forms import PagamentoForm
 
 class IndexView(TemplateView):
     template_name = "index.html"
@@ -43,8 +44,34 @@ class SaidaCreateView(CreateView):
     success_url = reverse_lazy('financeiro:menu_financeiro')
     
     def form_valid(self, form):
-        messages.success(self.request, f'Saída lançada!')
+        messages.success(self.request, 'Saída lançada!')
         return super().form_valid(form)
+
+
+class LancarEntradaView(CreateView):
+    template_name = 'lancar_pagamento.html'
+    model = Pagamento
+    fields = ['comprovante', 'jogador', 'partida', 'em_dinheiro', 'valor']
+    
+    def form_valid(self, form):
+        if not form.cleaned_data.get('comprovante'):
+            form.instance.comprovante = None
+        if not form.cleaned_data.get('jogador'):
+            form.instance.jogador = None
+        if not form.cleaned_data.get('partida'):
+            form.instance.partida = None
+
+        messages.success(self.request, 'Entrada lançada!')
+
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Algo deu errado!')
+        return super().form_invalid(form)
+
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
 
 class PagamentoYearArchiveView(YearArchiveView):

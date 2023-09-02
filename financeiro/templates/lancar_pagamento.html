@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Lançar Entrada - FFBVI{% endblock title %}
+
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <form class="col-12 col-md-6" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field != form.comprovante and field != form.em_dinheiro %}
+                    <div class="form-floating my-2">
+                        {{ field }}
+                        {{ field.label_tag }}
+                    </div>
+                {% elif field == form.em_dinheiro %}
+                    <div class="form-check my-2">
+                        {{ field }}
+                        {{ field.label_tag }}
+                    </div>
+                {% else %}
+                    {{ field.label_tag }}
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+            <button class="btn btn-success" type="submit" id="btnPagamento" disabled>Enviar</button>
+        </form>
+    </div>
+    <div class="box-money-mouth-face border border-success rounded-circle p-0 z-n1 d-none d-md-block">
+        <img src="https://static-00.iconduck.com/assets.00/money-mouth-face-emoji-2048x2048-jdg88fs2.png"
+            alt="Carinha com olhos de cifrão e dinheiro saindo da boca">
+    </div>
+</div>
+{% endblock content %}
+
+{% block more_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        inputs = document.getElementsByTagName('input');
+        selects = document.getElementsByTagName('select');
+        form_items = Array.from(inputs).concat(Array.from(selects));
+
+        form_items.forEach(element => {
+            if (element.id !== 'id_em_dinheiro') {
+                element.classList.add('form-control');
+                element.setAttribute('placeholder', 'dummy');
+                element.removeAttribute('required');
+            }
+        });
+
+        const comprovanteInput = document.getElementById('id_comprovante');
+        const selectBoxEmDinheiro = document.getElementById('id_em_dinheiro');
+        const btnPagamento = document.getElementById('btnPagamento');
+
+        function verificarPagamento() {
+            if (comprovanteInput.value || selectBoxEmDinheiro.checked) {
+                btnPagamento.disabled = false;
+                comprovanteInput.disabled = selectBoxEmDinheiro.checked; // Desativa o campo de comprovante se o checkbox estiver marcado
+            } else {
+                btnPagamento.disabled = true;
+                comprovanteInput.disabled = false; // Habilita o campo de comprovante se o checkbox não estiver marcado
+            }
+        }
+
+        comprovanteInput.addEventListener('change', verificarPagamento);
+        selectBoxEmDinheiro.addEventListener('click', verificarPagamento);
+
+        const checkBoxEmDinheiroLabel = document.querySelector('label[for="id_em_dinheiro"]');
+        if (checkBoxEmDinheiroLabel) {
+            checkBoxEmDinheiroLabel.classList.add('form-check-label');
+        }
+    });
+</script>
+{% endblock more_scripts %}
