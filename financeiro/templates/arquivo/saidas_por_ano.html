@@ -2,10 +2,12 @@
 
 {% block title %}Saída em {{ year|date:'Y' }}{% endblock title %}
 
-{% block url_previous_date %}{% url 'financeiro:pagamento_year' previous_year|date:'Y' %}{% endblock url_previous_date %}
-{% block url_next_date %}{% url 'financeiro:pagamento_year' next_year|date:'Y' %}{% endblock url_next_date %}
+{% block url_previous_date %}{% url 'financeiro:saida_year' previous_year|date:'Y' %}{% endblock url_previous_date %}
+{% block url_next_date %}{% url 'financeiro:saida_year' next_year|date:'Y' %}{% endblock url_next_date %}
 {% block previous_date %}{{ previous_year|date:'Y' }}{% endblock previous_date %}
 {% block current_date %}{{ year|date:"Y" }}{% endblock current_date %}
 {% block next_date %}{{ next_year|date:'Y' }}{% endblock next_date %}
 
-{% block ver_por %}<a class="btn btn-primary btn-sm" href="{% url 'financeiro:pagamento_month' year|date:'Y' year|date:'m' %}">Ver por mês</a>{% endblock ver_por %}
+{% block entrada_saida %}Saídas{% endblock entrada_saida %}
+
+{% block ver_por %}<a class="btn btn-primary btn-sm" href="{% url 'financeiro:saida_month' year|date:'Y' year|date:'m' %}">Ver por mês</a>{% endblock ver_por %}

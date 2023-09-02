@@ -26,12 +26,12 @@
         <div class="col-12 col-md-6 border entradas">
             <h3 class="text-success text-center d-flex justify-content-between">
                 <a href="{% block url_previous_date %}{% endblock url_previous_date %}" class="btn btn-sm btn-secondary m-2">{% block previous_date %}{% endblock previous_date %}</a>
-                Pagamentos de {% block current_date %}{% endblock current_date %}
+                {% block entrada_saida %}{% endblock entrada_saida %} de {% block current_date %}{% endblock current_date %}
                 <a href="{% block url_next_date %}{% endblock url_next_date %}" class="btn btn-sm btn-secondary m-2">{% block next_date %}{% endblock next_date %}</a>
             </h3>
             <ul class="list-group list-group-flush">
-                {% for pagamento in pagamentos %}
-                <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento.jogador.nome_jogador }} em {{ pagamento.data }}<span class="text-success">+ R$ {{ pagamento.valor }}</span></li>
+                {% for pagamento_saida in pagamentos %}
+                <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento_saida.jogador.nome_jogador }} em {{ pagamento_saida.data }}<span class="text-success">+ R$ {{ pagamento_saida.valor }}</span></li>
                 {% empty %}
                 <li class="list-group-item">Não há pagamentos nesta esta data!</li>
                 {% endfor %}

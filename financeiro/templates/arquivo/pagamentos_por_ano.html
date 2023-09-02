@@ -8,4 +8,6 @@
 {% block current_date %}{{ year|date:"Y" }}{% endblock current_date %}
 {% block next_date %}{{ next_year|date:'Y' }}{% endblock next_date %}
 
+{% block entrada_saida %}Entradas{% endblock entrada_saida %}
+
 {% block ver_por %}<a class="btn btn-primary btn-sm" href="{% url 'financeiro:pagamento_month' year|date:'Y' year|date:'m' %}">Ver por mês</a>{% endblock ver_por %}

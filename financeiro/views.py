@@ -100,3 +100,26 @@ class PagamentoMonthArchiveView(MonthArchiveView):
     allow_empty = True
     template_name = 'arquivo/pagamentos_por_mes.html'
     context_object_name = 'pagamentos'
+    
+class SaidasYearArchiveView(YearArchiveView):
+    queryset = Saida.objects.all()
+    date_field = "data"
+    make_object_list = True
+    allow_future = True
+    allow_empty = True
+    template_name = 'arquivo/saidas_por_ano.html'
+    context_object_name = 'pagamentos'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_month"] = datetime.datetime.today().month
+        return context
+
+class SaidasMonthArchiveView(MonthArchiveView):
+    queryset = Saida.objects.all()
+    date_field = "data"
+    make_object_list = True
+    allow_future = True
+    allow_empty = True
+    template_name = 'arquivo/saidas_por_mes.html'
+    context_object_name = 'pagamentos'
