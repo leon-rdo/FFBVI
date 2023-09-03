@@ -13,8 +13,8 @@ class IndexView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["pagamentos"] = Pagamento.objects.order_by('-data')[:8]
-        context["saidas"] = Saida.objects.order_by('-data')[:8]
+        context["pagamentos"] = Pagamento.objects.order_by('-data')[:7]
+        context["saidas"] = Saida.objects.order_by('-data')[:7]
         context["current_year"] = datetime.datetime.today().year
         context["current_month"] = datetime.datetime.today().month
         return context
