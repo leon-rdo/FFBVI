@@ -28,7 +28,7 @@
         </div>
         {% endif %}
         <div class="col-12 col-md-6 col-lg-4 border entradas">
-            <h3 class="text-success text-center">Entradas</h3>
+            <h3 class="text-success text-center">Últimas Entradas</h3>
             <ul class="list-group list-group-flush">
                 {% for pagamento in pagamentos %}
                 <li class="list-group-item d-flex justify-content-between">
@@ -44,7 +44,7 @@
             </ul>
         </div>
         <div class="col-12 col-md-6 col-lg-4 border saidas">
-            <h3 class="text-danger text-center">Saídas</h3>
+            <h3 class="text-danger text-center">Últimas Saídas</h3>
             <ul class="list-group list-group-flush">
                 {% for saida in saidas %}
                 <li class="list-group-item d-flex justify-content-between">
@@ -52,7 +52,7 @@
                     <span class="text-danger">- R$ {{ saida.valor }}</span>
                 </li>
                 {% endfor %}
-                <li class="list-group-item text-center"><a href="#">Ver mais...</a></li>
+                <li class="list-group-item text-center"><a href="{% url 'financeiro:saida_year' current_year %}">Ver mais...</a></li>
             </ul>
         </div>
         <div class="col-12 col-md-6 col-lg-4 border acoes">
