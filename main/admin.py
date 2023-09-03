@@ -1,11 +1,22 @@
 from django.contrib import admin
 from main.models import *
 
+from django.contrib import admin
+from .models import Pagamento
+
 @admin.register(Pagamento)
 class PagamentoAdmin(admin.ModelAdmin):
     list_display = ['data', 'jogador', 'partida', 'confirmado']
     ordering = ['-data']
     readonly_fields = ['data']
+
+    def confirmar_pagamento(self, request, queryset):
+        queryset.update(confirmado=True)
+        self.message_user(request, f'{queryset.count()} pagamentos confirmados com sucesso.')
+
+    confirmar_pagamento.short_description = "Confirmar os pagamentos selecionados"
+
+    actions = [confirmar_pagamento]
 
 class PagamentoInline(admin.TabularInline):
     model = Pagamento
