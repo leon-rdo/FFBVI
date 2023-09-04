@@ -1,6 +1,5 @@
 from django.contrib import admin
 from main.models import *
-from django.contrib import admin
 
 @admin.register(Pagamento)
 class PagamentoAdmin(admin.ModelAdmin):
