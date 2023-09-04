@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var elementoPagamento = document.querySelector(".model-pagamento");
+        var tabelaFinanceira = document.querySelector(".app-financeiro.module table tbody");
+        
+        // Verifique a URL atual
+        if (window.location.pathname === '/admin/main/pagamento/') {
+            elementoPagamento = document.querySelector(".model-pagamento.current-model");
+        }
+        
+        tabelaFinanceira.appendChild(elementoPagamento);
+    });
+</script>
+{% endblock extrahead %}
