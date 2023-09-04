@@ -54,7 +54,7 @@ class SaidaCreateView(CreateView):
 class LancarEntradaView(CreateView):
     template_name = 'lancar_pagamento.html'
     model = Pagamento
-    fields = ['comprovante', 'jogador', 'partida', 'em_dinheiro', 'valor']
+    fields = ['comprovante', 'jogador', 'partida', 'em_dinheiro', 'valor', 'descricao']
     success_url = reverse_lazy('financeiro:pagamentos_pendentes')
     
     def form_valid(self, form):
