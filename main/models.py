@@ -420,8 +420,8 @@ class Pagamento(models.Model):
             return f'Pagamento em {self.data}'
 
     class Meta:
-        verbose_name = 'Pagamento'
-        verbose_name_plural = 'Pagamentos'
+        verbose_name = 'Entrada'
+        verbose_name_plural = 'Entradas'
 
 @deconstructible
 class MediaTypeUploadTo:
