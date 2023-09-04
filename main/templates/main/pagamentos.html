@@ -14,24 +14,31 @@
         {% if pagamentos %}
         {% for pagamento in pagamentos %}
         {% if pagamento.em_dinheiro %}
-        <div class="col">
-            <div class="card" style="max-width: 18rem;">
+        <div class="col card-pagamentos-container">
+            <div class="card card-pagamentos">
                 <div class="card-header">
                     <h5 class="card-title text-center h5">Pagamento feito em dinheiro</h5>
                 </div>
                 <div class="card-body">
                     <h6 class="card-title text-center h6">Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}</h6>
+                    <p class="m-0">No valor de: R$ {{ pagamento.valor }}</p>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-success w-100" href="{% url 'financeiro:confirmar_pagamento' pagamento.id %}" role="button">Confirmar pagamento</a>
                 </div>
             </div>
         </div>
         {% else %}
-        <div class="col">
-            <div class="card" style="max-width: 18rem;">
+        <div class="col card-pagamentos-container">
+            <div class="card card-pagamentos">
                 <a class="ratio" style="--bs-aspect-ratio: 160%;" data-bs-toggle="modal" data-bs-target="#imagemModal{{ pagamento.id }}">
                     <img class="card-img-top img-fluid object-fit-cover" src="{{ pagamento.comprovante.url }}" alt="Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}">
                 </a>
                 <div class="card-body">
                     <h6 class="card-title text-center h6">Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}</h6>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-success w-100" href="{% url 'financeiro:confirmar_pagamento' pagamento.id %}" role="button">Confirmar pagamento</a>
                 </div>
             </div>
         </div>

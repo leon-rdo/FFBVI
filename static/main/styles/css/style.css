@@ -148,3 +148,9 @@ body footer {
 .acao {
   min-width: 80%;
 }
+
+.card-pagamentos-container,
+.card-pagamentos {
+  width: 18rem;
+  height: 37rem;
+}
