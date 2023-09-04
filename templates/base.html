@@ -35,18 +35,6 @@
   <meta name="twitter:url" content="http://ffbvi.pythonanywhere.com{% block twt_url %}{% endblock twt_url %}">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:image" content="{% static 'main/images/FFBVI - OG Image.png' %}">
-  <style>
-        body {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-      .content {
-        flex: 1;
-      }
-  </style>
   {% block style %}{% endblock style %}
 </head>
 
@@ -101,18 +89,27 @@
           {% if user.is_authenticated %}
           <div class="d-flex justify-content-end">
             <figure class="btn btn-secondary rounded-circle d-flex align-items-center justify-content-center"
-              data-bs-display="static" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-              style="width: 50px; height: 50px; overflow: hidden;">
-              <img src="{% if user.foto_principal %}
-                    {{ user.foto_principal.url }}
+              data-bs-display="static" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="profile-pic-container">
+              <img
+                src=
+                  "{% if user.foto_principal %}
+                      {{ user.foto_principal.url }}
                   {% else %}
-                    https://www.cornwallbusinessawards.co.uk/wp-content/uploads/2017/11/dummy450x450.jpg
-                  {% endif %}" alt="{% if user.foto_principal %}
+                      https://www.cornwallbusinessawards.co.uk/wp-content/uploads/2017/11/dummy450x450.jpg
+                  {% endif %}"
+                alt=
+                  "{% if user.foto_principal %}
                     Foto de {{ user.nome_jogador }}
                   {% else %}
                     Ícone de Foto de Usuário
-                  {% endif %}" class="rounded-circle object-fit-cover" {% if user.foto_principal %}
-                style="width: 60px; height: 80px;" {% else %} style="width: 60px; height: 60px;" {% endif %} />
+                  {% endif %}"
+                class="rounded-circle object-fit-cover"
+                {% if user.foto_principal %}
+                  style="width: 60px; height: 80px;"
+                {% else %}
+                  style="width: 60px; height: 60px;"
+                {% endif %}
+              />
             </figure>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark me-2">
               <li>
@@ -155,11 +152,11 @@
     </nav>
   </header>
 
-  <main class="content" style="margin-bottom: 5rem;">
+  <main class="content">
     {% block content %}{% endblock content %}
   </main>
 
-  <footer style="margin-top: auto;">
+  <footer>
     <nav class="container-fluid bg-primary navbar-dark text-white py-2">
       <div class="row justify-content-center align-items-center g-2">
         <div class="col-12">
