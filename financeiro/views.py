@@ -1,12 +1,15 @@
-import datetime
+from django.views.generic import TemplateView, ListView, YearArchiveView, MonthArchiveView, CreateView
+from django.views import View
+
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import TemplateView, ListView, YearArchiveView, MonthArchiveView, CreateView
+
 from main.models import Pagamento
 from .models import Saida
-from django.contrib import messages
-from main.forms import PagamentoForm
+
+import datetime
+
 
 class IndexView(TemplateView):
     template_name = "index.html"
@@ -18,7 +21,8 @@ class IndexView(TemplateView):
         context["current_year"] = datetime.datetime.today().year
         context["current_month"] = datetime.datetime.today().month
         return context
-    
+
+
 class PagamentosPendentesView(ListView):
     model = Pagamento
     template_name = "confirmar_pagamento.html"
@@ -27,6 +31,7 @@ class PagamentosPendentesView(ListView):
         context = super().get_context_data(**kwargs)
         context["pagamentos"] = Pagamento.objects.filter(confirmado=False).order_by('-data')
         return context
+
 
 class ConfirmarPagamentoView(View):
     def get(self, request, pk):
@@ -100,6 +105,7 @@ class PagamentoMonthArchiveView(MonthArchiveView):
     allow_empty = True
     template_name = 'arquivo/pagamentos_por_mes.html'
     context_object_name = 'pagamentos'
+
     
 class SaidasYearArchiveView(YearArchiveView):
     queryset = Saida.objects.all()
@@ -114,6 +120,7 @@ class SaidasYearArchiveView(YearArchiveView):
         context = super().get_context_data(**kwargs)
         context["current_month"] = datetime.datetime.today().month
         return context
+
 
 class SaidasMonthArchiveView(MonthArchiveView):
     queryset = Saida.objects.all()

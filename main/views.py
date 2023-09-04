@@ -1,13 +1,17 @@
 from django.views.generic import TemplateView, ListView, DetailView, FormView, DeleteView, CreateView
 from django.contrib.auth.views import PasswordChangeView
+
 from .models import *
 from .forms import PagamentoForm, PartidaForm, UserUpdateForm, RegistrationForm, AdicionarConvidadoForm, AdicionarConvidadoExistenteForm
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
+
 import datetime
 import random
+
 
 class IndexView(ListView):
     template_name = "main/index.html"

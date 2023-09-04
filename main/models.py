@@ -1,15 +1,17 @@
-from datetime import date
-from uuid import uuid4
 from django.db import models
-from django.forms import ValidationError
-from django.utils import timezone
-from django.core.validators import RegexValidator
+from financeiro.models import Saida
+
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext_lazy as _
-from django.template.defaultfilters import slugify
 from django.utils.deconstruct import deconstructible
+from django.template.defaultfilters import slugify
+from django.core.validators import RegexValidator
+from django.forms import ValidationError
+from django.utils import timezone
 from django.db.models import Sum
-from financeiro.models import Saida    
+
+from datetime import date
+from uuid import uuid4
 
 
 class Configuracao(models.Model):
@@ -374,6 +376,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = Administrador()
         
+        
 class Partida(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
@@ -402,6 +405,7 @@ class Partida(models.Model):
         formatted_hora = self.hora.strftime("%H:%M") if self.hora else "N/A"
         return f"Partida em {formatted_data} às {formatted_hora}"
         
+        
 class Pagamento(models.Model):
 
     comprovante = models.ImageField(_('Comprovante:'), upload_to='main/images/pagamentos', blank=True, null=True)
@@ -423,6 +427,7 @@ class Pagamento(models.Model):
         verbose_name = 'Entrada'
         verbose_name_plural = 'Entradas'
 
+
 @deconstructible
 class MediaTypeUploadTo:
     def __call__(self, instance, filename):
@@ -442,11 +447,13 @@ class MediaTypeUploadTo:
             return 'video'
         else:
             return 'other'
-        
+
+
 def validate_media_file(value):
     extension = value.name.split('.')[-1].lower()
     if extension not in ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'avi', 'mov', 'm4a']:
         raise ValidationError("O arquivo deve ser uma imagem (jpg, jpeg, png, gif) ou um vídeo (mp4, avi, mov, m4a).")
+
 
 class Noticia(models.Model):
     titulo = models.CharField(_('Título:'), max_length=100)
