@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}FFBVI - Financeiro{% endblock title %}
+
+{% block content %}
+<div class="container-fluid p-0 overflow-hidden">
+    <div class="row justify-content-end align-items-center">
+        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
+            <span class="btn btn-primary me-2">Saldo: R$ {{ configuracoes.saldo }}</span>
+        </div>
+    </div>
+    <div class="row justify-content-center px-1 g-2">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="col-12 col-md-6 border entradas">
+            <h3 class="text-success text-center m-2">Pagamentos Pendentes de Confirmação</h3>
+            <ul class="list-group">
+                {% for pagamento in pagamentos %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <div class="p-2">
+                            {% if pagamento.jogador %}
+                            <p class="m-0">Pagamento de {{ pagamento.jogador.nome_jogador }} em {{ pagamento.data }}</p>
+                            {% else %}
+                            <p class="m-0">Entrada em {{ pagamento.data }}</p>
+                                {% if pagamento.descricao %}
+                                <details>
+                                    <strong>{{ pagamento.descricao }}</strong>
+                                </details>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <span class="text-success">
+                            + R$ {{ pagamento.valor }}
+                        </span>
+                    </div>
+                    <a class="btn btn-outline-success btn-sm w-100 mt-1" href="{% url 'financeiro:confirmar_pagamento' pagamento.id %}" role="button">Confirmar Pagamento</a>
+                </li>
+                {% empty %}
+                <li class="list-group-item"><strong class="text-success fs-4">Não há pagamentos pendentes!</strong></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}FFBVI - Financeiro{% endblock title %}
+{% block content %}
+<div class="container-fluid p-0 overflow-hidden">
+    <div class="row justify-content-end align-items-center">
+        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
+            <span class="btn btn-primary me-md-2">Saldo: R$ {{ configuracoes.saldo }}</span>
+        </div>
+    </div>
+    <div class="row justify-content-center px-md-3 g-2">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="col-12 col-md-6 col-lg-4 border entradas">
+            <h3 class="text-success text-center">Últimas Entradas</h3>
+            <ul class="list-group list-group-flush">
+                {% for pagamento in pagamentos %}
+                <li class="list-group-item d-flex justify-content-between">
+                    {% if pagamento.jogador %}
+                        <p class="m-0 {% if not pagamento.confirmado %}mark{% endif %}">Pagamento de {{ pagamento.jogador.nome_jogador }}</p>
+                    {% else %}
+                        <p class="m-0 {% if not pagamento.confirmado %}mark{% endif %}">Entrada em {{ pagamento.data }}</p>
+                    {% endif %}
+                    <span class="text-success">+ R$ {{ pagamento.valor }} </span>
+                </li>
+                {% endfor %}
+                <li class="list-group-item text-center"><a href="{% url 'financeiro:pagamento_year' current_year %}">Ver mais...</a></li>
+            </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 border saidas">
+            <h3 class="text-danger text-center">Últimas Saídas</h3>
+            <ul class="list-group list-group-flush">
+                {% for saida in saidas %}
+                <li class="list-group-item d-flex justify-content-between">
+                    {{ saida.descricao }} {% if saida.partida %}({{ saida.partida.data }}){% endif %}
+                    <span class="text-danger">- R$ {{ saida.valor }}</span>
+                </li>
+                {% endfor %}
+                <li class="list-group-item text-center"><a href="{% url 'financeiro:saida_year' current_year %}">Ver mais...</a></li>
+            </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 border acoes">
+            <h3 class="text-primary text-center">Ações</h3>
+            <ul class="list-group list-group-flush text-center">
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamentos_pendentes' %}" role="button">Pagamentos a Confirmar</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:lancar_saida' %}" role="button">Lançar Saída</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:lancar_entrada' %}" role="button">Lançar Entrada</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamento_year' current_year %}" role="button">Pagamentos deste ano</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamento_month' current_year current_month %}" role="button">Pagamentos deste mês</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:saida_year' current_year %}" role="button">Saídas deste ano</a></li>
+                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:saida_month' current_year current_month %}" role="button">Saídas deste mês</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

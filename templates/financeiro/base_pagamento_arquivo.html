@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock title %}
+{% block content %}
+<div class="container-fluid p-0 overflow-hidden">
+    <div class="row justify-content-end align-items-center">
+        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
+            <span class="btn btn-primary me-2">Saldo: R$ {{ configuracoes.saldo }}</span>
+        </div>
+    </div>
+    <div class="row flex-column-reverse flex-md-row justify-content-center px-md-3 g-2">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="col-12 d-flex justify-content-center">
+            {% block ver_por %}{% endblock ver_por %}
+        </div>
+        <div class="col-12 col-md-6 border entradas">
+            <h3 class="text-success text-center d-flex justify-content-between">
+                <a href="{% block url_previous_date %}{% endblock url_previous_date %}" class="btn btn-sm btn-secondary m-2">{% block previous_date %}{% endblock previous_date %}</a>
+                {% block entrada_saida %}{% endblock entrada_saida %} de {% block current_date %}{% endblock current_date %}
+                <a href="{% block url_next_date %}{% endblock url_next_date %}" class="btn btn-sm btn-secondary m-2">{% block next_date %}{% endblock next_date %}</a>
+            </h3>
+            <ul class="list-group list-group-flush">
+                {% for pagamento_saida in pagamentos %}
+                <li class="list-group-item d-flex justify-content-between">Pagamento de {{ pagamento_saida.jogador.nome_jogador }} em {{ pagamento_saida.data }}<span class="text-success">+ R$ {{ pagamento_saida.valor }}</span></li>
+                {% empty %}
+                <li class="list-group-item">Não há pagamentos nesta esta data!</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock content %}

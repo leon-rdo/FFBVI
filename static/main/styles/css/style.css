@@ -55,6 +55,26 @@
   overflow-x: scroll;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+body header #profile-pic-container {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+}
+body .content {
+  flex: 1;
+  margin-bottom: 5rem;
+}
+body footer {
+  margin-top: auto;
+}
+
 .patrocinador figure img {
   width: 60px;
   transition: all 0.2s ease-out;
@@ -124,4 +144,7 @@
     -webkit-transform: translate(-200px, -100px);
     transform: translate(-100px, -100px);
   }
+}
+.acao {
+  min-width: 80%;
 }

@@ -1,8 +1,8 @@
-from main.models import User, Patrocinador
+from main.models import Configuracao, Patrocinador
 
-def federados(request):
-    federados = User.objects.all()
-    return {'users': federados}
+def configuracoes(request):
+    configuracoes = Configuracao.objects.first()
+    return {'configuracoes': configuracoes}
 
 def patrocinadores(request):
     patrocinadores = Patrocinador.objects.all()

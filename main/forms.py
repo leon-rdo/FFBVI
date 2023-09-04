@@ -105,11 +105,12 @@ class PagamentoForm(forms.ModelForm):
         required=False,
         label='Pagamento em dinheiro?'
     )
+    valor = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}), label=_('Qual o valor?'), required=True)
 
     
     class Meta:
         model = Pagamento
-        fields = ['comprovante', 'em_dinheiro']
+        fields = ['comprovante', 'em_dinheiro', 'valor']
 
 
 class AdicionarConvidadoForm(forms.ModelForm):
