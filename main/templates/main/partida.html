@@ -142,6 +142,13 @@
                 </a>
             </div>
             {% endif %}
+            {% if not now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
+            <div class="col-12 d-flex justify-content-center mt-4">
+                <a class="btn btn-success mt-5" href="{% url 'main:pagamentos' object.slug %}">
+                    Pagamentos &#128176;
+                </a>
+            </div>
+            {% endif %}
         </div>
             {% if now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
             <div class="row justify-content-center">
@@ -210,10 +217,14 @@
         <div class="col-12 col-md-10 d-flex flex-column align-items-center">
             <h3 class="display-6">Esta partida ocorreria em <time>{{ object.data }} às {{ object.hora }}</time>.</h3>
             <h2 class="display-3 text-warning">Partida anulada.</h2>
-            <h3 class="display-5">
+            <h3 class="display-5 mb-5">
                 <span class="text-secondary fs-3">Razão do cancelamento:</span>
                 <br>
-                {{ partida.razao_anulacao | safe }}</h3>
+                {{ partida.razao_anulacao | safe }}
+            </h3>
+            <a class="btn btn-success mt-5" href="{% url 'main:pagamentos' object.slug %}">
+                Pagamentos &#128176;
+            </a>
         </div>
         {% endif %}
     </div>
