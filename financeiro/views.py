@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView, ListView, YearArchiveView, MonthArchiveView, CreateView
 from django.views import View
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -12,7 +13,7 @@ from django.db.models import Sum
 import datetime
 
 
-class IndexView(TemplateView):
+class IndexView(TemplateView, LoginRequiredMixin, UserPassesTestMixin):
     template_name = "index.html"
     
     def get_context_data(self, **kwargs):
@@ -23,8 +24,12 @@ class IndexView(TemplateView):
         context["current_month"] = datetime.datetime.today().month
         return context
 
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
-class PagamentosPendentesView(ListView):
+
+class PagamentosPendentesView(ListView, LoginRequiredMixin, UserPassesTestMixin):
     model = Pagamento
     template_name = "confirmar_pagamento.html"
     
@@ -39,8 +44,12 @@ class PagamentosPendentesView(ListView):
             context["pendente"] = formatted_value
         return context
 
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
-class ConfirmarPagamentoView(View):
+
+class ConfirmarPagamentoView(View, LoginRequiredMixin, UserPassesTestMixin):
     def get(self, request, pk):
         pagamento = Pagamento.objects.get(pk=pk)
         pagamento.confirmado = True
@@ -51,8 +60,12 @@ class ConfirmarPagamentoView(View):
             messages.success(self.request, f'Pagamento em {pagamento.data} confirmado!')
         return redirect('financeiro:pagamentos_pendentes')
 
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
-class SaidaCreateView(CreateView):
+
+class SaidaCreateView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
     model = Saida
     template_name = "lancar_saida.html"
     fields = ['descricao', 'valor', 'partida']
@@ -62,8 +75,12 @@ class SaidaCreateView(CreateView):
         messages.success(self.request, 'Saída lançada!')
         return super().form_valid(form)
 
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
-class LancarEntradaView(CreateView):
+
+class LancarEntradaView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
     template_name = 'lancar_pagamento.html'
     model = Pagamento
     fields = ['comprovante', 'jogador', 'partida', 'em_dinheiro', 'valor', 'descricao']
@@ -90,7 +107,7 @@ class LancarEntradaView(CreateView):
         return user.tipo == 'admin'
 
 
-class PagamentoYearArchiveView(YearArchiveView):
+class PagamentoYearArchiveView(YearArchiveView, LoginRequiredMixin, UserPassesTestMixin):
     queryset = Pagamento.objects.all()
     date_field = "data"
     make_object_list = True
@@ -104,7 +121,11 @@ class PagamentoYearArchiveView(YearArchiveView):
         context["current_month"] = datetime.datetime.today().month
         return context
 
-class PagamentoMonthArchiveView(MonthArchiveView):
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
+
+class PagamentoMonthArchiveView(MonthArchiveView, LoginRequiredMixin, UserPassesTestMixin):
     queryset = Pagamento.objects.all()
     date_field = "data"
     make_object_list = True
@@ -113,8 +134,12 @@ class PagamentoMonthArchiveView(MonthArchiveView):
     template_name = 'arquivo/pagamentos_por_mes.html'
     context_object_name = 'pagamentos'
 
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
+
     
-class SaidasYearArchiveView(YearArchiveView):
+class SaidasYearArchiveView(YearArchiveView, LoginRequiredMixin, UserPassesTestMixin):
     queryset = Saida.objects.all()
     date_field = "data"
     make_object_list = True
@@ -128,8 +153,12 @@ class SaidasYearArchiveView(YearArchiveView):
         context["current_month"] = datetime.datetime.today().month
         return context
 
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
-class SaidasMonthArchiveView(MonthArchiveView):
+
+class SaidasMonthArchiveView(MonthArchiveView, LoginRequiredMixin, UserPassesTestMixin):
     queryset = Saida.objects.all()
     date_field = "data"
     make_object_list = True
@@ -137,3 +166,7 @@ class SaidasMonthArchiveView(MonthArchiveView):
     allow_empty = True
     template_name = 'arquivo/saidas_por_mes.html'
     context_object_name = 'pagamentos'
+
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
