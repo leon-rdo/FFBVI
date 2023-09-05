@@ -4,7 +4,8 @@
 {% block content %}
 <div class="container-fluid p-0 overflow-hidden">
     <div class="row justify-content-end align-items-center">
-        <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
+        <div class="col-12 d-flex justify-content-between my-3">
+            <span class="btn btn-warning ms-2">Pendente: R$ {{ pendente }}</span>
             <span class="btn btn-primary me-2">Saldo: R$ {{ configuracoes.saldo }}</span>
         </div>
     </div>

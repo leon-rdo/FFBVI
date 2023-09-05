@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from main.models import Pagamento
 from .models import Saida
 
+from django.db.models import Sum
 import datetime
 
 
@@ -30,6 +31,12 @@ class PagamentosPendentesView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["pagamentos"] = Pagamento.objects.filter(confirmado=False).order_by('-data')
+        total_pendente = Pagamento.objects.filter(confirmado=False).aggregate(total=Sum('valor'))
+        if total_pendente['total'] is None:
+            context["pendente"] = "0,00"
+        else:
+            formatted_value = f"{total_pendente['total']:.2f}".replace('.', ',')
+            context["pendente"] = formatted_value
         return context
 
 
