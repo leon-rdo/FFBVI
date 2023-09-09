@@ -1,4 +1,6 @@
-from django.views.generic import TemplateView, ListView, DetailView, FormView, DeleteView, CreateView
+from typing import Any
+from django.http import HttpRequest, HttpResponse
+from django.views.generic import TemplateView, ListView, DetailView, FormView, DeleteView, CreateView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
 
 from .models import *
@@ -263,6 +265,13 @@ class PartidaView(DetailView, FormView):
     def get_success_url(self):
         partida = self.get_partida()
         return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
+
+
+class CaraDaPartidaView(UpdateView):
+    model = Partida
+    fields = ['...']
+    success_url = reverse_lazy('main:...')
+    template_name ='main/cara_da_partida.html'
 
 
 class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):

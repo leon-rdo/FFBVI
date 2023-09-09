@@ -65,6 +65,11 @@
             <h2 class="display-6 text-center">Esta partida ocorreu em <time>{{ object.data }} às {{ object.hora }}</time></h2>
             {% endif %}
         </div>
+        {% if now|date:"Y-m-d" == object.data|date:"Y-m-d" and now >= object.hora %}
+        <div class="d-flex justify-content-center mt-3">
+            <a href="{% url 'main:cara_partida' %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+        </div>          
+        {% endif %}
         <div class="row justify-content-center align-items-top mt-4 g-2">
             {% if not object.sorteada %}
             <div class="col-12 col-md-10 border border-secondary rounded-3 mt-3 p-2">

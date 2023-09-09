@@ -1,3 +1,4 @@
+from collections import defaultdict
 from django.db import models
 from financeiro.models import Saida
 
@@ -7,6 +8,7 @@ from django.utils.deconstruct import deconstructible
 from django.template.defaultfilters import slugify
 from django.core.validators import RegexValidator
 from django.forms import ValidationError
+from django.db.models import Count
 from django.utils import timezone
 from django.db.models import Sum
 
@@ -375,7 +377,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'nome_jogador'
 
     objects = Administrador()
-        
+
         
 class Partida(models.Model):
 
@@ -391,6 +393,19 @@ class Partida(models.Model):
     razao_anulacao = models.TextField(_("Qual a razão da anulação?"), blank=True)
 
     slug = models.SlugField(max_length=50, unique=True, editable=False, default='')
+    
+    @property
+    def cara_da_partida(self):
+        
+        votos_por_jogador = defaultdict(int)
+
+        for voto in self.voto_set.all():
+            if voto.jogador:
+                votos_por_jogador[voto.jogador] += 1
+
+        jogador_com_mais_votos = max(votos_por_jogador, key=votos_por_jogador.get)
+
+        return jogador_com_mais_votos
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.id)
@@ -405,7 +420,21 @@ class Partida(models.Model):
         formatted_hora = self.hora.strftime("%H:%M") if self.hora else "N/A"
         return f"Partida em {formatted_data} às {formatted_hora}"
         
-        
+
+class Voto(models.Model):
+
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    votou_em = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _("Voto")
+        verbose_name_plural = _("Votos")
+
+    def __str__(self):
+        return f'{self.jogador.nome_jogador} votou em {self.votou_em.nome_jogador} | Partida: {self.partida.data}'
+
+
 class Pagamento(models.Model):
 
     comprovante = models.ImageField(_('Comprovante:'), upload_to='main/images/pagamentos', blank=True, null=True)
