@@ -70,8 +70,8 @@
             <div class="col-12 col-md-10 mt-3">
                 <ul class="list-group">
                     <li class="list-group-item active d-flex align-items-center justify-content-center">
-                        <h3 class="text-white text-center me-2" id="timeVerdeTitle">Relacionados</h3>
-                        <span class="badge rounded-5 text-bg-danger">{{ object.relacionados.count }}</span>
+                        <h3 class="text-white text-center me-2 my-0" id="timeVerdeTitle">Relacionados</h3>
+                        <span class="badge rounded-5 text-bg-danger my-0">{{ object.relacionados.count }}</span>
                     </li>
                     {% for jogador in object.relacionados.all %}
                         <li class="list-group-item d-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
