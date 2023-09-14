@@ -65,10 +65,44 @@
             <h2 class="display-6 text-center">Esta partida ocorreu em <time>{{ object.data }} às {{ object.hora }}</time></h2>
             {% endif %}
         </div>
-        {% if now|date:"Y-m-d" == object.data|date:"Y-m-d" and now >= object.hora %}
-        <div class="d-flex justify-content-center mt-3">
-            <a href="{% url 'main:cara_partida' %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
-        </div>          
+        {% if now|date:"Y-m-d" >= object.data|date:"Y-m-d" %}
+        {% if now|date:"Y-m-d" == object.data|date:"Y-m-d" and now|time:"H" > object.hora|time:"H" %}
+        {% if object.votacao_aberta %}
+        <div class="d-flex justify-content-center my-3">
+            <a href="{% url 'main:cara_partida' object.slug %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+        </div>
+        {% endif %}
+        {% elif now|date:"Y-m-d" > object.data|date:"Y-m-d" %}
+        {% if object.votacao_aberta %}
+        <div class="d-flex justify-content-center my-3">
+            <a href="{% url 'main:cara_partida' object.slug %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if object.cara_da_partida is not None %}          
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+            <div class="card text-center" style="max-width: 300px;">
+                <div class="card-header">
+                    <h4 class="card-title text-success">O CARA DA PARTIDA</h4>
+                    {% if object.votacao_aberta %}
+                        <span class="badge text-bg-success">Votação aberta!</span>
+                    {% else %}
+                        <span class="badge text-bg-secondary">Votação encerrada!</span>
+                    {% endif %}
+                </div>
+                <div class="card-body p-0">
+                    {% if object.cara_da_partida.foto_principal %}
+                    <img src="{{ object.cara_da_partida.foto_principal.url }}" class="img-fluid">
+                    {% else %}
+                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <h5>{{ object.cara_da_partida.nome_jogador }}</h5>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         {% endif %}
         <div class="row justify-content-center align-items-top mt-4 g-2">
             {% if not object.sorteada %}

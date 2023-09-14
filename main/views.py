@@ -267,11 +267,25 @@ class PartidaView(DetailView, FormView):
         return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
 
 
-class CaraDaPartidaView(UpdateView):
-    model = Partida
-    fields = ['...']
-    success_url = reverse_lazy('main:...')
+class CaraDaPartidaView(CreateView):
+    model = Voto
+    fields = ['votou_em']
     template_name ='main/cara_da_partida.html'
+    
+    def form_valid(self, form):
+        voto = form.save(commit=False)
+        voto.jogador = self.request.user
+        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])        
+        voto.partida = partida
+        voto.save()
+        
+        messages.success(self.request, f'Você votou em {voto.votou_em}.')
+        
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        partida_slug = self.kwargs['slug']
+        return reverse_lazy('main:partida', kwargs={'slug': partida_slug})
 
 
 class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):

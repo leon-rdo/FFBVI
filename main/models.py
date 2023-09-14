@@ -397,21 +397,28 @@ class Partida(models.Model):
     @property
     def cara_da_partida(self):
 
-        if self.voto_set.exists():
-            votos_por_jogador = defaultdict(int)
+        votos = self.voto_set.all()
+        
+        if not votos:
+            return None
 
-            for voto in self.voto_set.all():
-                if voto.jogador:
-                    votos_por_jogador[voto.jogador] += 1
+        contagem_votos = {}
 
+        for voto in votos:
+            jogador = voto.votou_em
+            if jogador in contagem_votos:
+                contagem_votos[jogador] += 1
+            else:
+                contagem_votos[jogador] = 1
 
-            jogador_com_mais_votos = max(votos_por_jogador, key=votos_por_jogador.get)
+        jogador_mais_votado = max(contagem_votos, key=contagem_votos.get, default=None)
 
-
-            return jogador_com_mais_votos.nome_jogador
-
-
-        return "Nenhum voto nesta partida"
+        return jogador_mais_votado
+    
+    def votacao_aberta(self):
+        hoje = timezone.now().date()
+        data_limite = self.data + timezone.timedelta(days=1)
+        return hoje <= data_limite
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.id)
