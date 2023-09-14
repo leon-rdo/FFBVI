@@ -63,6 +63,21 @@ class ConfirmarPagamentoView(View, LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         user = self.request.user
         return user.tipo == 'admin'
+    
+
+class DeletarPagamentoView(View, LoginRequiredMixin, UserPassesTestMixin):
+    def get(self, request, pk):
+        pagamento = Pagamento.objects.get(pk=pk)
+        pagamento.delete()
+        if pagamento.jogador is not None:
+            messages.warning(self.request, f'Pagamento de {pagamento.jogador.nome_jogador} em {pagamento.data} foi deletado.')
+        else:
+            messages.warning(self.request, f'Pagamento em {pagamento.data} deletado!')
+        return redirect('financeiro:pagamentos_pendentes')
+
+    def test_func(self):
+        user = self.request.user
+        return user.tipo == 'admin'
 
 
 class SaidaCreateView(CreateView, LoginRequiredMixin, UserPassesTestMixin):

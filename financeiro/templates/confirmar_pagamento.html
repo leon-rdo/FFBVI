@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}FFBVI - Financeiro{% endblock title %}
+{% block title %}FFBVI - Gestão de Entradas{% endblock title %}
 
 {% block content %}
 <div class="container-fluid p-0 overflow-hidden">
@@ -43,7 +43,30 @@
                             + R$ {{ pagamento.valor }}
                         </span>
                     </div>
-                    <a class="btn btn-outline-success btn-sm w-100 mt-1" href="{% url 'financeiro:confirmar_pagamento' pagamento.id %}" role="button">Confirmar Pagamento</a>
+                    <div class="d-flex justify-content-between">
+                        <a class="btn btn-outline-success btn-sm mt-1" href="{% url 'financeiro:confirmar_pagamento' pagamento.id %}" role="button" style="width: 48%;">Confirmar Pagamento</a>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" class="btn btn-outline-danger btn-sm mt-1" style="width: 48%;">Excluir Pagamento</button>
+
+                        <!-- Modal de Confirmação de Exclusão de Pagamento -->
+                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmação de Exclusão</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                Tem certeza de que deseja excluir este pagamento?
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <a class="btn btn-danger" id="confirmDeleteButton" href="{% url 'financeiro:deletar_pagamento' pagamento.id %}">Confirmar Exclusão</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
                 </li>
                 {% empty %}
                 <li class="list-group-item"><strong class="text-success fs-4">Não há pagamentos pendentes!</strong></li>
