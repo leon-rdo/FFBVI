@@ -79,16 +79,13 @@
         </div>
         {% endif %}
         {% endif %}
-        {% if object.cara_da_partida is not None %}          
+        {% if object.cara_da_partida is not None %}
         <div class="col-12 col-md-4 d-flex justify-content-center">
             <div class="card text-center" style="max-width: 300px;">
                 <div class="card-header">
-                    <h4 class="card-title text-success">O CARA DA PARTIDA</h4>
-                    {% if object.votacao_aberta %}
-                        <span class="badge text-bg-success">Votação aberta!</span>
-                    {% else %}
-                        <span class="badge text-bg-secondary">Votação encerrada!</span>
-                    {% endif %}
+                    <h4 class="m-0 card-title text-success">O CARA DA PARTIDA</h4>
+                    <hr class="my-1">
+                    <h5 class="m-0">{{ object.cara_da_partida.nome_jogador }}</h5>
                 </div>
                 <div class="card-body p-0">
                     {% if object.cara_da_partida.foto_principal %}
@@ -99,7 +96,12 @@
                     {% endif %}
                 </div>
                 <div class="card-footer">
-                    <h5>{{ object.cara_da_partida.nome_jogador }}</h5>
+                    {% if object.votacao_aberta %}
+                        <span class="badge text-bg-success w-75 mb-1">Votação aberta!</span>
+                    {% else %}
+                        <span class="badge text-bg-secondary w-75 mb-1">Votação encerrada!</span>
+                    {% endif %}
+                    <span class="badge text-bg-warning w-75">Total de votos: {{ object.voto_set.count }}</span>
                 </div>
             </div>
         </div>
