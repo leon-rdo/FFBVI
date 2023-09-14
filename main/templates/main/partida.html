@@ -94,6 +94,7 @@
                     {% if object.cara_da_partida.foto_principal %}
                     <img src="{{ object.cara_da_partida.foto_principal.url }}" class="img-fluid">
                     {% else %}
+                    {% load static %}
                     <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
                     {% endif %}
                 </div>
