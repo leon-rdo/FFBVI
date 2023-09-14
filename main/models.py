@@ -296,14 +296,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     senha_validator = RegexValidator(
-            regex=r'^(?=.*[\W_])(?=.*[A-Z]).{8,}$',
-            message="A senha deve conter no mínimo um caractere especial ou um caractere maiúsculo e ter pelo menos 8 caracteres."
-        )
+        regex=r'^(?=.*[\W_])(?=.*[A-Z]).{8,}$',
+        message="A senha deve conter no mínimo um caractere especial ou um caractere maiúsculo e ter pelo menos 8 caracteres."
+    )
     
     telefone_validator = RegexValidator(
-            regex=r'^[0-9\- ]*$',
-            message="O telefone deve conter apenas números, hífens (-) e espaços."
-        )
+        regex=r'^[0-9\- ]*$',
+        message="O telefone deve conter apenas números, hífens (-) e espaços."
+    )
     
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     # Informações de Login
@@ -396,16 +396,22 @@ class Partida(models.Model):
     
     @property
     def cara_da_partida(self):
-        
-        votos_por_jogador = defaultdict(int)
 
-        for voto in self.voto_set.all():
-            if voto.jogador:
-                votos_por_jogador[voto.jogador] += 1
+        if self.voto_set.exists():
+            votos_por_jogador = defaultdict(int)
 
-        jogador_com_mais_votos = max(votos_por_jogador, key=votos_por_jogador.get)
+            for voto in self.voto_set.all():
+                if voto.jogador:
+                    votos_por_jogador[voto.jogador] += 1
 
-        return jogador_com_mais_votos
+
+            jogador_com_mais_votos = max(votos_por_jogador, key=votos_por_jogador.get)
+
+
+            return jogador_com_mais_votos.nome_jogador
+
+
+        return "Nenhum voto nesta partida"
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.id)
@@ -422,9 +428,9 @@ class Partida(models.Model):
         
 
 class Voto(models.Model):
-
-    jogador = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    votou_em = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='votos_feitos')
+    votou_em = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='votos_recebidos')
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
@@ -433,6 +439,7 @@ class Voto(models.Model):
 
     def __str__(self):
         return f'{self.jogador.nome_jogador} votou em {self.votou_em.nome_jogador} | Partida: {self.partida.data}'
+
 
 
 class Pagamento(models.Model):
