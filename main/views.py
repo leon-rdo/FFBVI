@@ -104,8 +104,7 @@ class MeuPerfilView(LoginRequiredMixin, UserPassesTestMixin, FormView):
 
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
 
 class ChangePasswordView(LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView):
@@ -122,8 +121,7 @@ class ChangePasswordView(LoginRequiredMixin, UserPassesTestMixin, PasswordChange
         return super().form_invalid(form)
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
 
 class GerenciarFederadosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -133,8 +131,7 @@ class GerenciarFederadosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     context_object_name = "users"
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo == 'admin'
+        return self.request.user.tipo == 'admin'
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -150,8 +147,7 @@ class GerenciarFederadoView(LoginRequiredMixin, UserPassesTestMixin, DetailView)
     slug_url_kwarg = "slug"
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo == 'admin'
+        return self.request.user.tipo == 'admin'
 
 
 class AdicionarFederadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
@@ -174,8 +170,7 @@ class AdicionarFederadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return super().form_valid(form)
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo == 'admin'
+        return self.request.user.tipo == 'admin'
 
 
 class PartidasView(ListView):
@@ -330,8 +325,7 @@ class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
     def get_partida(self):
         partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
@@ -397,8 +391,7 @@ class AdicionarConvidadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return reverse_lazy('main:pagamento_convidado', kwargs={'slug': partida.slug, 'convidado_id': convidado_id})
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
 
 class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, FormView):
@@ -446,8 +439,7 @@ class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, F
         return super().form_invalid(form)
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
 
 class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -487,8 +479,7 @@ class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView
         return super().form_valid(form)
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
     def get_partida(self):
         partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
@@ -518,8 +509,7 @@ class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return filtered_queryset
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo != 'convidado'
+        return self.request.user.tipo != 'convidado'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -533,8 +523,7 @@ class PartidaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('main:partidas')
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo == 'admin'
+        return self.request.user.tipo == 'admin'
 
 
 class CriarPartidaView(LoginRequiredMixin, UserPassesTestMixin, FormView):
@@ -555,5 +544,4 @@ class CriarPartidaView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return super().form_valid(form)
 
     def test_func(self):
-        user = self.request.user
-        return user.tipo == 'admin'
+        return self.request.user.tipo == 'admin'
