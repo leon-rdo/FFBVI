@@ -445,7 +445,7 @@ class Voto(models.Model):
         verbose_name_plural = _("Votos")
 
     def __str__(self):
-        return f'{self.jogador.nome_jogador} votou em {self.votou_em.nome_jogador} | Partida: {self.partida.data}'
+        return f'{self.jogador.nome_jogador} votou em {self.votou_em.nome_jogador}'
 
 
 

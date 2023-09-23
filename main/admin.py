@@ -8,8 +8,10 @@ admin.site.index_title = 'FFBVI'
 
 @admin.register(Voto)
 class VotoAdmin(admin.ModelAdmin):
+    ordering = ['partida']
     list_filter = ['partida']
-
+    readonly_fields = ['partida', 'jogador', 'votou_em']
+    list_display = ['__str__', 'partida']
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
