@@ -1,5 +1,3 @@
-from typing import Any
-from django.http import HttpRequest, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView, FormView, DeleteView, CreateView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
 
@@ -228,6 +226,7 @@ class PartidaView(DetailView, FormView):
         except IndexError:
             pass
         context['partida_proxima'] = partida_proxima
+        context["votos_do_cara"] = Voto.objects.filter(partida=partida, votou_em=partida.cara_da_partida).count()
         return context
 
     def form_valid(self, form):
