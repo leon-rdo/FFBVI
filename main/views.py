@@ -261,7 +261,7 @@ class PartidaView(DetailView, FormView):
         return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
 
 
-class CaraDaPartidaView(CreateView):
+class CaraDaPartidaView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
     model = Voto
     fields = ['votou_em']
     template_name ='main/cara_da_partida.html'
@@ -273,7 +273,7 @@ class CaraDaPartidaView(CreateView):
         if usuario_ja_votou:
             messages.warning(self.request, 'Você já votou nesta partida.')
             return redirect('main:partida', slug=partida.slug)
-        elif (partida.data + datetime.timedelta(days=2)) < timezone.now().date():
+        elif (partida.data + datetime.timedelta(days=1)) < timezone.now().date():
             messages.error(self.request, 'O prazo para votar já expirou!')
             return redirect('main:partida', slug=partida.slug)
         
@@ -289,18 +289,41 @@ class CaraDaPartidaView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
-        user_voto = Voto.objects.filter(partida=partida, jogador=self.request.user)
+        context['slug'] = partida.slug
+        user_vote = Voto.objects.filter(partida=partida, jogador=self.request.user)
 
-        context['usuario_ja_votou'] = user_voto.exists()
+        context['usuario_ja_votou'] = user_vote.exists()
 
-        if user_voto.exists():
-            context['usuario_votou_em'] = user_voto.first().votou_em.nome_jogador
+        if user_vote.exists():
+            context['voto_usuario'] = user_vote.first()
 
         return context
     
     def get_success_url(self):
         partida_slug = self.kwargs['slug']
         return reverse_lazy('main:partida', kwargs={'slug': partida_slug})
+    
+    def test_func(self):
+        return self.request.user.tipo != 'convidado'
+    
+
+class MudarVotoView(UpdateView):
+    model = Voto
+    fields = ['votou_em']
+    template_name = "main/mudar_voto.html"
+    
+    def get_success_url(self):
+        partida_slug = self.kwargs['slug']
+        return reverse_lazy('main:partida', kwargs={'slug': partida_slug})
+    
+    def form_valid(self, form):
+        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
+        if (partida.data + datetime.timedelta(days=1)) < timezone.now().date():
+            messages.error(self.request, 'O prazo para votar já expirou!')
+            return redirect('main:partida', slug=partida.slug)
+        return super().form_valid(form)
+    
+
 
 class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'main/pagamento.html'
