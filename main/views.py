@@ -322,7 +322,6 @@ class MudarVotoView(UpdateView):
             messages.error(self.request, 'O prazo para votar já expirou!')
             return redirect('main:partida', slug=partida.slug)
         return super().form_valid(form)
-    
 
 
 class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):

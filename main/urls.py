@@ -24,4 +24,3 @@ urlpatterns = [
     path('gerenciar-federados/<slug:slug>', GerenciarFederadoView.as_view(), name='gerenciar_federado'),
     path('patrocinadores/', PatrocinadoresView.as_view(), name='patrocinadores'),
 ]
-
