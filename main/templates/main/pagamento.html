@@ -11,6 +11,19 @@
 {% block content %}
 {% load static %}
 <div class="container">
+    {% if messages %}
+    <div class="row justify-content-center align-items-center mt-2">
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
     {% if object == partida_proxima %}
         {% if not pagamento_usuario %}
             <div class="row justify-content-center align-items-center g-2">
