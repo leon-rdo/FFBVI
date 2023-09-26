@@ -37,7 +37,7 @@ class PagamentoAdmin(admin.ModelAdmin):
     actions = [confirmar_pagamento]
 
 
-class PagamentoInline(admin.TabularInline):
+class PagamentoInline(admin.StackedInline):
     model = Pagamento
     extra = 0
     readonly_fields = ['jogador', 'data']
