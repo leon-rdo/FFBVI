@@ -33,7 +33,16 @@ class IndexView(ListView):
             partida = Partida.objects.filter(data=today, sorteada=True).first()
         except IndexError:
             pass
+        
         context['partida'] = partida
+        
+        if Partida.objects.order_by('-data').first().cara_da_partida is not None:
+            cara_da_partida = Partida.objects.order_by('-data').first().cara_da_partida
+        else:
+            cara_da_partida = Partida.objects.order_by('-data').all()[1].cara_da_partida
+            
+        context['cara_da_partida'] = cara_da_partida
+        
         context['alerta'] = Configuracao.objects.first()
         context['noticias'] = Noticia.objects.all()
         return context

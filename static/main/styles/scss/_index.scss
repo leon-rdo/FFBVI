@@ -57,3 +57,13 @@
 .row-federados {
     overflow-x: scroll;
 }
+
+#cara-da-partida {
+    background-repeat: repeat;
+    background-size: 400px;
+    background-position: center;
+    .card {
+        max-width: 300px;
+        box-shadow: 15px 15px 25px black;
+    }
+}

@@ -55,6 +55,16 @@
   overflow-x: scroll;
 }
 
+#cara-da-partida {
+  background-repeat: repeat;
+  background-size: 400px;
+  background-position: center;
+}
+#cara-da-partida .card {
+  max-width: 300px;
+  box-shadow: 15px 15px 25px black;
+}
+
 body {
   margin: 0;
   padding: 0;
