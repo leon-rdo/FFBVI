@@ -14,6 +14,7 @@ urlpatterns = [
     path('partidas/<slug:slug>/', PartidaView.as_view(), name='partida'),
     path('partidas/<slug:slug>/cara-da-partida/', CaraDaPartidaView.as_view(), name='cara_partida'),
     path('partidas/<slug:slug>/cara-da-partida/mudar-voto/<int:pk>', MudarVotoView.as_view(), name='mudar_voto'),
+    path('partidas/<slug:slug>/gols/', GolView.as_view(), name='gols'),
     path('partidas/<slug:slug>/pagamentos/', PagamentosView.as_view(), name='pagamentos'),
     path('partidas/<slug:slug>/adicionar-convidado/novo', AdicionarConvidadoView.as_view(), name='adicionar_convidado'),
     path('partidas/<slug:slug>/adicionar-convidado/existente', AdicionarConvidadoExistenteView.as_view(), name='convidado_existente'),

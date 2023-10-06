@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Partida - Gols{% endblock title %}
+
+{% block meta_titulo_og %}Partida - Gols{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Lance os gols da partida!{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Partida - Gols{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Lance os gols da partida!{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Lance os gols da partida!{% endblock meta_descricao %}
+
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center mt-3 g-4">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="col-12 col-md-9">
+            <h1 class="display-1 text-center my-2">GOLS</h1>
+        </div>
+        <form class="col-12 col-md-6 col-lg-4 d-flex flex-column align-items-center" method="post">
+            <h4>Registre:</h4>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-floating mb-2 w-100">
+                {{ field }}
+                {{ field.label_tag }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success">Registrar</button>
+        </form>
+        {% if gols %}          
+        <div class="col-12 col-md-6">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2">
+                {% for gol in gols %}
+                <div class="col">
+                    <div class="card text-center">
+                        <div class="card-header">{{ gol.jogador }}</div>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                {% if gol.quantidade > 1 %}
+                                    Gols:
+                                {% else %}
+                                    Gol:
+                                {% endif %}
+                            </h4>
+                            <p class="card-text">{{ gol.quantidade }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

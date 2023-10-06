@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, ListView, DetailView, FormView, D
 from django.contrib.auth.views import PasswordChangeView
 
 from .models import *
-from .forms import PagamentoForm, PartidaForm, UserUpdateForm, RegistrationForm, AdicionarConvidadoForm, AdicionarConvidadoExistenteForm
+from .forms import GolForm, PagamentoForm, PartidaForm, UserUpdateForm, RegistrationForm, AdicionarConvidadoForm, AdicionarConvidadoExistenteForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
@@ -315,6 +315,45 @@ class CaraDaPartidaView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.tipo != 'convidado'
     
+
+class GolView(FormView, LoginRequiredMixin, UserPassesTestMixin):
+    model = Gol
+    template_name = "main/gols.html"
+    form_class = GolForm
+    
+    def form_valid(self, form):
+        
+        if Gol.objects.filter(jogador=form.cleaned_data['jogador'], partida=self.kwargs['slug']).exists():
+            gol = Gol.objects.filter(jogador=form.cleaned_data['jogador'], partida=self.kwargs['slug']).first()
+            gol.quantidade = form.cleaned_data['quantidade']
+            gol.save()
+            messages.success(self.request, 'Quantidade de gols atualizada!')
+        else:
+            gol = Gol()
+            gol.jogador=form.cleaned_data['jogador']
+            gol.partida=get_object_or_404(Partida, slug=self.kwargs['slug'])
+            gol.quantidade = form.cleaned_data['quantidade']
+            gol.save()
+            
+            if form.cleaned_data['quantidade'] > 1:
+                messages.success(self.request, 'Gols registrados!')
+            else:
+                messages.success(self.request, 'Gol registrado!')
+                
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        partida_slug = self.kwargs['slug']
+        return reverse_lazy('main:gols', kwargs={'slug': partida_slug})  
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['gols'] = Gol.objects.filter(partida=self.kwargs['slug'])
+        return context
+    
+    def test_func(self):
+        return self.request.user.tipo == 'admin' or self.request.user.is_staff
+  
 
 class MudarVotoView(UpdateView):
     model = Voto

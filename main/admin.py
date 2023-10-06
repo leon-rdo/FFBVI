@@ -66,3 +66,10 @@ class NoticiaAdmin(admin.ModelAdmin):
 @admin.register(Configuracao)
 class ConfiguracaoAdmin(admin.ModelAdmin):
     list_display = ['email_diretor', 'telefone_diretor', 'chave_pix', 'alerta_mensagem']
+    
+@admin.register(Gol)
+class GolAdmin(admin.ModelAdmin):
+    ordering = ['partida']
+    list_filter = ['partida']
+    list_display = ['__str__', 'partida']
+    search_fields = ['partida', 'jogador']

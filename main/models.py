@@ -415,6 +415,34 @@ class Partida(models.Model):
 
         return jogador_mais_votado
     
+
+    @property
+    def artilheiro(self):
+        artilheiro_info = (
+            Gol.objects
+            .filter(partida=self)
+            .values('jogador')
+            .annotate(total_gols=Sum('quantidade'))
+            .order_by('-total_gols')
+            .first()
+        )
+        
+        if artilheiro_info:
+            jogador_id = artilheiro_info['jogador']
+            total_gols_partida = artilheiro_info['total_gols']
+            jogador = User.objects.get(id=jogador_id)
+            
+            todos_gols = (
+                Gol.objects
+                .filter(jogador=jogador)
+                .aggregate(total_gols=Sum('quantidade'))
+            )['total_gols']
+            
+            return jogador, total_gols_partida, todos_gols
+        
+        return None
+
+    
     def votacao_aberta(self):
         hoje = timezone.now().date()
         data_limite = self.data + timezone.timedelta(days=1)
@@ -436,9 +464,9 @@ class Partida(models.Model):
 
 class Voto(models.Model):
     
-    jogador = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='votos_feitos')
-    votou_em = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='votos_recebidos')
-    partida = models.ForeignKey(Partida, on_delete=models.CASCADE, blank=True, null=True)
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votos_feitos')
+    votou_em = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votos_recebidos')
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Voto")
@@ -447,6 +475,22 @@ class Voto(models.Model):
     def __str__(self):
         return f'{self.jogador.nome_jogador} votou em {self.votou_em.nome_jogador}'
 
+    
+class Gol(models.Model):
+    
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE)
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
+    quantidade = models.PositiveSmallIntegerField("Quantos gols?")
+
+    class Meta:
+        verbose_name = _("Gol")
+        verbose_name_plural = _("Gols")
+
+    def __str__(self):
+        if self.quantidade > 1:
+            return f'{self.jogador} fez {str(self.quantidade)} gols na {self.partida}'
+        else:
+            return f'{self.jogador} fez {str(self.quantidade)} gol na {self.partida}'
 
 
 class Pagamento(models.Model):
