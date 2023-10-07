@@ -270,7 +270,7 @@ class PartidaView(DetailView, FormView):
         return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
 
 
-class CaraDaPartidaView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
+class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Voto
     fields = ['votou_em']
     template_name ='main/cara_da_partida.html'
@@ -316,7 +316,7 @@ class CaraDaPartidaView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
         return self.request.user.tipo != 'convidado'
     
 
-class GolView(FormView, LoginRequiredMixin, UserPassesTestMixin):
+class GolView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     model = Gol
     template_name = "main/gols.html"
     form_class = GolForm
