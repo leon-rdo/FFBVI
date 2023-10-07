@@ -194,6 +194,7 @@ class PartidasView(ListView):
     model = Partida
     context_object_name = 'partidas'
     ordering = ['-data']
+    paginate_by = 9
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
