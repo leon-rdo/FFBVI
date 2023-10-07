@@ -174,8 +174,9 @@
         </div>
     </section>
 
+    {% if cara_da_partida or artilheiro %}      
+    <section id="cara-da-partida" class="row justify-content-center my-2 p-5 g-4" style="background-image: url('{% static 'main/images/icons/Medals Pattern (no-background).svg' %}');">
     {% if cara_da_partida %}      
-    <section id="cara-da-partida" class="row justify-content-center my-2 p-5" style="background-image: url('{% static 'main/images/icons/Medals Pattern (no-background).svg' %}');">
         <div class="col-12 col-md-4 d-flex justify-content-center">
             <div class="card text-center">
                 <div class="card-header">
@@ -194,6 +195,27 @@
                 </div>
             </div>
         </div>
+    {% endif %}
+    {% if artilheiro %}      
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4 class="m-0 card-title text-success">ARTILHEIRO DA ÚLTIMA PARTIDA</h4>
+                </div>
+                <div class="card-body p-0">
+                    {% if artilheiro.0.foto_principal %}
+                    <img src="{{ artilheiro.0.foto_principal.url }}" class="img-fluid">
+                    {% else %}
+                    {% load static %}
+                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <h5 class="m-0">{{ artilheiro.0.nome_jogador }}</h5>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     </section>
     {% endif %}
 

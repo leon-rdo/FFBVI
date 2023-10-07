@@ -70,14 +70,18 @@
         {% if object.votacao_aberta %}
         <div class="d-flex justify-content-center my-3">
             <a href="{% url 'main:cara_partida' object.slug %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+            {% if user.tipo == 'admin' %}
             <a href="{% url 'main:gols' object.slug %}" class="btn btn-primary text-white ms-2">Lançar Gols da Partida</a>
+            {% endif %}
         </div>
         {% endif %}
         {% elif now|date:"Y-m-d" > object.data|date:"Y-m-d" %}
         {% if object.votacao_aberta %}
         <div class="d-flex justify-content-center my-3">
             <a href="{% url 'main:cara_partida' object.slug %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+            {% if 'user.tipo' == 'admin' %}
             <a href="{% url 'main:gols' object.slug %}" class="btn btn-primary text-white ms-2">Lançar Gols da Partida</a>
+            {% endif %}
         </div>
         {% endif %}
         {% endif %}
@@ -196,14 +200,12 @@
 
             <small class="text-end text-secondary text-decoration-underline mt-1">*Convidados sublinhados</small>
 
-                {% if user.tipo == 'admin' %}
-                <div class="col-12 d-flex justify-content-center align-items-center mt-4">
-                    <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
-                        Enviar no WhatsApp
-                        <img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
-                    </button>
-                </div>
-                {% endif %}
+            <div class="col-12 d-flex justify-content-center align-items-center mt-4">
+                <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
+                    Enviar no WhatsApp
+                    <img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
+                </button>
+            </div>
             {% endif %}
             {% if user in object.relacionados.all and now.date|date:'Y-m-d' >= dia_anterior|date:'Y-m-d' and object.relacionados.count < 18 %}
             <div class="col-12 d-flex justify-content-center mt-4">

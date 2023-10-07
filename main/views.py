@@ -43,6 +43,13 @@ class IndexView(ListView):
             
         context['cara_da_partida'] = cara_da_partida
         
+        if Partida.objects.order_by('-data').first().artilheiro is not None:
+            artilheiro = Partida.objects.order_by('-data').first().artilheiro
+        else:
+            artilheiro = Partida.objects.order_by('-data').all()[1].artilheiro
+            
+        context['artilheiro'] = artilheiro
+        
         context['alerta'] = Configuracao.objects.first()
         context['noticias'] = Noticia.objects.all()
         return context
