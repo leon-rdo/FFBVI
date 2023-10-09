@@ -131,7 +131,6 @@ class AdicionarConvidadoExistenteForm(forms.Form):
     class Meta:
         model = User
 
-from django import forms
 
 class GolForm(forms.ModelForm):
     class Meta:
