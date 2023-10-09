@@ -65,6 +65,77 @@
             <h2 class="display-6 text-center">Esta partida ocorreu em <time>{{ object.data }} às {{ object.hora }}</time></h2>
             {% endif %}
         </div>
+        {% if now|date:"Y-m-d" >= object.data|date:"Y-m-d" %}
+        {% if now|date:"Y-m-d" == object.data|date:"Y-m-d" and now|time:"H" > object.hora|time:"H" %}
+        {% if object.votacao_aberta %}
+        <div class="d-flex justify-content-center my-3">
+            <a href="{% url 'main:cara_partida' object.slug %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+            {% if user.tipo == 'admin' %}
+            <a href="{% url 'main:gols' object.slug %}" class="btn btn-primary text-white ms-2">Lançar Gols da Partida</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% elif now|date:"Y-m-d" > object.data|date:"Y-m-d" %}
+        {% if object.votacao_aberta %}
+        <div class="d-flex justify-content-center my-3">
+            <a href="{% url 'main:cara_partida' object.slug %}" class="btn btn-primary text-white">Vote no cara da partida!</a>
+            {% if 'user.tipo' == 'admin' %}
+            <a href="{% url 'main:gols' object.slug %}" class="btn btn-primary text-white ms-2">Lançar Gols da Partida</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if object.cara_da_partida is not None %}
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+            <div class="card text-center" style="max-width: 300px;">
+                <div class="card-header">
+                    <h4 class="m-0 card-title text-success">O CARA DA PARTIDA</h4>
+                    <hr class="my-1">
+                    <h5 class="m-0">{{ object.cara_da_partida.nome_jogador }}</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if object.cara_da_partida.foto_principal %}
+                    <img src="{{ object.cara_da_partida.foto_principal.url }}" class="img-fluid">
+                    {% else %}
+                    {% load static %}
+                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    {% if object.votacao_aberta %}
+                        <span class="badge text-bg-success w-75 mb-1">Votação aberta!</span>
+                    {% else %}
+                        <span class="badge text-bg-secondary w-75 mb-1">Votação encerrada!</span>
+                    {% endif %}
+                    <span class="badge text-bg-warning w-75">Total de votos: {{ votos_do_cara }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if object.artilheiro is not None %}
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+            <div class="card text-center" style="max-width: 300px;">
+                <div class="card-header">
+                    <h4 class="m-0 card-title text-success">O ARTILHEIRO</h4>
+                    <hr class="my-1">
+                    <h5 class="m-0">{{ object.artilheiro.0.nome_jogador }}</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if object.artilheiro.foto_principal %}
+                    <img src="{{ object.artilheiro.foto_principal.url }}" class="img-fluid">
+                    {% else %}
+                    {% load static %}
+                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <span class="badge text-bg-warning w-75 mb-1">Todos os gols: {{ object.artilheiro.2 }}</span>
+                    <span class="badge text-bg-warning w-75 mb-1">Nesta partida: {{ object.artilheiro.1 }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <div class="row justify-content-center align-items-top mt-4 g-2">
             {% if not object.sorteada %}
             <div class="col-12 col-md-10 mt-3">
@@ -129,14 +200,12 @@
 
             <small class="text-end text-secondary text-decoration-underline mt-1">*Convidados sublinhados</small>
 
-                {% if user.tipo == 'admin' %}
-                <div class="col-12 d-flex justify-content-center align-items-center mt-4">
-                    <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
-                        Enviar no WhatsApp
-                        <img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
-                    </button>
-                </div>
-                {% endif %}
+            <div class="col-12 d-flex justify-content-center align-items-center mt-4">
+                <button class="btn btn btn-outline-success" onclick="shareOnWhatsApp()">
+                    Enviar no WhatsApp
+                    <img class="img-fluid ms-2" src="https://cdn-icons-png.flaticon.com/512/174/174879.png" alt="Ícone do WhatsApp" style="width: 25px;">
+                </button>
+            </div>
             {% endif %}
             {% if user in object.relacionados.all and now.date|date:'Y-m-d' >= dia_anterior|date:'Y-m-d' and object.relacionados.count < 18 %}
             <div class="col-12 d-flex justify-content-center mt-4">

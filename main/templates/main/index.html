@@ -33,7 +33,7 @@
         {% endif %}
         <h1 class="display-1 text-center">Federação de Futebol Bela Vista I</h1>
     </div>
-    <div class="row justify-content-center align-items-center my-3">
+    <section class="row justify-content-center align-items-center my-3">
         <div id="carousel-federados-lg" class="carousel carousel-federados slide d-none d-lg-block my-3" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {% for federado in users %}
@@ -58,7 +58,7 @@
                             <div class="moldura position-absolute top-0 start-0 w-100 h-100"
                                 style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
                             </div>
-                            <div class="card">
+                            <div class="card card-federado">
                                 <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Mauro Shampoo.jpg' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
                                 <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Mauro Shampoo (Colete).jpg' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
                             </div>
@@ -104,7 +104,7 @@
                             <div class="moldura position-absolute top-0 start-0 w-100 h-100"
                                 style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
                             </div>
-                            <div class="card">
+                            <div class="card card-federado">
                                 <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Mauro Shampoo.jpg' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
                                 <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Mauro Shampoo (Colete).jpg' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
                             </div>
@@ -150,7 +150,7 @@
                             <div class="moldura position-absolute top-0 start-0 w-100 h-100"
                                 style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
                             </div>
-                            <div class="card">
+                            <div class="card card-federado">
                                 <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Mauro Shampoo.jpg' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
                                 <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Mauro Shampoo (Colete).jpg' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
                             </div>
@@ -172,9 +172,55 @@
                 <span class="visually-hidden">Próximo</span>
             </button>
         </div>
-    </div>
+    </section>
+
+    {% if cara_da_partida or artilheiro %}      
+    <section id="cara-da-partida" class="row justify-content-center my-2 p-5 g-4" style="background-image: url('{% static 'main/images/icons/Medals Pattern (no-background).svg' %}');">
+    {% if cara_da_partida %}      
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4 class="m-0 card-title text-success">O CARA DA ÚLTIMA PARTIDA</h4>
+                </div>
+                <div class="card-body p-0">
+                    {% if cara_da_partida.foto_principal %}
+                    <img src="{{ cara_da_partida.foto_principal.url }}" class="img-fluid">
+                    {% else %}
+                    {% load static %}
+                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <h5 class="m-0">{{ cara_da_partida.nome_jogador }}</h5>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if artilheiro %}      
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h4 class="m-0 card-title text-success">ARTILHEIRO DA ÚLTIMA PARTIDA</h4>
+                </div>
+                <div class="card-body p-0">
+                    {% if artilheiro.0.foto_principal %}
+                    <img src="{{ artilheiro.0.foto_principal.url }}" class="img-fluid">
+                    {% else %}
+                    {% load static %}
+                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <h5 class="m-0">{{ artilheiro.0.nome_jogador }}</h5>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </section>
+    {% endif %}
+
     {% if noticias %}      
-    <div class="row align-items-center my-3">
+    <section class="row align-items-center my-3">
         <div class="col-12">
             <h3 class="display-2 px-0">Últimas notícias!</h3>
         </div>
@@ -224,7 +270,7 @@
         <div class="col-4 d-none d-md-flex justify-content-center align-items-center">
             <img src="{% static 'main/images/icons/FFBVI - Logo.svg' %}" class="img-fluid">
         </div>
-    </div>
+    </section>
     {% endif %}
     {% if partida %}
     {% if partida.sorteada %}
@@ -271,8 +317,8 @@
 {% block more_scripts %}
 <script>
     // Obtém todas as imagens dos cartões
-    var cards = document.getElementsByClassName('card');
-    var cardImgs = document.querySelectorAll('.card .img-1');
+    var cards = document.getElementsByClassName('card-federado');
+    var cardImgs = document.querySelectorAll('.card-federado .img-1');
 
     // Define os intervalos de tempo
     var intervalo = 2000;

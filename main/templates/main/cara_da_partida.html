@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}O Cara da Partida{% endblock title %}
+
+{% block content %}
+{% if usuario_ja_votou %}
+<div class="row text-center mt-5">
+    <h1 class="display-1">Você já votou!</h1>
+    <h4 class="h4 my-2">
+        Você votou em 
+        {% if voto_usuario.votou_em.nome_jogador == user.nome_jogador %}
+        si mesmo.
+        {% else %}
+        {{ voto_usuario.votou_em.nome_jogador }}
+        {% endif %}
+    </h4>
+    <a href="{% url 'main:mudar_voto' slug voto_usuario.id %}">Mudar voto?</a>
+</div>
+{% else %}
+<div class="row justify-content-center align-items-center g-2 mt-5">
+    <form class="col-12 col-md-6 d-flex flex-column align-items-center" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Votar</button>
+    </form>
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block more_scripts %}
+<script>
+    input = document.getElementById('id_votou_em');
+    label = document.getElementsByTagName('label');
+    input.classList.add('form-control');
+    label[0].innerHTML = 'Em quem você vota?'
+</script>
+{% endblock more_scripts %}

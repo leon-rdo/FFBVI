@@ -27,9 +27,9 @@
                     {{ field }}
                     {{ field.label_tag }}
                 </div>
-                {% for error in field.errors %}
-                <div class="invalid-feedback">{{ error }}</div>
-                {% endfor %}
+                    {% for error in field.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
                 {% endfor %}
                 <div class="col-12 col-md-6 form-floating mb-1 mb-md-3">
                     <input type="text" readonly class="form-control-plaintext" id="idade" placeholder="dummy" value="{{ user.idade }}">

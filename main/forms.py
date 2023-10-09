@@ -1,8 +1,6 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import UserChangeForm
-from .models import Pagamento, User, Partida
+from .models import Gol, Pagamento, User, Partida
 from django.contrib.auth.forms import PasswordChangeForm
 
 class LoginForm(forms.Form):
@@ -133,3 +131,12 @@ class AdicionarConvidadoExistenteForm(forms.Form):
     class Meta:
         model = User
 
+
+class GolForm(forms.ModelForm):
+    class Meta:
+        model = Gol
+        fields = ['jogador', 'quantidade']
+        widgets = {
+            'jogador': forms.Select(attrs={'class': 'form-control', 'placeholder': 'dummy'}),
+            'quantidade': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'dummy'}),
+        }

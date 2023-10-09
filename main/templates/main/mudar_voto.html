@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}O Cara da Partida{% endblock title %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center g-2 mt-5">
+    <form class="col-12 col-md-6 d-flex flex-column align-items-center" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Votar</button>
+    </form>
+</div>
+{% endblock content %}
+
+{% block more_scripts %}
+<script>
+    input = document.getElementById('id_votou_em');
+    label = document.getElementsByTagName('label');
+    input.classList.add('form-control');
+    label[0].innerHTML = 'Mude seu voto:'
+</script>
+{% endblock more_scripts %}

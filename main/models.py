@@ -1,4 +1,6 @@
+from collections import defaultdict
 from django.db import models
+from django.urls import reverse
 from financeiro.models import Saida
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -7,6 +9,7 @@ from django.utils.deconstruct import deconstructible
 from django.template.defaultfilters import slugify
 from django.core.validators import RegexValidator
 from django.forms import ValidationError
+from django.db.models import Count
 from django.utils import timezone
 from django.db.models import Sum
 
@@ -294,14 +297,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     senha_validator = RegexValidator(
-            regex=r'^(?=.*[\W_])(?=.*[A-Z]).{8,}$',
-            message="A senha deve conter no mínimo um caractere especial ou um caractere maiúsculo e ter pelo menos 8 caracteres."
-        )
+        regex=r'^(?=.*[\W_])(?=.*[A-Z]).{8,}$',
+        message="A senha deve conter no mínimo um caractere especial ou um caractere maiúsculo e ter pelo menos 8 caracteres."
+    )
     
     telefone_validator = RegexValidator(
-            regex=r'^[0-9\- ]*$',
-            message="O telefone deve conter apenas números, hífens (-) e espaços."
-        )
+        regex=r'^[0-9\- ]*$',
+        message="O telefone deve conter apenas números, hífens (-) e espaços."
+    )
     
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     # Informações de Login
@@ -375,7 +378,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'nome_jogador'
 
     objects = Administrador()
-        
+
         
 class Partida(models.Model):
 
@@ -391,6 +394,60 @@ class Partida(models.Model):
     razao_anulacao = models.TextField(_("Qual a razão da anulação?"), blank=True)
 
     slug = models.SlugField(max_length=50, unique=True, editable=False, default='')
+    
+    @property
+    def cara_da_partida(self):
+
+        votos = self.voto_set.all()
+        
+        if not votos:
+            return None
+
+        contagem_votos = {}
+
+        for voto in votos:
+            jogador = voto.votou_em
+            if jogador in contagem_votos:
+                contagem_votos[jogador] += 1
+            else:
+                contagem_votos[jogador] = 1
+
+        jogador_mais_votado = max(contagem_votos, key=contagem_votos.get, default=None)
+
+        return jogador_mais_votado
+    
+
+    @property
+    def artilheiro(self):
+        artilheiro_info = (
+            Gol.objects
+            .filter(partida=self)
+            .values('jogador')
+            .annotate(total_gols=Sum('quantidade'))
+            .order_by('-total_gols')
+            .first()
+        )
+        
+        if artilheiro_info:
+            jogador_id = artilheiro_info['jogador']
+            total_gols_partida = artilheiro_info['total_gols']
+            jogador = User.objects.get(id=jogador_id)
+            
+            todos_gols = (
+                Gol.objects
+                .filter(jogador=jogador)
+                .aggregate(total_gols=Sum('quantidade'))
+            )['total_gols']
+            
+            return jogador, total_gols_partida, todos_gols
+        
+        return None
+
+    
+    def votacao_aberta(self):
+        hoje = timezone.now().date()
+        data_limite = self.data + timezone.timedelta(days=1)
+        return hoje <= data_limite
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.id)
@@ -404,8 +461,43 @@ class Partida(models.Model):
         formatted_data = self.data.strftime("%d/%m/%Y") if self.data else "N/A"
         formatted_hora = self.hora.strftime("%H:%M") if self.hora else "N/A"
         return f"Partida em {formatted_data} às {formatted_hora}"
+    
+    def get_absolute_url(self):
+        return reverse("main:partida", kwargs={"slug": self.slug})
+    
         
-        
+
+class Voto(models.Model):
+    
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votos_feitos')
+    votou_em = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votos_recebidos')
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _("Voto")
+        verbose_name_plural = _("Votos")
+
+    def __str__(self):
+        return f'{self.jogador.nome_jogador} votou em {self.votou_em.nome_jogador}'
+
+    
+class Gol(models.Model):
+    
+    jogador = models.ForeignKey(User, on_delete=models.CASCADE)
+    partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
+    quantidade = models.PositiveSmallIntegerField("Quantos gols?")
+
+    class Meta:
+        verbose_name = _("Gol")
+        verbose_name_plural = _("Gols")
+
+    def __str__(self):
+        if self.quantidade > 1:
+            return f'{self.jogador} fez {str(self.quantidade)} gols na {self.partida}'
+        else:
+            return f'{self.jogador} fez {str(self.quantidade)} gol na {self.partida}'
+
+
 class Pagamento(models.Model):
 
     comprovante = models.ImageField(_('Comprovante:'), upload_to='main/images/pagamentos', blank=True, null=True)
@@ -426,6 +518,10 @@ class Pagamento(models.Model):
     class Meta:
         verbose_name = 'Entrada'
         verbose_name_plural = 'Entradas'
+        
+    def get_absolute_url(self):
+        return reverse("main:pagamentos", kwargs={"slug": self.partida.slug})
+    
 
 
 @deconstructible
@@ -482,3 +578,7 @@ class Patrocinador(models.Model):
     class Meta:
         verbose_name = 'Patrocinador'
         verbose_name_plural = 'Patrocinadores'
+        
+    def get_absolute_url(self):
+        return reverse("main:patrocinadores")
+    
