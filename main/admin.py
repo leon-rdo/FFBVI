@@ -4,6 +4,7 @@ from main.models import *
 
 admin.site.site_header = 'Administração da FFBVI'
 admin.site.index_title = 'FFBVI'
+admin.site.site_title = 'Administração'
 
 
 @admin.register(Voto)
@@ -20,6 +21,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ['nome_jogador', 'tipo', 'posicao']
     list_filter = ['tipo']
     readonly_fields = ['idade', 'gols_marcados', 'pontos', 'date_joined', 'last_login']
+    empty_value_display = "???"
 
 
 @admin.register(Pagamento)

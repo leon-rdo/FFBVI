@@ -1,5 +1,6 @@
 from collections import defaultdict
 from django.db import models
+from django.urls import reverse
 from financeiro.models import Saida
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -460,6 +461,10 @@ class Partida(models.Model):
         formatted_data = self.data.strftime("%d/%m/%Y") if self.data else "N/A"
         formatted_hora = self.hora.strftime("%H:%M") if self.hora else "N/A"
         return f"Partida em {formatted_data} às {formatted_hora}"
+    
+    def get_absolute_url(self):
+        return reverse("main:partida", kwargs={"slug": self.slug})
+    
         
 
 class Voto(models.Model):
@@ -513,6 +518,10 @@ class Pagamento(models.Model):
     class Meta:
         verbose_name = 'Entrada'
         verbose_name_plural = 'Entradas'
+        
+    def get_absolute_url(self):
+        return reverse("main:pagamentos", kwargs={"slug": self.partida.slug})
+    
 
 
 @deconstructible
@@ -569,3 +578,7 @@ class Patrocinador(models.Model):
     class Meta:
         verbose_name = 'Patrocinador'
         verbose_name_plural = 'Patrocinadores'
+        
+    def get_absolute_url(self):
+        return reverse("main:patrocinadores")
+    
