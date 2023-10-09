@@ -363,7 +363,7 @@ class GolView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return self.request.user.tipo == 'admin' or self.request.user.is_staff
   
 
-class MudarVotoView(UpdateView):
+class MudarVotoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Voto
     fields = ['votou_em']
     template_name = "main/mudar_voto.html"
@@ -378,6 +378,9 @@ class MudarVotoView(UpdateView):
             messages.error(self.request, 'O prazo para votar já expirou!')
             return redirect('main:partida', slug=partida.slug)
         return super().form_valid(form)
+    
+    def test_func(self):
+        return self.request.user.tipo != 'convidado'
 
 
 class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
