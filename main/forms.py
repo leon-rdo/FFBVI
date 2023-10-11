@@ -103,7 +103,7 @@ class PagamentoForm(forms.ModelForm):
         required=False,
         label='Pagamento em dinheiro?'
     )
-    valor = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}), label=_('Qual o valor?'), required=True)
+    valor = forms.DecimalField(widget=forms.NumberInput(attrs={'class': 'form-control', 'value': '10.00', 'placeholder': 'dummy'}), label=_('Qual o valor?'), required=True)
 
     
     class Meta:

@@ -383,12 +383,13 @@ class MudarVotoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.tipo != 'convidado'
 
 
-class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     template_name = 'main/pagamento.html'
     model = Pagamento
     form_class = PagamentoForm
 
     def form_valid(self, form):
+        pagamento = Pagamento()
         pagamento = form.save(commit=False)
         pagamento.jogador = self.request.user
         pagamento.partida = self.get_partida()
@@ -403,7 +404,16 @@ class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
                 pagamento.comprovante = comprovante
 
         pagamento.save()
+        
+        messages.success(self.request, 'Pagamento efetuado com sucesso! Ingresse na partida.')
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f'Erro no campo "{form.fields[field].label}". {error}')
+        
+        return super().form_invalid(form)
 
     def test_func(self):
         return self.request.user.tipo != 'convidado'
