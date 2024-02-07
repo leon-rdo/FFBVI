@@ -26,9 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG').lower() == 'true'
 
-ALLOWED_HOSTS = []
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -59,7 +62,7 @@ ROOT_URLCONF = 'FFBVI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates/'],
+        'DIRS': os.environ.get('TEMPLATES', 'templates/').split(','),
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,10 +126,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static/"]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+if os.environ.get('STATIC_ROOT'):
+    STATIC_ROOT = os.environ.get('STATIC_ROOT')
+else:
+    STATICFILES_DIRS = [BASE_DIR / "static/"]
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT') if os.environ.get('MEDIA_ROOT') else os.path.join(BASE_DIR, 'media')
+MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
