@@ -24,4 +24,6 @@ urlpatterns = [
     path('gerenciar-federados/', GerenciarFederadosView.as_view(), name='gerenciar_federados'),
     path('gerenciar-federados/<slug:slug>', GerenciarFederadoView.as_view(), name='gerenciar_federado'),
     path('patrocinadores/', PatrocinadoresView.as_view(), name='patrocinadores'),
+    # ---------------
+    path('new/', NewIndexView.as_view(), name='new_index')
 ]

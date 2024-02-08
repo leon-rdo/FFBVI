@@ -55,6 +55,48 @@ class IndexView(ListView):
         return context
    
 
+class NewIndexView(ListView):
+    template_name = "main/new_index.html"
+    model = User
+    context_object_name = "users"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        filtered_queryset = queryset.filter(tipo__in=['federado', 'admin'])
+        randomized_queryset = list(filtered_queryset)
+        random.shuffle(randomized_queryset)
+        return randomized_queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = datetime.date.today()
+        partida = None
+        try:
+            partida = Partida.objects.filter(data=today, sorteada=True).first()
+        except IndexError:
+            pass
+        
+        context['partida'] = partida
+        
+        if Partida.objects.order_by('-data').first().cara_da_partida is not None:
+            cara_da_partida = Partida.objects.order_by('-data').first().cara_da_partida
+        else:
+            cara_da_partida = Partida.objects.order_by('-data').all()[1].cara_da_partida
+            
+        context['cara_da_partida'] = cara_da_partida
+        
+        if Partida.objects.order_by('-data').first().artilheiro is not None:
+            artilheiro = Partida.objects.order_by('-data').first().artilheiro
+        else:
+            artilheiro = Partida.objects.order_by('-data').all()[1].artilheiro
+            
+        context['artilheiro'] = artilheiro
+        
+        context['alerta'] = Configuracao.objects.first()
+        context['noticias'] = Noticia.objects.all()
+        return context
+
+
 class FederadosView(ListView):
     template_name = "main/federados.html"
     model = User
