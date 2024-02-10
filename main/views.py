@@ -94,6 +94,8 @@ class NewIndexView(ListView):
         
         context['alerta'] = Configuracao.objects.first()
         context['noticias'] = Noticia.objects.all()
+
+        context['proxima_partida'] = Partida.objects.filter(data__gte=datetime.date.today()).order_by('data').first()
         return context
 
 
