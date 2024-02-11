@@ -1,28 +1,35 @@
-{% extends "base.html" %}
-{% block title %}Patrocinadores da FFBVI{% endblock title %}
-{% block meta_titulo_og %}Patrocinadores - FFBVI{% endblock meta_titulo_og %}
-{% block meta_descricao_og %}Veja os patrocinadores da FFBVI.{% endblock meta_descricao_og %}
-{% block meta_titulo_twt %}Patrocinadores - FFBVI{% endblock meta_titulo_twt %}
-{% block meta_descricao_twt %}Veja os patrocinadores da FFBVI.{% endblock meta_descricao_twt %}
-{% block meta_descricao %}{% endblock meta_descricao %}
-{% block og_url %}{% url 'main:patrocinadores' %}{% endblock og_url %}
-{% block twt_url %}{% url 'main:patrocinadores' %}{% endblock twt_url %}
-{% block canonical %}{% url 'main:patrocinadores' %}{% endblock canonical %}
-{% block content %}
+{% extends "new_base.html" %}
 {% load static %}
-<div class="container">
-    <h1 class="display-1">Patrocinadores</h1>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2 d-flex justify-content-center mt-3">
+
+{% comment metatags %}
+    {% block title %}Patrocinadores da FFBVI{% endblock title %}
+    {% block meta_titulo_og %}Patrocinadores - FFBVI{% endblock meta_titulo_og %}
+    {% block meta_descricao_og %}Veja os patrocinadores da FFBVI.{% endblock meta_descricao_og %}
+    {% block meta_titulo_twt %}Patrocinadores - FFBVI{% endblock meta_titulo_twt %}
+    {% block meta_descricao_twt %}Veja os patrocinadores da FFBVI.{% endblock meta_descricao_twt %}
+    {% block meta_descricao %}{% endblock meta_descricao %}
+    {% block og_url %}{% url 'main:patrocinadores' %}{% endblock og_url %}
+    {% block twt_url %}{% url 'main:patrocinadores' %}{% endblock twt_url %}
+    {% block canonical %}{% url 'main:patrocinadores' %}{% endblock canonical %}
+{% endcomment %}
+
+{% block content %}
+<div class="container" style="padding: 5.6rem 0;">
+
+    <div class="row no-gutters overflow-hidden g-0 mt-3 px-2">
+        <h1 class="display-3 d-none d-md-block mb-4">Patrocinadores</h1>
+        <h1 class="display-5 d-md-none mb-4">Patrocinadores</h1>
         {% for patrocinador in patrocinadores %}
-        <div class="card my-2 mx-2 border border-primary overflow-hidden p-0" style="width: 18rem;">
-            <div class="bg-secondary w-100">
-                <img class="card-img-top object-fit-cover" src="{{ patrocinador.logo.url }}" alt="Logomarca de {{ patrocinador.nome }}">
+        <a href="{{ patrocinador.link }}" class="col-6 col-md-3">
+            <div class="post-entry ">
+                <img src="{{ patrocinador.logo.url }}" class="w-100 ratio ratio-1x1" alt="Logomarca de {{ patrocinador.nome }}">
+                <div class="caption">
+                    <div class="caption-inner">
+                        <h3 class="mb-3">{{ patrocinador.nome }}</h3>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <h4 class="card-title">{{ patrocinador.nome }}</h4>
-                <a href="{{ patrocinador.link }}" class="card-text text-decoration-none">Veja mais aqui!</a>
-            </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
 </div>

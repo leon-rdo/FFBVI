@@ -1040,14 +1040,17 @@ h5,
   transform: skew(-15deg);
 }
 
-.latest-news .post-entry {
+.post-entry {
   position: relative;
   overflow: hidden;
-  height: 18rem;
-  aspect-ratio: 16/9;
 }
 
-.latest-news .post-entry img {
+.latest-news .post-entry {
+  aspect-ratio: 16/9;
+  height: 18rem;
+}
+
+.post-entry img {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
@@ -1056,7 +1059,7 @@ h5,
   transform: scale(1);
 }
 
-.latest-news .post-entry:before {
+.post-entry:before {
   content: "";
   width: 0;
   height: 5px;
@@ -1070,7 +1073,7 @@ h5,
   z-index: 2;
 }
 
-.latest-news .post-entry .caption {
+.post-entry .caption {
   position: absolute;
   top: 0;
   left: 0;
@@ -1080,7 +1083,7 @@ h5,
   z-index: 1;
 }
 
-.latest-news .post-entry .caption:before {
+.post-entry .caption:before {
   content: "";
   position: absolute;
   top: 0;
@@ -1094,57 +1097,57 @@ h5,
   background: rgba(0, 0, 0, 0.4);
 }
 
-.latest-news .post-entry .caption .caption-inner {
+.post-entry .caption .caption-inner {
   position: absolute;
   bottom: 30px;
   left: 30px;
   right: 30px;
 }
 
-.latest-news .post-entry .caption .caption-inner h3 {
+.post-entry .caption .caption-inner h3 {
   font-size: 16px;
   font-weight: 700;
   color: #fff;
 }
 
-.latest-news .post-entry .author .img {
+.post-entry .author .img {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 40px;
   flex: 0 0 40px;
 }
 
-.latest-news .post-entry .author .img img {
+.post-entry .author .img img {
   max-width: 100%;
   border-radius: 50%;
 }
 
-.latest-news .post-entry .author .text h4 {
+.post-entry .author .text h4 {
   color: #fff;
   font-weight: 700;
 }
 
-.latest-news .post-entry .author .text span {
+.post-entry .author .text span {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.latest-news .post-entry .author .text h4,
-.latest-news .post-entry .author .text span {
+.post-entry .author .text h4,
+.post-entry .author .text span {
   margin: 0;
   line-height: 1;
   font-size: 14px;
 }
 
-.latest-news .post-entry:hover img {
+.post-entry:hover img {
   -webkit-transform: scale(1.1);
   -ms-transform: scale(1.1);
   transform: scale(1.1);
 }
 
-.latest-news .post-entry:hover .caption:before {
+.post-entry:hover .caption:before {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.latest-news .post-entry:hover:before {
+.post-entry:hover:before {
   width: 100%;
 }
 
