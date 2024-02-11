@@ -1040,13 +1040,11 @@ h5,
   transform: skew(-15deg);
 }
 
-.latest-news {
-  padding: 100px 0;
-}
-
 .latest-news .post-entry {
   position: relative;
   overflow: hidden;
+  height: 18rem;
+  aspect-ratio: 16/9;
 }
 
 .latest-news .post-entry img {
