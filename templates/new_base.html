@@ -3,7 +3,9 @@
 {% load static %}
 
 <head>
-  <title>FFBVI</title>
+
+  <title>{% block title %}{% endblock title %}</title>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -31,7 +33,33 @@
   <link rel="shortcut icon" href="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" type="image/svg+xml">
   
   <link rel="stylesheet" href="{% static 'main/styles/css/style.css' %}">
-
+  
+  <!-- Meta Tags -->
+  <meta name="author" content="Leonardo Costa" />
+  <link rel="canonical" href="http://ffbvi.pythonanywhere.com{% block canonical %}{% endblock canonical %}"/>
+  <meta name="description" content="{% block meta_descricao %}{% endblock meta_descricao %}" />
+  <meta name="geo.placename" content="Espaço Esportivo Do Bela Vista">
+  <meta name="geo.region" content="BR-PA" />
+  <meta name="geo.position" content="-1.397428;-48.469795" />
+  <meta name="ICBM" content="-1.397428, -48.469795" />
+  <meta http-equiv="cache-control" content="Private" />
+  <meta http-equiv="content-language" content="pt-br" />
+  <meta name="copyright" content="© 2023 FFBVI" />
+  <meta name="generator" content="Django.py 4.2.1" />
+  <meta name="rating" content="general" />
+  <!-- Meta Tags da META (Facebook) -->
+  <meta property="og:title" content="{% block meta_titulo_og %}{% endblock meta_titulo_og %}"/>
+  <meta property="og:description" content="{% block meta_descricao_og %}{% endblock meta_descricao_og %}"/>
+  <meta property="og:url" content="http://ffbvi.pythonanywhere.com{% block og_url %}{% endblock og_url %}"/>
+  <meta property="og:type" content="sports_league"/>
+  <meta property="og:image" content="{% static 'main/images/FFBVI - OG Image.png' %}"/>
+  <meta property="og:site_name" content="Federação de Futebol Bela Vista I"/>
+  <!-- Meta Tags do Twitter -->
+  <meta name="twitter:title" content="{% block meta_titulo_twt %}{% endblock meta_titulo_twt %}">
+  <meta name="twitter:description" content="{% block meta_descricao_twt %}{% endblock meta_descricao_twt %}">
+  <meta name="twitter:url" content="http://ffbvi.pythonanywhere.com{% block twt_url %}{% endblock twt_url %}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="{% static 'main/images/FFBVI - OG Image.png' %}">
   {% block style %}{% endblock style %}
 
   <style>
@@ -103,7 +131,7 @@
       <div class="container-fluid">
         <div class="d-flex align-items-center">
           <div class="site-logo">
-            <a href="{% url 'main:new_index' %}" class="text-decoration-none">
+            <a href="{% url 'main:homepage' %}" class="text-decoration-none">
               <img src="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" width="40" height="40" alt="Logo">
               FFBVI
             </a>
@@ -111,7 +139,7 @@
           <div class="ms-auto">
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav me-auto d-none d-lg-block">
-                <li class="{% if request.path == homepage_url %}active{% endif %}"><a href="{% url 'main:new_index' %}" class="nav-link">Início</a></li>
+                <li class="{% if request.path == homepage_url %}active{% endif %}"><a href="{% url 'main:homepage' %}" class="nav-link">Início</a></li>
                 <li class="{% if request.path == partidas_url %}active{% endif %}"><a href="{% url 'main:partidas' %}" class="nav-link">Partidas</a></li>
                 <li class="{% if request.path == federados_url %}active{% endif %}"><a href="{% url 'main:federados' %}" class="nav-link">Federados</a></li>
                 <li class="{% if request.path == patrocinadores_url %}active{% endif %}"><a href="{% url 'main:patrocinadores' %}" class="nav-link">Patrocinadores</a></li>

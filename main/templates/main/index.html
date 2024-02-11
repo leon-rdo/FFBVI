@@ -1,354 +1,306 @@
-{% extends "base.html" %}
+{% extends 'new_base.html' %}
+{% load static %}
+
 {% block title %}FFBVI{% endblock title %}
 {% block meta_titulo_og %}Federação de Futebol Bela Vista I{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Página Inicial do site da FFBVI.{% endblock meta_descricao_og %}
 {% block meta_titulo_twt %}Federação de Futebol Bela Vista I{% endblock meta_titulo_twt %}
 {% block meta_descricao_twt %}Página Inicial do site da FFBVI.{% endblock meta_descricao_twt %}
 {% block meta_descricao %}Página Inicial do site da FFBVI.{% endblock meta_descricao %}
+
 {% block content %}
-{% load static %}
+<div class="hero overlay" style="background-image: url('{% static 'theme/soccer-master/images/bg_3.jpg' %}');">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-5 ms-auto" style="z-index: 1999;">
+        {% if not anterior %}
+        <h1 class="text-white">Próxima Partida</h1>
+        <p>Venha participar da próxima partida, não perca a inscrição.</p>
+        <div id="date-countdown"
+          data-match-datetime="{{ partida_destaque.data|date:'Y/m/d' }} {{ partida_destaque.hora }}"></div>
+        <p>
+          <a href="{% url 'main:pagamento' partida_destaque.slug %}"
+            class="btn btn-primary py-3 px-4 me-3">Participar</a>
+          <a href="{{ partida_destaque.get_absolute_url }}" class="more light">Ver mais</a>
+        </p>
+        {% else %}
+        <h1 class="text-white">Partida Anterior</h1>
+        <p>Veja detalhes da última partida enquanto aguarda a nova.</p>
+        <a href="{{ partida_destaque.get_absolute_url }}" class="btn btn-primary py-3 px-4 me-3">Veja mais</a>
+        <a href="#destaques" class="more light">Jogadores destaque</a>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if artilheiro or cara_da_partida %}
 <div class="container">
-    <div class="row justify-content-center align-items-center my-3">
-        {% if not alerta.alerta_mensagem is None %}
-        <div class="col-12">
-            <div class="alert alert-{{ alerta.alerta_cor }} alert-dismissible fade show d-flex align-items-center" role="alert">
-                {% if alerta.alerta_icon %}
-                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                    <symbol id="check-circle-fill" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                    </symbol>
-                    <symbol id="info-fill" viewBox="0 0 16 16">
-                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                    </symbol>
-                    <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16">
-                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </symbol>
-                </svg>
-                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="{{ alerta.alerta_cor|capfirst }}:" style="width: 20px; height: 20px"><use xlink:href="{{ alerta.alerta_icon }}"/></svg>
-                {% endif %}
-                <div>{{ alerta.alerta_mensagem }} <a class="alert-link" href="{{ alerta.alerta_link }}">{{ alerta.alerta_texto_link }}</a></div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="d-flex team-vs">
+        {% if cara_da_partida %}
+        <div class="team-1 w-100">
+          <div class="team-details w-100 text-center">
+            <img src="{% static 'theme/soccer-master/images/logo_1.png' %}" alt="Image" class="img-fluid">
+            <h3>O CARA DA ÚLTIMA PARTIDA</h3>
+            <h5>{{ cara_da_partida.nome_completo }}</h5>
+            <h4><strong>{{ cara_da_partida.nome_jogador }}</strong></h4>
+            {% if ultima_partida.votacao_aberta %}
+            <a href="{% url 'main:cara_partida' ultima_partida.slug %}" class="badge text-bg-success w-75 mb-1">Votação
+              aberta!</a>
+            {% else %}
+            <span class="badge text-bg-warning w-75">Total de votos: {{ votos_do_cara }}</span>
+            {% endif %}
+          </div>
         </div>
         {% endif %}
-        <h1 class="display-1 text-center">Federação de Futebol Bela Vista I</h1>
+        {% if artilheiro %}
+        <div class="team-2 w-100">
+          <div class="team-details w-100 text-center">
+            <img src="{% static 'theme/soccer-master/images/logo_2.png' %}" alt="Image" class="img-fluid">
+            <h3>ARTILHEIRO DA ÚLTIMA PARTIDA</h3>
+            <h5>{{ artilheiro.0.nome_completo }}</h5>
+            <h4><strong>{{ artilheiro.0.nome_jogador }}</strong></h4>
+            <span class="badge text-bg-warning w-75">Gols: {{ artilheiro.2 }}</span>
+          </div>
+        </div>
+        {% endif %}
+      </div>
     </div>
-    <section class="row justify-content-center align-items-center my-3">
-        <div id="carousel-federados-lg" class="carousel carousel-federados slide d-none d-lg-block my-3" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% for federado in users %}
-                {% if forloop.counter0|divisibleby:4 %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
-                    <div class="row row-cols-4 d-flex justify-content-evenly">
-                {% endif %}
-                        <div class="col cols-cards position-relative p-0 overflow-hidden">
-                            <div
-                                class="card-body text-dark position-absolute text-white d-flex align-items-center justify-content-between w-100 pe-5">
-                                <div>
-                                    <h5 class="card-title text-capitalize m-0 fs-6">{{ federado.nome_jogador }}</h5>
-                                    <p class="card-text text-capitalize m-0 fs-6">{{ federado.posicao }}</p>
-                                </div>
-                                <div class="text-end">
-                                    {% if federado.cidade_nascimento and federado.uf_nascimento and federado.data_nascimento %}
-                                    <h4 class="m-0 fs-6">{{ federado.cidade_nascimento }}-{{ federado.uf_nascimento }}</h4>
-                                    <small class="card-text small m-0 fs-6">{{ federado.data_nascimento|date:"d/m/Y" }}</small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="moldura position-absolute top-0 start-0 w-100 h-100"
-                                style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
-                            </div>
-                            <div class="card card-federado">
-                                <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Mauro Shampoo.jpg' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
-                                <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Mauro Shampoo (Colete).jpg' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
-                            </div>
-                        </div>
-                {% if forloop.counter|divisibleby:4 or forloop.last %}
-                    </div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-federados-lg"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel-federados-lg"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Próximo</span>
-            </button>
-        </div>
-        <div id="carousel-federados-md" class="carousel carousel-federados slide d-none d-md-block d-lg-none my-3" data-bs-ride="carousel" >
-            <div class="carousel-inner">
-                {% for federado in users %}
-                {% if forloop.counter0|divisibleby:3 %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
-                    <div class="row row-cols-3 justify-content-evenly flex-nowrap">
-                {% endif %}
-                        <div class="col cols-cards position-relative p-0 overflow-hidden">
-                            <div
-                                class="card-body text-dark position-absolute text-white d-flex align-items-center justify-content-between w-100 pe-5">
-                                <div>
-                                    <h5 class="card-title text-capitalize m-0 fs-6">{{ federado.nome_jogador }}</h5>
-                                    <p class="card-text text-capitalize m-0 fs-6">{{ federado.posicao }}</p>
-                                </div>
-                                <div class="text-end">
-                                    {% if federado.cidade_nascimento and federado.uf_nascimento and federado.data_nascimento %}
-                                    <h4 class="m-0 fs-6">{{ federado.cidade_nascimento }}-{{ federado.uf_nascimento }}</h4>
-                                    <small class="card-text small m-0 fs-6">{{ federado.data_nascimento|date:"d/m/Y" }}</small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="moldura position-absolute top-0 start-0 w-100 h-100"
-                                style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
-                            </div>
-                            <div class="card card-federado">
-                                <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Mauro Shampoo.jpg' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
-                                <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Mauro Shampoo (Colete).jpg' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
-                            </div>
-                        </div>
-                {% if forloop.counter|divisibleby:3 or forloop.last %}
-                    </div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-federados-md"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel-federados-md"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Próximo</span>
-            </button>
-        </div>
-        <div id="carousel-federados-sm" class="carousel carousel-federados slide d-block d-md-none d-lg-none my-3" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% for federado in users %}
-                {% if forloop.counter0|divisibleby:1 %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
-                    <div class="row row-cols-1 g-2 d-flex justify-content-center">
-                {% endif %}
-                        <div class="col cols-cards position-relative p-0 overflow-hidden">
-                            <div
-                                class="card-body text-dark position-absolute text-white d-flex align-items-center justify-content-between w-100 pe-5">
-                                <div>
-                                    <h5 class="card-title text-capitalize m-0 fs-6">{{ federado.nome_jogador }}</h5>
-                                    <p class="card-text text-capitalize m-0 fs-6">{{ federado.posicao }}</p>
-                                </div>
-                                <div class="text-end">
-                                    {% if federado.cidade_nascimento and federado.uf_nascimento and federado.data_nascimento %}
-                                    <h4 class="m-0 fs-6">{{ federado.cidade_nascimento }}-{{ federado.uf_nascimento }}</h4>
-                                    <small class="card-text small m-0 fs-6">{{ federado.data_nascimento|date:"d/m/Y" }}</small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="moldura position-absolute top-0 start-0 w-100 h-100"
-                                style="background-image: url('{% static 'main/images/Moldura de Figurinha.svg' %}')">
-                            </div>
-                            <div class="card card-federado">
-                                <img src="{% if federado.foto_principal %}{{ federado.foto_principal.url }}{% else %}{% static 'main/images/Mauro Shampoo.jpg' %}{% endif %}" class="card-img-top object-fit-contain img-1" alt="Foto de {{ federado.nome_jogador }}">
-                                <img src="{% if federado.foto_secundaria %}{{ federado.foto_secundaria.url }}{% else %}{% static 'main/images/Mauro Shampoo (Colete).jpg' %}{% endif %}" class="card-img-top object-fit-contain img-2" alt="Foto de {{ federado.nome_jogador }}">
-                            </div>
-                        </div>
-                {% if forloop.counter|divisibleby:1 or forloop.last %}
-                    </div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-federados-sm"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel-federados-sm"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Próximo</span>
-            </button>
-        </div>
-    </section>
+  </div>
+</div>
+{% endif %}
 
-    {% if cara_da_partida or artilheiro %}      
-    <section id="cara-da-partida" class="row justify-content-center my-2 p-5 g-4" style="background-image: url('{% static 'main/images/icons/Medals Pattern (no-background).svg' %}');">
-    {% if cara_da_partida %}      
-        <div class="col-12 col-md-4 d-flex justify-content-center">
-            <div class="card text-center">
-                <div class="card-header">
-                    <h4 class="m-0 card-title text-success">O CARA DA ÚLTIMA PARTIDA</h4>
-                </div>
-                <div class="card-body p-0">
-                    {% if cara_da_partida.foto_principal %}
-                    <img src="{{ cara_da_partida.foto_principal.url }}" class="img-fluid">
-                    {% else %}
-                    {% load static %}
-                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
-                    {% endif %}
-                </div>
-                <div class="card-footer">
-                    <h5 class="m-0">{{ cara_da_partida.nome_jogador }}</h5>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-    {% if artilheiro %}      
-        <div class="col-12 col-md-4 d-flex justify-content-center">
-            <div class="card text-center">
-                <div class="card-header">
-                    <h4 class="m-0 card-title text-success">ARTILHEIRO DA ÚLTIMA PARTIDA</h4>
-                </div>
-                <div class="card-body p-0">
-                    {% if artilheiro.0.foto_principal %}
-                    <img src="{{ artilheiro.0.foto_principal.url }}" class="img-fluid">
-                    {% else %}
-                    {% load static %}
-                    <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" class="img-fluid">
-                    {% endif %}
-                </div>
-                <div class="card-footer">
-                    <h5 class="m-0">{{ artilheiro.0.nome_jogador }}</h5>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-    </section>
-    {% endif %}
-
-    {% if noticias %}      
-    <section class="row align-items-center my-3">
-        <div class="col-12">
-            <h3 class="display-2 px-0">Últimas notícias!</h3>
-        </div>
-        <div id="carouselNoticias" class="carousel slide col-12 col-md-8" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-              {% for noticia in noticias %}
-                <button type="button" data-bs-target="#carouselNoticias" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true" {% endif %} aria-label="Slide {{ forloop.counter }}"></button>
-              {% endfor %}
-            </div>
-            <div class="carousel-inner">
-              {% for noticia in noticias %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval='{% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}{{ noticia.duracao_video }}{% else %}5000{% endif %}'>
-                    <div class="ratio ratio-16x9 w-100">
-                        {% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}
-                        <video autoplay muted loop>
-                            <source src="{{ noticia.midia.url }}" type="video/mp4">
-                            Seu navegador não suporta a reprodução de vídeo.
-                        </video>                            
-                        {% else %}
-                            <img src="{{ noticia.midia.url }}" class="d-block object-fit-cover" alt="{{ noticia.desc_imagem }}">
-                        {% endif %}
-                    </div>
-                    <div class="carousel-caption d-none d-md-block rounded-pill" style="background-color: #000000dd;">
-                        <h5>{{ noticia.titulo }}</h5>
-                        <p>{{ noticia.texto }}</p>
-                    </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselNoticias" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselNoticias" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Próximo</span>
-            </button>
-        </div>
-        <div class="col-12 d-md-none text-center carousel-outside-captions">
-            {% for noticia in noticias %}
-            <div class="carousel-outside-caption border border-primary-subtle px-1 pt-1 {% if forloop.counter != 1 %}d-none{% endif %}" id="carousel-outside-caption-{{ forloop.counter }}" style="min-height: 105px;">
-                <h5>{{ noticia.titulo }}</h5>
-                <p>{{ noticia.texto }}</p>
-            </div>
-            {% endfor %}
-        </div>  
-        <div class="col-4 d-none d-md-flex justify-content-center align-items-center">
-            <img src="{% static 'main/images/icons/FFBVI - Logo.svg' %}" class="img-fluid">
-        </div>
-    </section>
-    {% endif %}
-    {% if partida %}
-    {% if partida.sorteada %}
-    <div class="row justify-content-center my-3">
-        <div class="col-12">
-            <h3 class="display-3 text-center d-none d-md-block px-0">Confira a escalação de hoje!</h3>
-            <h4 class="display-3 text-center d-block d-md-none px-0">Escalação de hoje</h4>
-        </div>
-        <div class="col-12 col-md-4 p-2 time">
-            <ul class="list-group list-group-flush border border-success rounded-3">
-                <h3 class="text-success text-center" id="timeVerdeTitle">Time Verde</h3>
-                {% for jogador in partida.time_verde.all %}
-                <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
-                        class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="col-12 col-md-4 p-2 time">
-            <ul class="list-group list-group-flush border border-danger rounded-3">
-                <h3 class="text-danger text-center" id="timeVermelhoTitle">Time Vermelho</h3>
-                {% for jogador in partida.time_vermelho.all %}
-                <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
-                        class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="col-12 col-md-4 p-2 time">
-            <ul class="list-group list-group-flush border border-primary rounded-3">
-                <h3 class="text-primary text-center text" id="timeAzulTitle">Time Azul</h3>
-                {% for jogador in partida.time_azul.all %}
-                <li class="list-group-item d-flex justify-content-between">{{ jogador.nome_jogador }} <span
-                        class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></li>
-                {% endfor %}
-            </ul>
-        </div>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h1 class="display-2 text-white">Federação de Futebol Bela Vista I</h1>
     </div>
-    {% endif %}
-    {% endif %}
+  </div>
+</div>
+
+{% if noticias %}
+<div class="latest-news pb-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 title-section">
+        <h2 class="heading">Últimas notícias</h2>
+      </div>
+    </div>
+    <div class="row no-gutters g-2">
+      {% for noticia in noticias %}
+      <div class="col-auto">
+        <div class="post-entry">
+          <a href="#">
+            {% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}
+            <video autoplay muted loop class="h-100">
+              <source src="{{ noticia.midia.url }}" type="video/mp4"> Seu navegador não suporta a reprodução de vídeo.
+            </video>
+            {% else %}
+            <img src="{{ noticia.midia.url }}" class="h-100" alt="{{ noticia.desc_imagem }}">
+            {% endif %}
+          </a>
+          <div class="caption">
+            <div class="caption-inner">
+              <h3 class="mb-3">{{ noticia.titulo }}</h3>
+              <div class="text">
+                {{ noticia.texto }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+{% endif %}
+
+{% if partida_destaque and partida_destaque.relacionados.count > 0 %}
+<div class="site-section bg-dark">
+  <div class="container">
+    <div class="row disputa g-2">
+      <div class="col-12 col-md-6">
+        <div class="widget-next-match">
+          <div class="widget-title">
+            {% if anterior %}
+            <h3>Última Partida</h3>
+            {% else %}
+            <h3>Próxima Partida</h3>
+            {% endif %}
+          </div>
+          <div class="widget-body mb-3">
+            <div class="widget-vs">
+              <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
+                <div class="team-1 text-center">
+                  <img src="{% static 'theme/soccer-master/images/logo_1.png' %}" alt="Image">
+                  <h3>Time Verde</h3>
+                </div>
+                <div>
+                  <span class="vs"><span>VS</span></span>
+                </div>
+                <div class="team-2 text-center">
+                  <img src="{% static 'theme/soccer-master/images/logo_2.png' %}" alt="Image">
+                  <h3>Time Vermelho</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center widget-vs-contents mb-4">
+            <h4>DISPUTA</h4>
+            <p class="mb-5">
+              <span class="d-block">{{ partida_destaque.data }}</span>
+              <span class="d-block">às {{ partida_destaque.hora }} horas</span>
+              <strong class="text-primary">Society Noventa</strong>
+            </p>
+
+            <div id="date-countdown2" class="pb-1"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        {% if partida_destaque.sorteada %}
+        <div id="carouselTeams" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover table-striped">
+                  <thead>
+                    <tr class="bg-success border-bottom border-dark">
+                      <th class="bg-success text-center" colspan="2"><strong>Time Verde</strong></th>
+                    </tr>
+                    <tr class="bg-success">
+                      <th class="bg-success">Nome do Jogador</th>
+                      <th class="bg-success">Posição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for jogador in partida_destaque.time_verde.all %}
+                    <tr>
+                      <td>{{ jogador.nome_jogador }}</td>
+                      <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover table-striped">
+                  <thead>
+                    <tr class="bg-danger border-bottom border-dark">
+                      <th class="bg-danger text-center" colspan="2"><strong>Time Vermelho</strong></th>
+                    </tr>
+                    <tr class="bg-danger">
+                      <th class="bg-danger">Nome do Jogador</th>
+                      <th class="bg-danger">Posição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for jogador in partida_destaque.time_vermelho.all %}
+                    <tr>
+                      <td>{{ jogador.nome_jogador }}</td>
+                      <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover table-striped">
+                  <thead>
+                    <tr class="bg-primary border-bottom border-dark">
+                      <th class="bg-primary text-center" colspan="2"><strong>Time Azul</strong></th>
+                    </tr>
+                    <tr class="bg-primary">
+                      <th class="bg-primary">Nome do Jogador</th>
+                      <th class="bg-primary">Posição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for jogador in partida_destaque.time_azul.all %}
+                    <tr>
+                      <td>{{ jogador.nome_jogador }}</td>
+                      <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <a class="carousel-control-next" href="#carouselTeams" role="button" data-bs-slide="next">
+            <span class="sr-only">Próximo</span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+        {% else %}
+        <div style="height: 442px; overflow-y: auto;">
+          <table class="table custom-table">
+            <thead class="thead-sticky">
+              <tr class="bg-danger">
+                <th class="bg-danger">Nome do Jogador</th>
+                <th class="bg-danger">Posição</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jogador in partida_destaque.relacionados.all %}
+              <tr>
+                <td>{{ jogador.nome_jogador }}</td>
+                <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="site-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 title-section">
+        <h2 class="heading">Federados</h2>
+      </div>
+      <div class="col-6 text-right">
+        <div class="custom-nav">
+          <a href="#" class="js-custom-prev-v2"><span class="icon-keyboard_arrow_left"></span></a>
+          <span></span>
+          <a href="#" class="js-custom-next-v2"><span class="icon-keyboard_arrow_right"></span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="owl-4-slider owl-carousel">
+      {% for federado in users %}
+      <div class="item">
+        <div class="video-media">
+          {% if federado.foto_principal %}
+          <img src="{{ federado.foto_principal.url }}" alt="Image" class="img-fluid">
+          {% else %}
+          <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" alt="Image" class="img-fluid">
+          {% endif %}
+
+          <a class="d-flex play-button align-items-center" data-fancybox>
+            <div class="caption">
+              <h3 class="m-0">{{ federado.nome_jogador }}</h3>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock content %}
-
-{% block more_scripts %}
-<script>
-    // Obtém todas as imagens dos cartões
-    var cards = document.getElementsByClassName('card-federado');
-    var cardImgs = document.querySelectorAll('.card-federado .img-1');
-
-    // Define os intervalos de tempo
-    var intervalo = 2000;
-
-    // Função para alternar as imagens
-    function alternarImagem() {
-        // Adiciona e remove as classes de animação em todos os cartões e imagens
-        for (var i = 0; i < cards.length; i++) {
-            cards[i].classList.toggle('card-animation');
-            cardImgs[i].classList.toggle('d-none');
-        }
-    }
-
-    // Inicia o intervalo para alternar as imagens
-    setInterval(alternarImagem, intervalo);
-
-    // Exibe as legendas abaixo do 'carouselNoticias' em telas pequenas
-    document.addEventListener('DOMContentLoaded', function() {
-        var carousel = document.getElementById('carouselNoticias');
-        var captionsContainer = document.querySelector('.carousel-outside-captions');
-        var captions = captionsContainer.querySelectorAll('.carousel-outside-caption');
-
-        carousel.addEventListener('slide.bs.carousel', function(event) {
-            var activeSlideIndex = event.to;
-            captions.forEach(function(caption) {
-                caption.classList.add('d-none');
-            });
-            captions[activeSlideIndex].classList.remove('d-none');
-        });
-    });
-</script>
-
-{% endblock more_scripts %}

@@ -1,16 +1,14 @@
 {% extends "new_base.html" %}
 
-{% comment metatags %}
-    {% block title %}Partidas &mdash; FFBVI{% endblock title %}
-    {% block meta_titulo_og %}Partidas - FFBVI{% endblock meta_titulo_og %}
-    {% block meta_descricao_og %}Veja as partidas da FFBVI.{% endblock meta_descricao_og %}
-    {% block meta_titulo_twt %}Partidas - FFBVI{% endblock meta_titulo_twt %}
-    {% block meta_descricao_twt %}Veja as partidas da FFBVI.{% endblock meta_descricao_twt %}
-    {% block meta_descricao %}Veja as partidas da FFBVI.{% endblock meta_descricao %}
-    {% block og_url %}{% url 'main:partidas' %}{% endblock og_url %}
-    {% block twt_url %}{% url 'main:partidas' %}{% endblock twt_url %}
-    {% block canonical %}{% url 'main:partidas' %}{% endblock canonical %}
-{% endcomment %}
+{% block title %}Partidas &mdash; FFBVI{% endblock title %}
+{% block meta_titulo_og %}Partidas - FFBVI{% endblock meta_titulo_og %}
+{% block meta_descricao_og %}Veja as partidas da FFBVI.{% endblock meta_descricao_og %}
+{% block meta_titulo_twt %}Partidas - FFBVI{% endblock meta_titulo_twt %}
+{% block meta_descricao_twt %}Veja as partidas da FFBVI.{% endblock meta_descricao_twt %}
+{% block meta_descricao %}Veja as partidas da FFBVI.{% endblock meta_descricao %}
+{% block og_url %}{% url 'main:partidas' %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:partidas' %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:partidas' %}{% endblock canonical %}
 
 {% block style %}
 <style>
