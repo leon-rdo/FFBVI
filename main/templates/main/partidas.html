@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "new_base.html" %}
 {% block title %}Partidas &mdash; FFBVI{% endblock title %}
 {% block meta_titulo_og %}Partidas - FFBVI{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Veja as partidas da FFBVI.{% endblock meta_descricao_og %}
@@ -8,15 +8,26 @@
 {% block og_url %}{% url 'main:partidas' %}{% endblock og_url %}
 {% block twt_url %}{% url 'main:partidas' %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:partidas' %}{% endblock canonical %}
+
+{% block style %}
+<style>
+    .page-link {
+        background-color: #00000000;
+        color: white;
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
-<div class="container-sm">
+<div class="container-sm pt-5">
     <div class="row justify-content-center mt-3 g-2">
         <div class="col-12 col-md-9">
-            <h1 class="display-1 text-center my-2">Partidas</h1>
+            <h1 class="display-1 text-center text-white my-2">Partidas</h1>
         </div>
-        <div class="col-12 col-md-9 list-group border border-secondary p-0">
+        <div class="col-12 col-md-9 list-group list-group-flush p-0">
             {% for partida in partidas %}
-                <a href="{% url 'main:partida' partida.id %}" class="fs-6 list-group-item list-group-item-action list-group-item-light d-flex justify-content-between {% if partida == partida_proxima %}active" aria-current="true" {% else %}"{% endif %}>
+                <a href="{% url 'main:partida' partida.id %}" class="bg-transparent text-white fs-6 list-group-item list-group-item-light d-flex justify-content-between"
+                {% if partida == partida_proxima %}aria-current="true"{% endif %}>
                     <time class="d-flex">{{ partida.data }}<span class="hora-partida ms-1">às {{ partida.hora }}</span></time>
                     {% if partida.anulada %}
                         <span class="badge badge-partidas text-bg-warning ms-2">Cancelada</span>
@@ -32,7 +43,7 @@
         </div>
         <div class="col-12 d-flex justify-content-center">
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
+                <ul class="pagination rounded-3">
                 {% if page_obj.has_previous %}
                     <li class="page-item d-none d-md-block"><a class="page-link" href="?page=1">Primeira</a></li>
                     <li class="page-item d-md-none"><a class="page-link" href="?page=1" aria-label="Primeira">
@@ -50,17 +61,30 @@
                             &laquo;
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    </li>
                 {% endif %}
-                    <li class="page-item active"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+                    <li class="page-item bg-white">
+                        <a class="page-link bg-white text-success fw-bold" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a>
+                    </li>
                 {% if page_obj.has_next %}
-                    <li class="page-item d-none d-md-block"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
-                    <li class="page-item d-md-none"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
-                    <li class="page-item d-none d-md-block"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima &raquo;</a></li>
-                    <li class="page-item d-md-none"><a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próxima">
+                    <li class="page-item d-none d-md-block">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    <li class="page-item d-md-none">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    <li class="page-item d-none d-md-block">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima &raquo;</a>
+                    </li>
+                    <li class="page-item d-md-none">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próxima">
                         &raquo;
                     </a></li>
-                    <li class="page-item d-none d-md-block"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última</a></li>
+                    <li class="page-item d-none d-md-block">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última">Última</a>
+                    </li>
                     <li class="page-item d-md-none">
                         <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">

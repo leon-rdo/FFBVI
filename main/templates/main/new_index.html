@@ -1,537 +1,299 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'new_base.html' %}
 {% load static %}
 
-<head>
-  <title>FFBVI</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/fonts/icomoon/style.css' %}">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/jquery-ui.css' %}">
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/owl.carousel.min.css' %}">
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/owl.theme.default.min.css' %}">
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/owl.theme.default.min.css' %}">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/jquery.fancybox.min.css' %}">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/bootstrap-datepicker.css' %}">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/fonts/flaticon/font/flaticon.css' %}">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/aos.css' %}">
-
-  <link rel="stylesheet" href="{% static 'theme/soccer-master/css/style.css' %}">
-
-  <link rel="shortcut icon" href="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" type="image/svg+xml">
-  
-  <link rel="stylesheet" href="{% static 'main/styles/css/style.css' %}">
-
-  <style>
-    /* Profile Picture */
-    .profile-pic {
-      display: inline-block;
-      vertical-align: middle;
-      width: 40px;
-      height: 40px;
-      overflow: hidden;
-      border-radius: 50%;
-    }
-
-    .profile-pic img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
-
-    .profile-menu .dropdown-menu {
-      right: 0;
-      left: unset;
-    }
-
-    .profile-menu .fa-fw {
-      margin-right: 10px;
-    }
-
-    .toggle-change::after {
-      border-top: 0;
-      border-bottom: 0.3em solid;
-    }
-
-    .thead-sticky th {
-      position: sticky;
-      top: 0;
-      background: white;
-      z-index: 10;
-    }
-    .footer-section a {
-      text-decoration: none;
-    }
-  </style>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-</head>
-
-<body>
-
-  <div class="site-wrap">
-
-    <div class="site-mobile-menu site-navbar-target">
-      <div class="site-mobile-menu-header">
-        <div class="site-mobile-menu-close">
-        </div>
+{% block content %}
+<div class="hero overlay" style="background-image: url('{% static 'theme/soccer-master/images/bg_3.jpg' %}');">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-5 ms-auto" style="z-index: 1999;">
+        {% if not anterior %}
+        <h1 class="text-white">Próxima Partida</h1>
+        <p>Venha participar da próxima partida, não perca a inscrição.</p>
+        <div id="date-countdown"
+          data-match-datetime="{{ partida_destaque.data|date:'Y/m/d' }} {{ partida_destaque.hora }}"></div>
+        <p>
+          <a href="{% url 'main:pagamento' partida_destaque.slug %}"
+            class="btn btn-primary py-3 px-4 me-3">Participar</a>
+          <a href="{{ partida_destaque.get_absolute_url }}" class="more light">Ver mais</a>
+        </p>
+        {% else %}
+        <h1 class="text-white">Partida Anterior</h1>
+        <p>Veja detalhes da última partida enquanto aguarda a nova.</p>
+        <a href="{{ partida_destaque.get_absolute_url }}" class="btn btn-primary py-3 px-4 me-3">Veja mais</a>
+        <a href="#destaques" class="more light">Jogadores destaque</a>
+        </p>
+        {% endif %}
       </div>
-      <div class="site-mobile-menu-body"></div>
     </div>
+  </div>
+</div>
 
-
-    <header class="site-navbar py-4" role="banner">
-
-      <div class="container-fluid">
-        <div class="d-flex align-items-center">
-          <div class="site-logo">
-            <a href="{% url 'main:new_index' %}" class="text-decoration-none">
-              <img src="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" width="40" height="40" alt="Logo">
-              FFBVI
-            </a>
-          </div>
-          <div class="ms-auto">
-            <nav class="site-navigation position-relative text-right" role="navigation">
-              <ul class="site-menu main-menu js-clone-nav me-auto d-none d-lg-block">
-                <li class="active"><a href="{% url 'main:new_index' %}" class="nav-link">Início</a></li>
-                <li><a href="{% url 'main:partidas' %}" class="nav-link">Partidas</a></li>
-                <li><a href="{% url 'main:federados' %}" class="nav-link">Federados</a></li>
-                <li><a href="{% url 'main:patrocinadores' %}" class="nav-link">Patrocinadores</a></li>
-                {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    {% if user.foto_principal %}
-                    <div class="profile-pic">
-                      <img src="{{ user.foto_principal.url }}" alt="Profile Picture">
-                    </div>
-                    {% else %}
-                    <i class="bi bi-person-fill fs-5"></i>
-                    {% endif %}
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li>
-                      <h6 class="h6 dropdown-item-text text-center">Olá, {{ user.nome_jogador }}!</h6>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'main:meu_perfil' %}">
-                        <i class="bi bi-person-fill"></i> Meu Perfil
-                      </a>
-                    </li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    {% if user.is_staff %}
-                    <li><a class="dropdown-item" href="{% url 'admin:index' %}"> <i class="bi bi-sliders2"></i> Administração</a></li>
-                    {% if user.is_superuser %}
-                    <li>
-                      <a class="dropdown-item" href="https://www.pythonanywhere.com/user/ffbvi/" target="_blank">
-                        <i class="bi bi-hdd-stack"></i>
-                        PythonAnywhere
-                      </a>
-                    </li>
-                    {% endif %}
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    {% endif %}
-                    {% if user.tipo == 'admin' %}
-                    <li><a class="dropdown-item" href="{% url 'main:criar_partida' %}"><i class="bi bi-plus-circle-fill"></i> Criar Partida</a></li>
-                    <li><a class="dropdown-item" href="{% url 'main:gerenciar_federados' %}"><i class="bi bi-person-fill-gear"></i> Gerenciar Federados</a>
-                    </li>
-                    <li><a class="dropdown-item" href="{% url 'main:adicionar_federado' %}"><i class="bi bi-person-fill-add"></i> Adicionar Federado</a></li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    {% endif %}
-                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
-                  </ul>
-                </li>
-                {% else %}
-                <li><a href="{% url 'login' %}" class="nav-link">Entrar</a></li>
-                {% endif %}
-              </ul>
-            </nav>
-
-            <a href="#"
-              class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right text-white"><span
-                class="icon-menu h3 text-white"></span></a>
-          </div>
-        </div>
-      </div>
-
-    </header>
-
-    <div class="hero overlay" style="background-image: url('{% static 'theme/soccer-master/images/bg_3.jpg' %}');">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-5 ms-auto" style="z-index: 1999;">
-            {% if not anterior %}              
-            <h1 class="text-white">Próxima Partida</h1>
-            <p>Venha participar da próxima partida, não perca a inscrição.</p>
-            <div id="date-countdown"
-              data-match-datetime="{{ partida_destaque.data|date:'Y/m/d' }} {{ partida_destaque.hora }}"></div>
-            <p>
-              <a href="{% url 'main:pagamento' partida_destaque.slug %}"
-                class="btn btn-primary py-3 px-4 me-3">Participar</a>
-              <a href="{{ partida_destaque.get_absolute_url }}" class="more light">Ver mais</a>
-            </p>
+{% if artilheiro or cara_da_partida %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="d-flex team-vs">
+        {% if cara_da_partida %}
+        <div class="team-1 w-100">
+          <div class="team-details w-100 text-center">
+            <img src="{% static 'theme/soccer-master/images/logo_1.png' %}" alt="Image" class="img-fluid">
+            <h3>O CARA DA ÚLTIMA PARTIDA</h3>
+            <h5>{{ cara_da_partida.nome_completo }}</h5>
+            <h4><strong>{{ cara_da_partida.nome_jogador }}</strong></h4>
+            {% if ultima_partida.votacao_aberta %}
+            <a href="{% url 'main:cara_partida' ultima_partida.slug %}" class="badge text-bg-success w-75 mb-1">Votação
+              aberta!</a>
             {% else %}
-            <h1 class="text-white">Partida Anterior</h1>
-            <p>Veja detalhes da última partida enquanto aguarda a nova.</p>
-              <a href="{{ partida_destaque.get_absolute_url }}"
-                class="btn btn-primary py-3 px-4 me-3">Veja mais</a>
-              <a href="#destaques" class="more light">Jogadores destaque</a>
-            </p>
+            <span class="badge text-bg-warning w-75">Total de votos: {{ votos_do_cara }}</span>
             {% endif %}
           </div>
         </div>
-      </div>
-    </div>
-
-    {% if artilheiro or cara_da_partida %}
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="d-flex team-vs">
-            {% if cara_da_partida %}
-            <div class="team-1 w-100">
-              <div class="team-details w-100 text-center">
-                <img src="{% static 'theme/soccer-master/images/logo_1.png' %}" alt="Image" class="img-fluid">
-                <h3>O CARA DA ÚLTIMA PARTIDA</h3>
-                <h5>{{ cara_da_partida.nome_completo }}</h5>
-                <h4><strong>{{ cara_da_partida.nome_jogador }}</strong></h4>
-                {% if ultima_partida.votacao_aberta %}
-                  <a href="{% url 'main:cara_partida' ultima_partida.slug %}" class="badge text-bg-success w-75 mb-1">Votação aberta!</a>
-                {% else %}
-                  <span class="badge text-bg-warning w-75">Total de votos: {{ votos_do_cara }}</span>
-                {% endif %}
-              </div>
-            </div>
-            {% endif %}
-            {% if artilheiro %}
-            <div class="team-2 w-100">
-              <div class="team-details w-100 text-center">
-                <img src="{% static 'theme/soccer-master/images/logo_2.png' %}" alt="Image" class="img-fluid">
-                <h3>ARTILHEIRO DA ÚLTIMA PARTIDA</h3>
-                <h5>{{ artilheiro.0.nome_completo }}</h5>
-                <h4><strong>{{ artilheiro.0.nome_jogador }}</strong></h4>
-                <span class="badge text-bg-warning w-75">Gols: {{ artilheiro.2 }}</span>
-              </div>
-            </div>
-            {% endif %}
+        {% endif %}
+        {% if artilheiro %}
+        <div class="team-2 w-100">
+          <div class="team-details w-100 text-center">
+            <img src="{% static 'theme/soccer-master/images/logo_2.png' %}" alt="Image" class="img-fluid">
+            <h3>ARTILHEIRO DA ÚLTIMA PARTIDA</h3>
+            <h5>{{ artilheiro.0.nome_completo }}</h5>
+            <h4><strong>{{ artilheiro.0.nome_jogador }}</strong></h4>
+            <span class="badge text-bg-warning w-75">Gols: {{ artilheiro.2 }}</span>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
-    {% endif %}
+  </div>
+</div>
+{% endif %}
 
-    <div class="container my-5">
-      <div class="row">
-        <div class="col-12 text-center">
-          <h1 class="display-2 text-white">Federação de Futebol Bela Vista I</h1>
-        </div>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h1 class="display-2 text-white">Federação de Futebol Bela Vista I</h1>
+    </div>
+  </div>
+</div>
+
+{% if noticias %}
+<div class="latest-news pb-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 title-section">
+        <h2 class="heading">Últimas notícias</h2>
       </div>
     </div>
-
-    {% if noticias %}
-    <div class="latest-news pb-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 title-section">
-            <h2 class="heading">Últimas notícias</h2>
-          </div>
-        </div>
-        <div class="row no-gutters">
-          {% for noticia in noticias %}
-          <div class="col-auto">
-            <div class="post-entry">
-              <a href="#">
-                {% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}
-                  <video autoplay muted loop class="h-100">
-                    <source src="{{ noticia.midia.url }}" type="video/mp4"> Seu navegador não suporta a reprodução de vídeo.
-                  </video>                            
-                {% else %}
-                  <img src="{{ noticia.midia.url }}" class="h-100" alt="{{ noticia.desc_imagem }}">
-                {% endif %}
-              </a>
-              <div class="caption">
-                <div class="caption-inner">
-                  <h3 class="mb-3">{{ noticia.titulo }}</h3>
-                  <div class="text">
-                    {{ noticia.texto }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-
-      </div>
-    </div>
-    {% endif %}
-
-    {% if partida_destaque and partida_destaque.relacionados.count > 0 %}
-    <div class="site-section bg-dark">
-      <div class="container">
-        <div class="row" style="max-height: 445px; overflow: hidden;">
-          <div class="col-lg-6">
-            <div class="widget-next-match">
-              <div class="widget-title">
-                {% if anterior %}
-                <h3>Última Partida</h3>
-                {% else %}
-                <h3>Próxima Partida</h3>
-                {% endif %}
-              </div>
-              <div class="widget-body mb-3">
-                <div class="widget-vs">
-                  <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
-                    <div class="team-1 text-center">
-                      <img src="{% static 'theme/soccer-master/images/logo_1.png' %}" alt="Image">
-                      <h3>Time Verde</h3>
-                    </div>
-                    <div>
-                      <span class="vs"><span>VS</span></span>
-                    </div>
-                    <div class="team-2 text-center">
-                      <img src="{% static 'theme/soccer-master/images/logo_2.png' %}" alt="Image">
-                      <h3>Time Vermelho</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-center widget-vs-contents mb-4">
-                <h4>DISPUTA</h4>
-                <p class="mb-5">
-                  <span class="d-block">{{ partida_destaque.data }}</span>
-                  <span class="d-block">às {{ partida_destaque.hora }} horas</span>
-                  <strong class="text-primary">Society Noventa</strong>
-                </p>
-
-                <div id="date-countdown2" class="pb-1"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            {% if partida_destaque.sorteada %}
-            <div id="carouselTeams" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <div class="table-responsive">
-                    <table class="table custom-table table-hover table-striped">
-                      <thead>
-                        <tr class="bg-success border-bottom border-dark">
-                          <th class="bg-success text-center" colspan="2"><strong>Time Verde</strong></th>
-                        </tr>
-                        <tr class="bg-success">
-                          <th class="bg-success">Nome do Jogador</th>
-                          <th class="bg-success">Posição</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for jogador in partida_destaque.time_verde.all %}
-                        <tr>
-                          <td>{{ jogador.nome_jogador }}</td>
-                          <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div class="table-responsive">
-                    <table class="table custom-table table-hover table-striped">
-                      <thead>
-                        <tr class="bg-danger border-bottom border-dark">
-                          <th class="bg-danger text-center" colspan="2"><strong>Time Vermelho</strong></th>
-                        </tr>
-                        <tr class="bg-danger">
-                          <th class="bg-danger">Nome do Jogador</th>
-                          <th class="bg-danger">Posição</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for jogador in partida_destaque.time_vermelho.all %}
-                        <tr>
-                          <td>{{ jogador.nome_jogador }}</td>
-                          <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="carousel-item">
-                  <div class="table-responsive">
-                    <table class="table custom-table table-hover table-striped">
-                      <thead>
-                        <tr class="bg-primary border-bottom border-dark">
-                          <th class="bg-primary text-center" colspan="2"><strong>Time Azul</strong></th>
-                        </tr>
-                        <tr class="bg-primary">
-                          <th class="bg-primary">Nome do Jogador</th>
-                          <th class="bg-primary">Posição</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for jogador in partida_destaque.time_azul.all %}
-                        <tr>
-                          <td>{{ jogador.nome_jogador }}</td>
-                          <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <a class="carousel-control-next" href="#carouselTeams" role="button" data-bs-slide="next">
-                <span class="sr-only">Próximo</span>
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              </a>
-            </div>
+    <div class="row no-gutters">
+      {% for noticia in noticias %}
+      <div class="col-auto">
+        <div class="post-entry">
+          <a href="#">
+            {% if ".mp4" in noticia.midia.url|lower or ".m4a" in noticia.midia.url|lower or ".avi" in noticia.midia.url|lower or ".mov" in noticia.midia.url|lower %}
+            <video autoplay muted loop class="h-100">
+              <source src="{{ noticia.midia.url }}" type="video/mp4"> Seu navegador não suporta a reprodução de vídeo.
+            </video>
             {% else %}
-            <div style="height: 442px; overflow-y: auto;">
-              <table class="table custom-table">
-                <thead class="thead-sticky">
-                  <tr class="bg-danger">
-                    <th class="bg-danger">Nome do Jogador</th>
-                    <th class="bg-danger">Posição</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for jogador in partida_destaque.relacionados.all %}
-                  <tr>
-                    <td>{{ jogador.nome_jogador }}</td>
-                    <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
+            <img src="{{ noticia.midia.url }}" class="h-100" alt="{{ noticia.desc_imagem }}">
             {% endif %}
+          </a>
+          <div class="caption">
+            <div class="caption-inner">
+              <h3 class="mb-3">{{ noticia.titulo }}</h3>
+              <div class="text">
+                {{ noticia.texto }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endif %}
-
-    <div class="site-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-6 title-section">
-            <h2 class="heading">Federados</h2>
-          </div>
-          <div class="col-6 text-right">
-            <div class="custom-nav">
-              <a href="#" class="js-custom-prev-v2"><span class="icon-keyboard_arrow_left"></span></a>
-              <span></span>
-              <a href="#" class="js-custom-next-v2"><span class="icon-keyboard_arrow_right"></span></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="owl-4-slider owl-carousel">
-          {% for federado in users %}  
-          <div class="item">
-            <div class="video-media">
-              {% if federado.foto_principal %}
-              <img src="{{ federado.foto_principal.url }}" alt="Image" class="img-fluid">
-              {% else %}
-              <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" alt="Image" class="img-fluid">
-              {% endif %}
-
-              <a class="d-flex play-button align-items-center" data-fancybox>
-                <div class="caption">
-                  <h3 class="m-0">{{ federado.nome_jogador }}</h3>
-                </div>
-              </a>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
-    <footer class="footer-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <h3 class="text-center mb-5">Patrocinadores</h3>
-            <div class="row justify-content-center align-items-start g-2">
-              {% for patrocinador in patrocinadores %}
-              <a class="col-auto patrocinador" href="{{ patrocinador.link }}" target="_blank">
-                <figure class="text-center text-white text-decoration-none">
-                  <img src="{{ patrocinador.logo.url }}" class="object-fit-cover rounded-circle" alt="Logo de {{ patrocinador.nome }}">
-                  <figcaption class="small mt-1">{{ patrocinador.nome }}</figcaption>
-                </figure>
-              </a>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-
-        <div class="row text-center">
-          <div class="col-md-12">
-            <div class=" pt-5">
-              <p>
-                FFBVI &copy; {{ current_year }} Todos os direitos reservados | Este modelo é feito com <i class="icon-heart" aria-hidden="true"></i> por <a href="https://colorlib.com" target="_blank">Colorlib</a>
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </footer>
-
-
 
   </div>
-  <!-- .site-wrap -->
+</div>
+{% endif %}
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js"
-    integrity="sha512-KgffulL3mxrOsDicgQWA11O6q6oKeWcV00VxgfJw4TcM8XRQT8Df9EsrYxDf7tpVpfl3qcYD96BpyPvA4d1FDQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="{% static 'theme/soccer-master/js/jquery.countdown.min.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"></script>
-  <script src="{% static 'theme/soccer-master/js/jquery.stellar.min.js' %}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
-    integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
-    integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous"  referrerpolicy="no-referrer"></script>
+{% if partida_destaque and partida_destaque.relacionados.count > 0 %}
+<div class="site-section bg-dark">
+  <div class="container">
+    <div class="row" style="max-height: 445px; overflow: hidden;">
+      <div class="col-lg-6">
+        <div class="widget-next-match">
+          <div class="widget-title">
+            {% if anterior %}
+            <h3>Última Partida</h3>
+            {% else %}
+            <h3>Próxima Partida</h3>
+            {% endif %}
+          </div>
+          <div class="widget-body mb-3">
+            <div class="widget-vs">
+              <div class="d-flex align-items-center justify-content-around justify-content-between w-100">
+                <div class="team-1 text-center">
+                  <img src="{% static 'theme/soccer-master/images/logo_1.png' %}" alt="Image">
+                  <h3>Time Verde</h3>
+                </div>
+                <div>
+                  <span class="vs"><span>VS</span></span>
+                </div>
+                <div class="team-2 text-center">
+                  <img src="{% static 'theme/soccer-master/images/logo_2.png' %}" alt="Image">
+                  <h3>Time Vermelho</h3>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <script src="{% static 'theme/soccer-master/js/main.js' %}"></script>
+          <div class="text-center widget-vs-contents mb-4">
+            <h4>DISPUTA</h4>
+            <p class="mb-5">
+              <span class="d-block">{{ partida_destaque.data }}</span>
+              <span class="d-block">às {{ partida_destaque.hora }} horas</span>
+              <strong class="text-primary">Society Noventa</strong>
+            </p>
 
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+            <div id="date-countdown2" class="pb-1"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        {% if partida_destaque.sorteada %}
+        <div id="carouselTeams" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover table-striped">
+                  <thead>
+                    <tr class="bg-success border-bottom border-dark">
+                      <th class="bg-success text-center" colspan="2"><strong>Time Verde</strong></th>
+                    </tr>
+                    <tr class="bg-success">
+                      <th class="bg-success">Nome do Jogador</th>
+                      <th class="bg-success">Posição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for jogador in partida_destaque.time_verde.all %}
+                    <tr>
+                      <td>{{ jogador.nome_jogador }}</td>
+                      <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover table-striped">
+                  <thead>
+                    <tr class="bg-danger border-bottom border-dark">
+                      <th class="bg-danger text-center" colspan="2"><strong>Time Vermelho</strong></th>
+                    </tr>
+                    <tr class="bg-danger">
+                      <th class="bg-danger">Nome do Jogador</th>
+                      <th class="bg-danger">Posição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for jogador in partida_destaque.time_vermelho.all %}
+                    <tr>
+                      <td>{{ jogador.nome_jogador }}</td>
+                      <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover table-striped">
+                  <thead>
+                    <tr class="bg-primary border-bottom border-dark">
+                      <th class="bg-primary text-center" colspan="2"><strong>Time Azul</strong></th>
+                    </tr>
+                    <tr class="bg-primary">
+                      <th class="bg-primary">Nome do Jogador</th>
+                      <th class="bg-primary">Posição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for jogador in partida_destaque.time_azul.all %}
+                    <tr>
+                      <td>{{ jogador.nome_jogador }}</td>
+                      <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <a class="carousel-control-next" href="#carouselTeams" role="button" data-bs-slide="next">
+            <span class="sr-only">Próximo</span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+        {% else %}
+        <div style="height: 442px; overflow-y: auto;">
+          <table class="table custom-table">
+            <thead class="thead-sticky">
+              <tr class="bg-danger">
+                <th class="bg-danger">Nome do Jogador</th>
+                <th class="bg-danger">Posição</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jogador in partida_destaque.relacionados.all %}
+              <tr>
+                <td>{{ jogador.nome_jogador }}</td>
+                <td style="text-transform: uppercase;">{{ jogador.posicao }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
-</body>
+<div class="site-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 title-section">
+        <h2 class="heading">Federados</h2>
+      </div>
+      <div class="col-6 text-right">
+        <div class="custom-nav">
+          <a href="#" class="js-custom-prev-v2"><span class="icon-keyboard_arrow_left"></span></a>
+          <span></span>
+          <a href="#" class="js-custom-next-v2"><span class="icon-keyboard_arrow_right"></span></a>
+        </div>
+      </div>
+    </div>
 
-</html>
+    <div class="owl-4-slider owl-carousel">
+      {% for federado in users %}
+      <div class="item">
+        <div class="video-media">
+          {% if federado.foto_principal %}
+          <img src="{{ federado.foto_principal.url }}" alt="Image" class="img-fluid">
+          {% else %}
+          <img src="{% static 'main/images/Mauro Shampoo.jpg' %}" alt="Image" class="img-fluid">
+          {% endif %}
+
+          <a class="d-flex play-button align-items-center" data-fancybox>
+            <div class="caption">
+              <h3 class="m-0">{{ federado.nome_jogador }}</h3>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
