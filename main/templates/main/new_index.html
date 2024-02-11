@@ -82,7 +82,7 @@
         <h2 class="heading">Últimas notícias</h2>
       </div>
     </div>
-    <div class="row no-gutters">
+    <div class="row no-gutters g-2">
       {% for noticia in noticias %}
       <div class="col-auto">
         <div class="post-entry">
@@ -115,8 +115,8 @@
 {% if partida_destaque and partida_destaque.relacionados.count > 0 %}
 <div class="site-section bg-dark">
   <div class="container">
-    <div class="row" style="max-height: 445px; overflow: hidden;">
-      <div class="col-lg-6">
+    <div class="row disputa g-2">
+      <div class="col-12 col-md-6">
         <div class="widget-next-match">
           <div class="widget-title">
             {% if anterior %}
@@ -155,7 +155,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-12 col-md-6">
         {% if partida_destaque.sorteada %}
         <div id="carouselTeams" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">

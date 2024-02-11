@@ -1045,9 +1045,19 @@ h5,
   overflow: hidden;
 }
 
-.latest-news .post-entry {
-  aspect-ratio: 16/9;
-  height: 18rem;
+@media (max-width: 991.99px) {
+  .latest-news .post-entry {
+    aspect-ratio: 16/9;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 992px) {
+  .latest-news .post-entry {
+    aspect-ratio: 16/9;
+    height: 18rem;
+  }
 }
 
 .post-entry img {

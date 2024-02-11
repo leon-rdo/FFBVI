@@ -12,6 +12,7 @@
 .cols-cards:hover .card {
   transform: scale(1.2);
 }
+
 .cols-cards:hover .card .img-1 {
   display: none;
 }
@@ -32,9 +33,11 @@
 .carousel-federados {
   overflow: hidden;
 }
+
 .carousel-federados .carousel-inner {
   overflow: visible;
 }
+
 .carousel-federados button {
   z-index: 999;
 }
@@ -60,6 +63,7 @@
   background-size: 400px;
   background-position: center;
 }
+
 #cara-da-partida .card {
   max-width: 300px;
   box-shadow: 15px 15px 25px black;
@@ -72,15 +76,18 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
 body header #profile-pic-container {
   width: 50px;
   height: 50px;
   overflow: hidden;
 }
+
 body .content {
   flex: 1;
   margin-bottom: 5rem;
 }
+
 body footer {
   margin-top: auto;
 }
@@ -89,10 +96,12 @@ body footer {
   width: 60px;
   transition: all 0.2s ease-out;
 }
+
 .patrocinador figure img:hover {
   transform: translateY(-10px);
   border: 1px blue solid;
 }
+
 .patrocinador figure figcaption {
   width: 100px;
   overflow-wrap: break-word;
@@ -110,10 +119,18 @@ body footer {
   height: 6px;
 }
 
+@media (min-width: 768px) {
+  .disputa {
+    max-height: 500px;
+    overflow: hidden;
+  }
+}
+
 .badge-partidas {
   width: 5.6rem;
   height: 1.6rem;
 }
+
 @media (max-width: 329px) {
   .badge-partidas {
     display: none;
@@ -126,7 +143,8 @@ body footer {
   }
 }
 
-#lotacao-title, #lotacao {
+#lotacao-title,
+#lotacao {
   transition: all 0.6s ease;
 }
 
@@ -149,12 +167,14 @@ body footer {
     transform: rotate(-720deg);
   }
 }
+
 @keyframes move-emoji {
   100% {
     -webkit-transform: translate(-200px, -100px);
     transform: translate(-100px, -100px);
   }
 }
+
 .acao {
   min-width: 80%;
 }
