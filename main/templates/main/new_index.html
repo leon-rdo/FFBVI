@@ -290,7 +290,11 @@
           <div class="col-lg-6">
             <div class="widget-next-match">
               <div class="widget-title">
+                {% if anterior %}
+                <h3>Última Partida</h3>
+                {% else %}
                 <h3>Próxima Partida</h3>
+                {% endif %}
               </div>
               <div class="widget-body mb-3">
                 <div class="widget-vs">
