@@ -28,32 +28,27 @@ class IndexView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = datetime.date.today()
-        partida = None
-        try:
-            partida = Partida.objects.filter(data=today, sorteada=True).first()
-        except IndexError:
-            pass
-        
-        context['partida'] = partida
-        
-        if Partida.objects.order_by('-data').first().cara_da_partida is not None:
-            cara_da_partida = Partida.objects.order_by('-data').first().cara_da_partida
-        else:
-            cara_da_partida = Partida.objects.order_by('-data').all()[1].cara_da_partida
-            
-        context['cara_da_partida'] = cara_da_partida
-        
-        if Partida.objects.order_by('-data').first().artilheiro is not None:
-            artilheiro = Partida.objects.order_by('-data').first().artilheiro
-        else:
-            artilheiro = Partida.objects.order_by('-data').all()[1].artilheiro
-            
-        context['artilheiro'] = artilheiro
-        
+
         context['alerta'] = Configuracao.objects.first()
         context['noticias'] = Noticia.objects.all()
+
+        ultima_partida = Partida.objects.filter(data__lt=datetime.date.today()).order_by('-data').first()
+            
+        context['cara_da_partida'] = ultima_partida.cara_da_partida 
+        context['artilheiro'] = ultima_partida.artilheiro
+
+        ultima_partida = Partida.objects.filter(data__lt=datetime.date.today()).order_by('-data').first()
+        partida_destaque = Partida.objects.filter(data__gte=datetime.date.today()).order_by('data').first() or ultima_partida
+
+        context['partida_destaque'] = partida_destaque
+        context['anterior'] = partida_destaque == ultima_partida
+
+        context["votos_do_cara"] = Voto.objects.filter(partida=ultima_partida, votou_em=ultima_partida.cara_da_partida).count()
+
+        context['current_year'] = datetime.date.today().year
+
         return context
-   
+
 
 class FederadosView(ListView):
     template_name = "main/federados.html"

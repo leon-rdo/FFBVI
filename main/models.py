@@ -371,6 +371,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("Usuário")
         verbose_name_plural = _("Usuários")
+        ordering = ['nome_jogador']
 
     def __str__(self):
         return self.nome_jogador
@@ -456,6 +457,7 @@ class Partida(models.Model):
     class Meta:
         verbose_name = "Partida"
         verbose_name_plural = "Partidas"
+        ordering = ['-data']
 
     def __str__(self):
         formatted_data = self.data.strftime("%d/%m/%Y") if self.data else "N/A"

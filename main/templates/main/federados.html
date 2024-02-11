@@ -1,4 +1,6 @@
-{% extends "base.html" %}
+{% extends "new_base.html" %}
+{% load static %}
+
 {% block title %}Federados da FFBVI{% endblock title %}
 {% block meta_titulo_og %}Federados da FFBVI{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Veja as figurinhas dos federados da FFBVI.{% endblock meta_descricao_og %}
@@ -8,10 +10,14 @@
 {% block og_url %}{% url 'main:federados' %}{% endblock og_url %}
 {% block twt_url %}{% url 'main:federados' %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:federados' %}{% endblock canonical %}
+
 {% block content %}
-{% load static %}
-<div class="container">
-    <h1 class="display-1">Federados</h1>
+<div class="container" style="padding: 5.6rem 1rem;">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-2 text-center">Federados</h1>
+        </div>
+    </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 justify-content-evenly">
         {% for federado in users %}
         <div class="col cols-cards position-relative mt-3 p-0 overflow-hidden">
