@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "new_base.html" %}
 {% block title %}Partida &mdash; FFBVI{% endblock title %}
 {% block meta_titulo_og %}Partida em {{ object.data }} às {{ object.hora }}{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Veja os detalhes desta partida!{% endblock meta_descricao_og %}
@@ -9,11 +9,8 @@
 {% block twt_url %}{% url 'main:partida' object.id %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:partida' object.id %}{% endblock canonical %}
 {% block content %}
-<div class="container-sm">
-    <div class="row justify-content-center mt-3 g-2">
-        <div class="col-12 col-md-10">
-            <h1 class="display-1 text-center my-2">Partida</h1>
-        </div>
+<div class="container-sm py-5">
+    <div class="row justify-content-center mt-3 g-2 pt-5">
         {% if messages %}
         <div class="col-12 col-md-10">
             {% for message in messages %}
@@ -28,7 +25,7 @@
         {% if not partida.anulada %}
         <div class="col-12 col-md-10">
             {% if now|date:"Y-m-d" < object.data|date:"Y-m-d" %}
-            <h2 class="display-6 text-center">Esta partida ocorrerá em <time>{{ object.data }} às {{ object.hora }}</time></h2>
+            <h1 class="display-4 text-center">Esta partida ocorrerá em <time>{{ object.data }} às {{ object.hora }}</time></h1>
                 {% if object == partida_proxima %}
                     {% if not pagamento_usuario and object.relacionados.count < 18 %}
                     <div class="w-100 d-flex justify-content-center mt-3">
@@ -139,18 +136,28 @@
         <div class="row justify-content-center align-items-top mt-4 g-2">
             {% if not object.sorteada %}
             <div class="col-12 col-md-10 mt-3">
-                <ul class="list-group">
-                    <li class="list-group-item active d-flex align-items-center justify-content-center">
-                        <h3 class="text-white text-center me-2 my-0" id="timeVerdeTitle">Relacionados</h3>
-                        <span class="badge rounded-5 text-bg-danger my-0">{{ object.relacionados.count }}</span>
-                    </li>
-                    {% for jogador in object.relacionados.all %}
-                        <li class="list-group-item d-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
-                            {{ jogador.nome_jogador }}
-                            <span class="badge rounded-pill text-bg-secondary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
+                <table class="table custom-table table-hover table-striped">
+                    <thead>
+                        <tr class="bg-primary border-bottom border-dark">
+                            <th class="bg-primary text-center" colspan="2">
+                                <strong>Relacionados</strong>
+                                <span class="badge rounded-5 text-bg-danger my-0">{{ object.relacionados.count }}</span>
+                            </th>
+                        </tr>
+                        <tr class="bg-primary">
+                            <th class="bg-primary">Nome do Jogador</th>
+                            <th class="bg-primary">Posição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for jogador in object.relacionados.all %}
+                        <tr class="{% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
+                            <td>{{ jogador.nome_jogador }}</td>
+                            <td><span class="badge rounded-pill text-bg-secondary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             <div class="col-12 col-md-10 d-flex justify-content-end m-0">
                 <small class="text-secondary text-decoration-underline mt-1">*Convidados sublinhados</small>
@@ -163,39 +170,69 @@
             </div>
             {% else %}
             <div class="col-12 col-md-4 p-2 time">
-                <ul class="list-group list-group-flush border border-success rounded-3">
-                    <h3 class="text-success text-center" id="timeVerdeTitle">Time Verde</h3>
-                    {% for jogador in object.time_verde.all %}
-                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
-                        {{ jogador.nome_jogador }}
-                        <span class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <table class="table custom-table table-hover table-striped">
+                    <thead>
+                        <tr class="bg-success border-bottom border-dark">
+                            <th class="bg-success text-center" colspan="2"><strong>Time Verde</strong></th>
+                        </tr>
+                        <tr class="bg-success">
+                            <th class="bg-success">Nome do Jogador</th>
+                            <th class="bg-success">Posição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for jogador in object.time_verde.all %}
+                        <tr>
+                            <td>{{ jogador.nome_jogador }}</td>
+                            <td style="text-transform: uppercase;"><span class="badge rounded-pill text-bg-success text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
             <div class="col-12 col-md-4 p-2 time">
-                <ul class="list-group list-group-flush border border-danger rounded-3">
-                    <h3 class="text-danger text-center" id="timeVermelhoTitle">Time Vermelho</h3>
-                    {% for jogador in object.time_vermelho.all %}
-                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
-                        {{ jogador.nome_jogador }}
-                        <span class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <table class="table custom-table table-hover table-striped">
+                    <thead>
+                        <tr class="bg-danger border-bottom border-dark">
+                            <th class="bg-danger text-center" colspan="2"><strong>Time Vermelho</strong></th>
+                        </tr>
+                        <tr class="bg-danger">
+                            <th class="bg-danger">Nome do Jogador</th>
+                            <th class="bg-danger">Posição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for jogador in object.time_vermelho.all %}
+                        <tr>
+                            <td>{{ jogador.nome_jogador }}</td>
+                            <td><span class="badge rounded-pill text-bg-danger text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
             <div class="col-12 col-md-4 p-2 time">
-                <ul class="list-group list-group-flush border border-primary rounded-3">
-                    <h3 class="text-primary text-center text" id="timeAzulTitle">Time Azul</h3>
-                    {% for jogador in object.time_azul.all %}
-                    <li class="list-group-item d-flex d-md-block d-lg-flex justify-content-between {% if jogador.tipo == 'convidado' %}text-decoration-underline{% endif %}">
-                        {{ jogador.nome_jogador }}
-                        <span class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <table class="table custom-table table-hover table-striped">
+                    <thead>
+                        <tr class="bg-primary border-bottom border-dark">
+                            <th class="bg-primary text-center" colspan="2"><strong>Time Azul</strong></th>
+                        </tr>
+                        <tr class="bg-primary">
+                            <th class="bg-primary">Nome do Jogador</th>
+                            <th class="bg-primary">Posição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for jogador in object.time_azul.all %}
+                        <tr>
+                            <td>{{ jogador.nome_jogador }}</td>
+                            <td style="text-transform: uppercase;"><span class="badge rounded-pill text-bg-primary text-uppercase" style="min-width: 80px;">{{ jogador.posicao }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
             <small class="text-end text-secondary text-decoration-underline mt-1">*Convidados sublinhados</small>
