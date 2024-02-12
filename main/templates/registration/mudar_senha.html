@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "new_base.html" %}
 {% block title %}Mudar Senha - FFBVI{% endblock title %}
 {% block meta_titulo_og %}Mudar Senha - FFBVI{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Mudar senha da FFBVI.{% endblock meta_descricao_og %}
@@ -9,9 +9,9 @@
 {% block twt_url %}{% url 'main:mudar_senha' %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:mudar_senha' %}{% endblock canonical %}
 {% block content %}
-<div class="container-sm">
+<div class="container-sm py-5">
     <div class="row justify-content-center align-items-center mt-3 g-2">
-        <div class="col-12 col-md-8 col-lg-5 mt-md-5">
+        <div class="col-12 col-md-8 col-lg-5 mt-md-5 pt-3">
             <h2>Atualize seus dados:</h2>
 
             {% for message in messages %}
@@ -35,26 +35,10 @@
             
     </div>
 </div>
+{% endblock content %}
 
+{% block more_scripts %}
 <script>
-    const nova_senha = document.getElementById('id_new_password1');
-    const nova_senha_confirmacao = document.getElementById('id_new_password2');
-    const salvar_senha = document.getElementById('salvar_senha');
-
-    nova_senha.addEventListener('input', validarSenha);
-
-    nova_senha_confirmacao.addEventListener('input', validarSenha);
-
-    function validarSenha() {
-        const senha = nova_senha.value;
-        const confirmacaoSenha = nova_senha_confirmacao.value;
-
-        if (senha === confirmacaoSenha && senha !== '') {
-            salvar_senha.removeAttribute('disabled');
-        } else {
-            salvar_senha.setAttribute('disabled', 'disabled');
-        }
-    }
 
     const inputs = document.getElementsByTagName('input');
 
@@ -68,4 +52,4 @@
     label[1].innerHTML = "Insira sua nova senha:";
     label[2].innerHTML = "Insira novamente a nova senha:";
 </script>
-{% endblock content %}
+{% endblock more_scripts %}
