@@ -191,18 +191,6 @@ class PartidasView(ListView):
     ordering = ['-data']
     paginate_by = 9
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        now = datetime.datetime.today()
-        context['now'] = now
-        partida_proxima = None
-        try:
-            partida_proxima = Partida.objects.filter(data__gte=now).order_by('data')[0]
-        except IndexError:
-            pass
-        context['partida_proxima'] = partida_proxima
-        return context
-
 
 class PartidaView(DetailView, FormView):
     template_name = 'main/partida.html'
