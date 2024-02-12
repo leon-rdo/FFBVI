@@ -185,6 +185,10 @@ body footer {
   height: 37rem;
 }
 
+input {
+  color-scheme: dark;
+}
+
 /* Meu Perfil */
 
 .meu-perfil .form-floating>.form-control-plaintext~label::after,

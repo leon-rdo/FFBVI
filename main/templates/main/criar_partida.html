@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}Mudar Senha &mdash; FFBVI{% endblock title %}
 {% block meta_titulo_og %}Criar Partida{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Crie uma nova partida.{% endblock meta_descricao_og %}
@@ -8,9 +9,10 @@
 {% block og_url %}{% url 'main:criar_partida' %}{% endblock og_url %}
 {% block twt_url %}{% url 'main:criar_partida' %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:criar_partida' %}{% endblock canonical %}
+
 {% block content %}
-<div class="container-sm">
-    <div class="row justify-content-center align-items-center mt-3 g-2">
+<div class="container-sm py-5">
+    <div class="row justify-content-center align-items-center mt-3 g-2 py-5">
         <div class="col-12 col-md-8 col-lg-5 mt-md-5">
             <h2>Crie a partida:</h2>
 

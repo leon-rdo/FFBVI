@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" type="image/svg+xml">
+  <title>{% block title %}{% endblock title %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'main/styles/css/style.css' %}">
+  <!-- Meta Tags -->
+  <meta name="author" content="Leonardo Costa" />
+  <link rel="canonical" href="http://ffbvi.pythonanywhere.com{% block canonical %}{% endblock canonical %}"/>
+  <meta name="description" content="{% block meta_descricao %}{% endblock meta_descricao %}" />
+  <meta name="geo.placename" content="Espaço Esportivo Do Bela Vista">
+  <meta name="geo.region" content="BR-PA" />
+  <meta name="geo.position" content="-1.397428;-48.469795" />
+  <meta name="ICBM" content="-1.397428, -48.469795" />
+  <meta http-equiv="cache-control" content="Private" />
+  <meta http-equiv="content-language" content="pt-br" />
+  <meta name="copyright" content="© 2023 FFBVI" />
+  <meta name="generator" content="Django.py 4.2.1" />
+  <meta name="rating" content="general" />
+  <!-- Meta Tags da META (Facebook) -->
+  <meta property="og:title" content="{% block meta_titulo_og %}{% endblock meta_titulo_og %}"/>
+  <meta property="og:description" content="{% block meta_descricao_og %}{% endblock meta_descricao_og %}"/>
+  <meta property="og:url" content="http://ffbvi.pythonanywhere.com{% block og_url %}{% endblock og_url %}"/>
+  <meta property="og:type" content="sports_league"/>
+  <meta property="og:image" content="{% static 'main/images/FFBVI - OG Image.png' %}"/>
+  <meta property="og:site_name" content="Federação de Futebol Bela Vista I"/>
+  <!-- Meta Tags do Twitter -->
+  <meta name="twitter:title" content="{% block meta_titulo_twt %}{% endblock meta_titulo_twt %}">
+  <meta name="twitter:description" content="{% block meta_descricao_twt %}{% endblock meta_descricao_twt %}">
+  <meta name="twitter:url" content="http://ffbvi.pythonanywhere.com{% block twt_url %}{% endblock twt_url %}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="{% static 'main/images/FFBVI - OG Image.png' %}">
+  {% block style %}{% endblock style %}
+</head>
+
+<body>
+  <header>
+    {% url 'financeiro:menu_financeiro' as financeiro_url %}
+    {% url 'main:homepage' as homepage_url %}
+    {% url 'main:federados' as federados_url %}
+    {% url 'main:partidas' as partidas_url %}
+    {% url 'main:patrocinadores' as patrocinadores_url %}
+    {% url 'main:regras' as regras_url %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center text-white fs-4" href="{% if request.path == financeiro_url %}{% url 'financeiro:menu_financeiro' %}{% endif %}">
+          <img class="me-2" src="{% static 'main/images/icons/FFBVI - Logo (White).svg' %}" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+          FFBVI{% if request.path == financeiro_url %}<span class="ms-1 d-none d-sm-block">- Financeiro</span>{% endif %}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
+          aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == homepage_url %}active{% endif %}" aria-current="page"
+                href="{% url 'main:homepage' %}">Página Inicial</a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == federados_url %}active{% endif %}"
+                href="{% url 'main:federados' %}">Federados</a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == regras_url %}active{% endif %}"
+                href="{% url 'main:regras' %}">Regras</a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == partidas_url %}active{% endif %}"
+                href="{% url 'main:partidas' %}">Partidas</a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == patrocinadores_url %}active{% endif %}"
+                href="{% url 'main:patrocinadores' %}">Patrocinadores</a>
+            </li>
+          {% if user.tipo == 'admin' %}
+            <li class="nav-item me-2">
+              <a class="nav-link {% if request.path == financeiro_url %}active{% endif %}"
+                href="{% url 'financeiro:menu_financeiro' %}">Financeiro</a>
+            </li>
+          {% endif %}
+          </ul>
+          {% if user.is_authenticated %}
+          <div class="d-flex justify-content-end">
+            <figure class="btn btn-secondary rounded-circle d-flex align-items-center justify-content-center"
+              data-bs-display="static" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="profile-pic-container">
+              <img
+                src=
+                  "{% if user.foto_principal %}
+                      {{ user.foto_principal.url }}
+                  {% else %}
+                      https://www.cornwallbusinessawards.co.uk/wp-content/uploads/2017/11/dummy450x450.jpg
+                  {% endif %}"
+                alt=
+                  "{% if user.foto_principal %}
+                    Foto de {{ user.nome_jogador }}
+                  {% else %}
+                    Ícone de Foto de Usuário
+                  {% endif %}"
+                class="rounded-circle object-fit-cover"
+                {% if user.foto_principal %}
+                  style="width: 60px; height: 80px;"
+                {% else %}
+                  style="width: 60px; height: 60px;"
+                {% endif %}
+              />
+            </figure>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark me-2">
+              <li>
+                <h6 class="h6 dropdown-item-text text-center">Olá, {{ user.nome_jogador }}!</h6>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="{% url 'main:meu_perfil' %}">Meu Perfil</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% if user.is_staff %}
+              <li><a class="dropdown-item" href="/admin">Administração</a></li>
+              {% if user.is_superuser %}
+              <li><a class="dropdown-item" href="https://www.pythonanywhere.com/user/ffbvi/" target="_blank">PythonAnywhere</a></li>
+              {% endif %}              
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% endif %}
+              {% if user.tipo == 'admin' %}
+              <li><a class="dropdown-item" href="{% url 'main:criar_partida' %}">Criar Partida</a></li>
+              <li><a class="dropdown-item" href="{% url 'main:gerenciar_federados' %}">Gerenciar Federados</a></li>
+              <li><a class="dropdown-item" href="{% url 'main:adicionar_federado' %}">Adicionar Federado</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% endif %}
+              <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a></li>
+            </ul>
+            {% else %}
+            <div class="d-flex justify-content-end">
+              <a class="btn btn-light" href="{% url 'login' %}" role="button">Entrar</a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content">
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer>
+    <nav class="container-fluid bg-primary navbar-dark text-white py-2">
+      <div class="row justify-content-center align-items-center g-2">
+        <div class="col-12">
+          <h3 class="text-center">Patrocinadores</h3>
+        </div>
+      </div>
+      <div class="row justify-content-center align-items-start g-2">
+          {% for patrocinador in patrocinadores %}
+          <a class="col-auto patrocinador" href="{{ patrocinador.link }}" target="_blank">
+            <figure class="text-center text-white text-decoration-none">
+              <img src="{{ patrocinador.logo.url }}" class="object-fit-cover rounded-circle" alt="Logo de {{ patrocinador.nome }}">
+              <figcaption class="small mt-1">{{ patrocinador.nome }}</figcaption>
+            </figure>
+          </a>
+          {% endfor %}
+      </div>
+    </nav>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  {% block more_scripts %}{% endblock more_scripts %}
+</body>
+
+</html>

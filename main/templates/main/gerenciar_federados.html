@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}Gerenciar Federados{% endblock title %}
 {% block meta_titulo_og %}Gerenciar Federados{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Veja os dados dos federados da FFBVI.{% endblock meta_descricao_og %}
@@ -8,18 +10,16 @@
 {% block og_url %}{% url 'main:gerenciar_federados' %}{% endblock og_url %}
 {% block twt_url %}{% url 'main:gerenciar_federados' %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:gerenciar_federados' %}{% endblock canonical %}
+
 {% block content %}
-{% load static %}
-<div class="container">
-    <div class="row justify-content-center align-items-center my-3">
+<div class="container py-5">
+    <div class="row g-2 mt-3 d-flex justify-content-center py-5">
         <h1 class="display-1 text-center">Gerenciar Federados</h1>
-    </div>
-    <div class="row g-2 mt-3 d-flex justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
-            <table class="table table-light table-hover table-bordered caption-top table-striped-columns d-none d-md-table">
+            <table class="table table-dark table-hover table-bordered caption-top table-striped-columns d-none d-md-table">
                 <caption>Lista dos Federados</caption>
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th scope="col">Jogador</th>
                         <th scope="col">Posição</th>
                         <th scope="col">Aniversário</th>
@@ -32,9 +32,13 @@
                     <tr>
                         <td class="text-capitalize">{{ federado.nome_jogador }}</td>
                         <td class="text-capitalize">{{ federado.posicao }}</td>
-                        <td class="">{% if federado.data_nascimento %}{{ federado.data_nascimento }}{% else %}---------{% endif %}</td>
-                        <td class="text-capitalize">{% if federado.telefone %}{{ federado.telefone }}{% else %}---------{% endif %}</td>
-                        <td><a href="{% url 'main:gerenciar_federado' federado.slug %}"><img src="{% static 'main/images/icons/gear.svg' %}"></a></td>
+                        <td class="">{{ federado.data_nascimento|default:"---------" }}</td>
+                        <td class="text-capitalize">{{ federado.telefone|default:"---------" }}</td>
+                        <td>
+                            <a class="text-white w-100 h-100 d-flex justify-content-center" href="{% url 'main:gerenciar_federado' federado.slug %}">
+                                <i class="bi bi-gear"></i>
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

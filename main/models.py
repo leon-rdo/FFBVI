@@ -340,7 +340,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def idade(self):
         if self.data_nascimento is None:
-            return 'Infome sua data de nascimento'
+            return None
 
         hoje = date.today()
         idade = hoje.year - self.data_nascimento.year
