@@ -10,50 +10,50 @@
 {% block canonical %}{% url 'main:gerenciar_federado' object.id %}{% endblock canonical %}
 {% block content %}
 {% load static %}
-<div class="container">
-    <div class="row justify-content-center align-items-center my-3">
-        <h1 class="display-1 text-center">{{ object.nome_jogador }}</h1>
-    </div>
-    <div class="row g-2 mt-3 d-flex justify-content-center">
+<div class="container py-5">
+    <div class="row g-2 mt-3 d-flex justify-content-center py-3">
         <div class="col-12 col-md-8 col-lg-6 table-responsive-sm">
-          <table class="table table-light table-hover table-bordered caption-top table-striped-columns">
+          <h1 class="display-1 text-center">{{ object.nome_jogador }}</h1>
+          <table class="table table-dark table-hover table-bordered caption-top table-striped-columns">
             <caption class="small">Dados de {{ object.nome_completo }}</caption>
             <tbody>
               <tr>
                 <th scope="row">Nome completo:</th>
-                <td class="text-capitalize">{% if object.nome_completo %}{{ object.nome_completo }}{% else %}---------{% endif %}</td>
+                <td class="text-capitalize">{{ object.nome_completo|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">Posição:</th>
-                <td class="text-capitalize">{{ object.posicao }}</td>
+                <td class="text-capitalize">{{ object.posicao|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">E-mail:</th>
-                <td>{% if object.email %}{{ object.email }}{% else %}---------{% endif %}</td>
+                <td>{{ object.email|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">Telefone:</th>
-                <td class="text-capitalize">{% if object.telefone %}{{ object.telefone }}{% else %}---------{% endif %}</td>
+                <td class="text-capitalize">{{ object.telefone|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">Time:</th>
-                <td class="text-capitalize">{% if object.time_coracao %}{{ object.time_coracao }}{% else %}---------{% endif %}</td>
+                <td class="text-capitalize">{{ object.time_coracao|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">Idade:</th>
-                <td>{% if object.data_nascimento %}{{ object.idade }} anos{% else %}---------{% endif %}</td>
+                <td>
+                  {{ object.idade|default:"---------" }} {% if object.idade %}anos{% endif %}
+                </td>
               </tr>
               <tr>
                 <th scope="row">Aniversário:</th>
-                <td>{% if object.data_nascimento %}{{ object.data_nascimento }}{% else %}---------{% endif %}</td>
+                <td>{{ object.data_nascimento|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">Origem:</th>
-                <td>{% if object.cidade_nascimento and object.uf_nascimento %}{{ object.cidade_nascimento }}-{{ object.uf_nascimento }}{% else %}---------{% endif %}</td>
+                <td>{{ object.cidade_nascimento|default:"---------" }}-{{ object.uf_nascimento|default:"---------" }}</td>
               </tr>
               <tr>
                 <th scope="row">Altura:</th>
-                <td>{% if object.altura %}{{ object.altura }}{% else %}---------{% endif %}</td>
+                <td>{{ object.altura|default:"---------" }}</td>
               </tr>
             </tbody>
           </table>

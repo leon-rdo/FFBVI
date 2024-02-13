@@ -2,10 +2,10 @@
 
 {% block title %}FFBVI &mdash; Financeiro{% endblock title %}
 {% block content %}
-<div class="container-fluid p-0 overflow-hidden">
-    <div class="row justify-content-end align-items-center">
+<div class="container-fluid px-2 py-5 overflow-hidden">
+    <div class="row justify-content-end align-items-center pt-4">
         <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
-            <span class="btn btn-primary me-md-2">Saldo: R$ {{ configuracoes.saldo }}</span>
+            <span class="btn bg-primary text-white me-md-2">Saldo: R$ {{ configuracoes.saldo }}</span>
         </div>
     </div>
     <div class="row justify-content-center px-md-3 g-2">
@@ -20,44 +20,96 @@
             {% endfor %}
         </div>
         {% endif %}
-        <div class="col-12 col-md-6 col-lg-4 border entradas">
-            <h3 class="text-success text-center">Últimas Entradas</h3>
-            <ul class="list-group list-group-flush">
-                {% for pagamento in pagamentos %}
-                <li class="list-group-item d-flex justify-content-between">
-                    {% if pagamento.jogador %}
-                        <p class="m-0 {% if not pagamento.confirmado %}mark{% endif %}">Pagamento de {{ pagamento.jogador.nome_jogador }}</p>
-                    {% else %}
-                        <p class="m-0 {% if not pagamento.confirmado %}mark{% endif %}">Entrada em {{ pagamento.data }}</p>
-                    {% endif %}
-                    <span class="text-success">+ R$ {{ pagamento.valor }} </span>
-                </li>
-                {% endfor %}
-                <li class="list-group-item text-center"><a href="{% url 'financeiro:pagamento_year' current_year %}">Ver mais...</a></li>
-            </ul>
+        <div class="col-12 col-md-6 col-lg-4">
+            <table class="table custom-table table-hover table-striped">
+                <thead class="text-center">
+                    <tr class="bg-success border-bottom border-dark">
+                        <th class="bg-success text-center" colspan="2">
+                            <strong>Entradas</strong>
+                        </th>
+                    </tr>
+                    <tr class="bg-success">
+                        <th class="bg-success">Nome do Jogador/Data</th>
+                        <th class="bg-success">Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos %}
+                    <tr>
+                        <td>
+                            {% if pagamento.jogador %}
+                                <span>Pagamento de {{ pagamento.jogador.nome_jogador }}{% if not pagamento.confirmado %}*{% endif %}
+                            {% else %}
+                                <span>Entrada em {{ pagamento.data }}{% if not pagamento.confirmado %}*{% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <span class="text-success">+ R$ {{ pagamento.valor }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <a class="text-white" href="{% url 'financeiro:pagamento_year' current_year %}">
+                                Ver mais...
+                            </a>
+                        </td>
+                        <td>
+                            *Não confirmado   
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="col-12 col-md-6 col-lg-4 border saidas">
-            <h3 class="text-danger text-center">Últimas Saídas</h3>
-            <ul class="list-group list-group-flush">
-                {% for saida in saidas %}
-                <li class="list-group-item d-flex justify-content-between">
-                    {{ saida.descricao }} {% if saida.partida %}({{ saida.partida.data }}){% endif %}
-                    <span class="text-danger">- R$ {{ saida.valor }}</span>
-                </li>
-                {% endfor %}
-                <li class="list-group-item text-center"><a href="{% url 'financeiro:saida_year' current_year %}">Ver mais...</a></li>
-            </ul>
+        <div class="col-12 col-md-6 col-lg-4">
+            <table class="table custom-table table-hover table-striped">
+                <thead>
+                    <tr class="bg-danger border-bottom border-dark">
+                        <th class="bg-danger text-center" colspan="2">
+                            <strong>Saídas</strong>
+                        </th>
+                    </tr>
+                    <tr class="bg-danger">
+                        <th class="bg-danger">Descrição</th>
+                        <th class="bg-danger">Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saida in saidas %}
+                    <tr>
+                        <td>{{ saida.descricao }} {% if saida.partida %}({{ saida.partida.data }}){% endif %}</td>
+                        <td><span class="text-danger">- R$ {{ saida.valor }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    <td class="text-center" colspan="2">
+                        <a class="text-white" href="{% url 'financeiro:saida_year' current_year %}">Ver mais...</a>
+                    </td>
+                </tbody>
+            </table>
         </div>
-        <div class="col-12 col-md-6 col-lg-4 border acoes">
-            <h3 class="text-primary text-center">Ações</h3>
-            <ul class="list-group list-group-flush text-center">
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamentos_pendentes' %}" role="button">Pagamentos a Confirmar</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:lancar_saida' %}" role="button">Lançar Saída</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:lancar_entrada' %}" role="button">Lançar Entrada</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamento_year' current_year %}" role="button">Pagamentos deste ano</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:pagamento_month' current_year current_month %}" role="button">Pagamentos deste mês</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:saida_year' current_year %}" role="button">Saídas deste ano</a></li>
-                <li class="list-group-item"><a class="btn btn-primary acao" href="{% url 'financeiro:saida_month' current_year current_month %}" role="button">Saídas deste mês</a></li>
+        <div class="col-12 col-md-6 col-lg-4 mt-5 mt-md-2">
+            <ul class="nav h-100 flex-column justify-content-between align-items-center">
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" aria-current="page" href="{% url 'financeiro:pagamentos_pendentes' %}">Pagamentos a Confirmar</a>
+                </li>
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" href="{% url 'financeiro:lancar_saida' %}">Lançar Saída</a>
+                </li>
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" href="{% url 'financeiro:lancar_entrada' %}">Lançar Entrada</a>
+                </li>
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" href="{% url 'financeiro:pagamento_year' current_year %}">Pagamentos deste ano</a>
+                </li>
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" href="{% url 'financeiro:pagamento_month' current_year current_month %}">Pagamentos deste mês</a>
+                </li>
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" href="{% url 'financeiro:saida_year' current_year %}">Saídas deste ano</a>
+                </li>
+                <li class="nav-item w-75">
+                    <a class="nav-link btn bg-primary text-white mb-2" href="{% url 'financeiro:saida_month' current_year current_month %}">Saídas deste mês</a>
+                </li>
             </ul>
         </div>
     </div>

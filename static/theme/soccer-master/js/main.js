@@ -252,16 +252,24 @@ jQuery(document).ready(function($) {
 	siteStellar();
 
 	var siteCountDown = function() {
-		var countdownDiv = $('#date-countdown');
-		var matchDatetime = countdownDiv.data('match-datetime');
-		countdownDiv.countdown(matchDatetime, function(event) {
-			var $this = $(this).html(event.strftime(''
-				+ '<span class="countdown-block"><span class="label">%w</span> semanas </span>'
-				+ '<span class="countdown-block"><span class="label">%d</span> dias </span>'
-				+ '<span class="countdown-block"><span class="label">%H</span> horas </span>'
-				+ '<span class="countdown-block"><span class="label">%M</span> minutos </span>'
-				+ '<span class="countdown-block"><span class="label">%S</span> segundos </span>'));
-		});
+		var countdownDiv = document.getElementById('date-countdown');
+		var matchDatetime = new Date(countdownDiv.getAttribute('data-match-datetime'));
+		var interval = setInterval(function() {
+			var now = new Date();
+			var distance = matchDatetime - now;
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+			countdownDiv.innerHTML = '<span class="countdown-block"><span class="label">' + days + '</span> dias </span>'
+				+ '<span class="countdown-block"><span class="label">' + hours + '</span> horas </span>'
+				+ '<span class="countdown-block"><span class="label">' + minutes + '</span> minutos </span>'
+				+ '<span class="countdown-block"><span class="label">' + seconds + '</span> segundos </span>';
+			if (distance < 0) {
+				clearInterval(interval);
+				countdownDiv.innerHTML = "O evento já começou!";
+			}
+		}, 1000);
 	};
 	siteCountDown();
 

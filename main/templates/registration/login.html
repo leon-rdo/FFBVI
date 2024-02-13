@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}FFBVI - Login{% endblock title %}
 {% block meta_titulo_og %}Login - FFBVI{% endblock meta_titulo_og %}
 {% block meta_descricao_og %}Faça login na sua conta FFBVI.{% endblock meta_descricao_og %}
@@ -8,7 +9,8 @@
 {% block og_url %}/login{% endblock og_url %}
 {% block twt_url %}/login{% endblock twt_url %}
 {% block canonical %}/login{% endblock canonical %}
-{% block content %}
+
+{% block style %}
 <style>
     .box-soccer-ball {
         position: absolute;
@@ -36,9 +38,12 @@
             transform: translate(-100px, -100px)
         }
     }
-</style>
-<div class="container-sm">
-    <div class="row justify-content-center align-items-center mt-3 g-2">
+</style>    
+{% endblock style %}
+
+{% block content %}
+<div class="container-sm py-5">
+    <div class="row justify-content-center align-items-center mt-3 g-2 py-5">
         <div class="col-12 col-md-8 col-lg-5">
             {% if form.errors %}
             <div class="alert alert-danger alert-dismissible fade show d-none d-md-block" role="alert">
@@ -75,9 +80,10 @@
             <div class="d-flex justify-content-center my-3">
                 <a class="btn btn-lg btn-primary w-50 fs-6" href="{% url 'main:homepage' %}" role="button">Página Inicial</a>
             </div>
-            <div class="d-flex justify-content-center my-3">
-                <a class="btn btn-lg btn-danger w-50 fs-6" href="{% url 'logout' %}" role="button">Sair</a>
-            </div>
+            <form class="d-flex justify-content-center my-3" method="post" action="{% url 'admin:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-lg btn-danger w-50 fs-6">Encerrar sessão</button>
+            </form>
             <img src="https://creazilla-store.fra1.digitaloceanspaces.com/emojis/47756/winking-face-emoji-clipart-md.png"
                 alt="Emoji de Piscadela" class="img-fluid">
             <div class="box-soccer-ball">
@@ -86,8 +92,10 @@
             {% endif %}
         </div>
     </div>
-
 </div>
+{% endblock content %}
+
+{% block more_scripts %}
 <script>
     const inputs = document.getElementsByTagName('input');
     Array.from(inputs).forEach(element => {
@@ -99,4 +107,4 @@
     label[0].innerHTML = "Insira seu nome de jogador:";
     label[1].innerHTML = "Insira sua senha:";
 </script>
-{% endblock content %}
+{% endblock more_scripts %}

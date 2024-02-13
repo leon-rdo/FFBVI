@@ -5,6 +5,10 @@
   color: #FFF;
 }
 
+main {
+  flex: 1;
+}
+
 .card {
   transition: all 0.5s ease-out;
 }
@@ -83,7 +87,12 @@ body header #profile-pic-container {
   overflow: hidden;
 }
 
-body .content {
+.site-menu .dropdown li, .site-menu .dropdown li a {
+  z-index: 2;
+  position: relative;
+}
+
+main {
   flex: 1;
   margin-bottom: 5rem;
 }
@@ -184,3 +193,45 @@ body footer {
   width: 18rem;
   height: 37rem;
 }
+
+input {
+  color-scheme: dark;
+}
+
+#offcanvasEditar input {
+  color-scheme: light;
+  border: 1px solid #012070;
+  color: black!important;
+}
+
+/* Escurecer Formulários */
+
+.form-dark .form-floating>.form-control-plaintext~label::after,
+.form-floating>.form-control:focus~label::after,
+.form-floating>.form-control:not(:placeholder-shown)~label::after,
+.form-floating>.form-select~label::after {
+  background-color: transparent;
+}
+
+.form-dark .form-floating>.form-control-plaintext~label,
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-select~label {
+  color: unset;
+}
+
+.form-dark .form-control-plaintext {
+  color: white;
+}
+
+.form-dark option {
+  background-color: #222831;
+  color: white;
+}
+
+.form-dark option:checked {
+  background-color: green;
+  color: white;
+}
+
+/* Fim de Escurecer Formulários */

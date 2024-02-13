@@ -8,9 +8,10 @@
 {% block og_url %}{% url 'main:meu_perfil' %}{% endblock og_url %}
 {% block twt_url %}{% url 'main:meu_perfil' %}{% endblock twt_url %}
 {% block canonical %}{% url 'main:meu_perfil' %}{% endblock canonical %}
+
 {% block content %}
-<div class="container-sm">
-    <div class="row justify-content-center align-items-center mt-3 g-2">
+<div class="container-sm py-5">
+    <div class="row justify-content-center align-items-center mt-3 g-2 pt-5">
         <div class="col-12 col-md-8">
             <h2>Atualize seus dados:</h2>
             {% for message in messages %}
@@ -20,7 +21,7 @@
             </div>
             {% endfor %}
 
-            <form method="post" class="mb-2 row g-2">
+            <form method="post" class="form-dark mb-2 row g-2">
                 {% csrf_token %}
                 {% for field in form %}
                 <div class="col-12 col-md-6 form-floating mb-1 mb-md-3">
@@ -41,7 +42,7 @@
                 </div>
                 <button type="submit" class="btn btn-success w-100">Salvar</button>
             </form>
-            <a class="text-primary" href="{% url 'main:mudar_senha' %}">Deseja mudar sua senha?</a>
+            <a class="text-white" href="{% url 'main:mudar_senha' %}">Deseja mudar sua senha?</a>
         </div>
     </div>
 </div>

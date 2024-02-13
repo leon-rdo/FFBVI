@@ -340,7 +340,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def idade(self):
         if self.data_nascimento is None:
-            return 'Infome sua data de nascimento'
+            return None
 
         hoje = date.today()
         idade = hoje.year - self.data_nascimento.year
@@ -443,6 +443,28 @@ class Partida(models.Model):
             return jogador, total_gols_partida, todos_gols
         
         return None
+    
+
+    @staticmethod
+    def get_proxima_partida():
+        now = timezone.now()
+        try:
+            return Partida.objects.filter(data__gte=now).order_by('data').first()
+        except IndexError:
+            return None
+
+    @property
+    def status_and_class(self):
+        now = timezone.now()
+        partida_proxima = Partida.get_proxima_partida()
+        if self.anulada:
+            return 'Cancelada', 'text-bg-warning'
+        elif self == partida_proxima:
+            return 'Aberta', 'text-bg-success'
+        elif self.data > now.date() and self != partida_proxima:
+            return 'Fechada', 'text-bg-danger'
+        elif self.data < now.date():
+            return 'Disputada', 'text-bg-secondary'
 
     
     def votacao_aberta(self):
