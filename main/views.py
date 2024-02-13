@@ -280,6 +280,15 @@ class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         voto = form.save(commit=False)
         voto.jogador = self.request.user
         voto.partida = partida
+
+        if voto.jogador == voto.votou_em:
+            messages.error(self.request, 'Um jogador não pode votar em si mesmo.')
+            return redirect('main:cara_partida', slug=partida.slug)
+
+        if voto.votou_em not in partida.relacionados.all():
+            messages.error(self.request, 'O jogador votado não participou da partida.')
+            return redirect('main:cara_partida', slug=partida.slug)
+
         voto.save()
         
         messages.success(self.request, f'Você votou em {voto.votou_em}.')
