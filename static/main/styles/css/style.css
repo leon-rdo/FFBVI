@@ -198,6 +198,12 @@ input {
   color-scheme: dark;
 }
 
+#offcanvasEditar input {
+  color-scheme: light;
+  border: 1px solid #012070;
+  color: black!important;
+}
+
 /* Escurecer Formulários */
 
 .form-dark .form-floating>.form-control-plaintext~label::after,

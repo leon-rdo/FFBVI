@@ -269,12 +269,12 @@
                     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasEditar"
                         aria-labelledby="offcanvasEditarLabel">
                         <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasEditarLabel">Editar partida</h5>
+                            <h5 class="offcanvas-title text-primary" id="offcanvasEditarLabel">Editar partida</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
                             <div>
-                                <form class="form-floating" method="post">
+                                <form class="form-floating form-light" method="post">
                                     {% csrf_token %}
                                     <div class="form-floating mb-3">
                                         {{ form.data }}
