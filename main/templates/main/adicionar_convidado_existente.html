@@ -10,14 +10,12 @@
 {% block canonical %}{% url 'main:convidado_existente' partida.slug %}{% endblock canonical %}
 {% block content %}
 {% load static %}
-<div class="container">
-    <div class="row justify-content-center align-items-center my-3">
-        <div class="col-12 col-md-10 col-lg-6">
-            <h3 class="display-3 text-center">Adicionar Convidado Existente à Partida</h3>
-        </div>
-    </div>
+<div class="container py-5">
+    <div class="row justify-content-center align-items-center my-3 py-5">
 
     <div class="row g-2 mt-3 d-flex justify-content-center">
+        <h1 class="display-6 text-center">Adicionar Convidado Existente à Partida</h1>
+
         <form class="col-12 col-md-10 col-lg-6" method="post">
             {% if messages %}
             <div class="col-12 col-md-10">

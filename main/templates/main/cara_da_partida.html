@@ -3,7 +3,7 @@
 
 {% block content %}
 {% if usuario_ja_votou %}
-<div class="row text-center mt-5">
+<div class="row text-center mt-5 py-5">
     <h1 class="display-1">Você já votou!</h1>
     <h4 class="h4 my-2">
         Você votou em 
@@ -16,8 +16,8 @@
     <a href="{% url 'main:mudar_voto' slug voto_usuario.id %}">Mudar voto?</a>
 </div>
 {% else %}
-<div class="row justify-content-center align-items-center g-2 mt-5">
-    <form class="col-12 col-md-6 d-flex flex-column align-items-center" method="post">
+<div class="row justify-content-center align-items-center g-2 mt-5 py-5">
+    <form class="col-12 col-md-6 d-flex flex-column align-items-center form-dark" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Votar</button>

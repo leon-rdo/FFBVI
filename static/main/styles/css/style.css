@@ -5,6 +5,10 @@
   color: #FFF;
 }
 
+main {
+  flex: 1;
+}
+
 .card {
   transition: all 0.5s ease-out;
 }
@@ -83,7 +87,12 @@ body header #profile-pic-container {
   overflow: hidden;
 }
 
-body .content {
+.site-menu .dropdown li, .site-menu .dropdown li a {
+  z-index: 2;
+  position: relative;
+}
+
+main {
   flex: 1;
   margin-bottom: 5rem;
 }
@@ -189,34 +198,34 @@ input {
   color-scheme: dark;
 }
 
-/* Meu Perfil */
+/* Escurecer Formulários */
 
-.meu-perfil .form-floating>.form-control-plaintext~label::after,
+.form-dark .form-floating>.form-control-plaintext~label::after,
 .form-floating>.form-control:focus~label::after,
 .form-floating>.form-control:not(:placeholder-shown)~label::after,
 .form-floating>.form-select~label::after {
   background-color: transparent;
 }
 
-.meu-perfil .form-floating>.form-control-plaintext~label,
+.form-dark .form-floating>.form-control-plaintext~label,
 .form-floating>.form-control:focus~label,
 .form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.form-select~label {
   color: unset;
 }
 
-.meu-perfil .form-control-plaintext {
+.form-dark .form-control-plaintext {
   color: white;
 }
 
-.meu-perfil option {
+.form-dark option {
   background-color: #222831;
   color: white;
 }
 
-.meu-perfil option:checked {
+.form-dark option:checked {
   background-color: green;
   color: white;
 }
 
-/* Fim de Meu Perfil */
+/* Fim de Escurecer Formulários */

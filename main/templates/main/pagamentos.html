@@ -9,8 +9,8 @@
 {% block twt_url %}{% url 'main:pagamentos' partida.slug %}{% endblock twt_url %}
 {% block canonical %}{% endblock canonical %}
 {% block content %}
-<div class="container-sm">
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 justify-content-evenly align-items-center mt-3 g-2">
+<div class="container-sm py-5">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 justify-content-evenly align-items-center mt-3 g-2 py-5">
         {% if pagamentos %}
         {% for pagamento in pagamentos %}
         {% if pagamento.em_dinheiro %}
