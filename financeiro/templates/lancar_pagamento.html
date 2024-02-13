@@ -3,8 +3,8 @@
 
 {% block content %}
 {% load static %}
-<div class="container overflow-hidden">
-    <div class="row justify-content-center mt-3">
+<div class="container overflow-hidden py-5">
+    <div class="row justify-content-center mt-3 pt-5">
         {% if messages %}
         <div class="col-12 col-md-10">
             {% for message in messages %}
@@ -16,7 +16,7 @@
             {% endfor %}
         </div>
         {% endif %}
-        <form class="col-12 col-md-6" method="post" enctype="multipart/form-data">
+        <form class="col-12 col-md-6 form-dark" method="post" enctype="multipart/form-data">
             <h1 class="mb-3">Lançar Entrada</h1>
             {% csrf_token %}
             {% for field in form %}

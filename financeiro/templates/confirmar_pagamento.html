@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 {% block title %}FFBVI &mdash; Gestão de Entradas{% endblock title %}
 
+{% block style %}
+    <style>
+        .list-group-item {
+            background-color: unset;
+            color: white;
+            border: 0;
+            border-bottom: 1px solid white;
+        }
+
+        h1 {
+            padding-bottom: 6px;
+            border-bottom: 1px solid white;
+        }
+    </style>
+{% endblock style %}
+
 {% block content %}
-<div class="container-fluid p-0 overflow-hidden">
-    <div class="row justify-content-end align-items-center">
+<div class="container-fluid px-2 py-5 overflow-hidden">
+    <div class="row justify-content-end align-items-center pt-5">
         <div class="col-12 d-flex justify-content-between my-3">
             <span class="btn btn-warning ms-2">Pendente: R$ {{ pendente }}</span>
             <span class="btn btn-primary me-2">Saldo: R$ {{ configuracoes.saldo }}</span>
@@ -22,7 +38,7 @@
         </div>
         {% endif %}
         <div class="col-12 col-md-6 border entradas">
-            <h3 class="text-success text-center m-2">Pagamentos Pendentes de Confirmação</h3>
+            <h1 class="h3 text-success text-center m-2">Pagamentos Pendentes de Confirmação</h1>
             <ul class="list-group">
                 {% for pagamento in pagamentos %}
                 <li class="list-group-item">

@@ -2,8 +2,8 @@
 {% block title %}FFBVI &mdash; Lançar Saída{% endblock title %}
 
 {% block content %}
-<div class="container-fluid p-0 overflow-hidden">
-    <div class="row justify-content-end align-items-center">
+<div class="container-fluid px-0 py-5 overflow-hidden">
+    <div class="row justify-content-end align-items-center pt-5">
         <div class="col-12 d-flex justify-content-center justify-content-md-end my-3">
             <span class="btn btn-primary me-2">Saldo: R$ {{ configuracoes.saldo }}</span>
         </div>
@@ -11,7 +11,7 @@
     <div class="row justify-content-center px-3 g-2">
         <div class="col-12 col-md-6 col-lg-4 border entradas">
             <h3 class="text-danger text-center m-2">Lançar Saída</h3>
-            <form class="form text-center" method="post">
+            <form class="form form-dark text-center" method="post">
                 {% csrf_token %}
                 {% for field in form %}
                 <div class="form-floating mb-3">
