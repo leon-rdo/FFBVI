@@ -18,6 +18,17 @@
 {% else %}
 <div class="row justify-content-center align-items-center g-2 mt-5 py-5">
     <form class="col-12 col-md-6 d-flex flex-column align-items-center form-dark" method="post">
+        {% if messages %}
+        <div class="col-12 col-md-10">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+                role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Votar</button>
