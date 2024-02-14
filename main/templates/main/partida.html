@@ -254,15 +254,46 @@
             {% if not now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
             <div class="col-12 d-flex justify-content-center mt-4">
                 <a class="btn btn-success mt-5" href="{% url 'main:pagamentos' object.slug %}">
-                    Pagamentos &#128176;
-                </a>
+                    <i class="bi bi-cash-coin"></i>
+                    Pagamentos                </a>
             </div>
             {% endif %}
         </div>
+            {% if user in object.relacionados.all %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
+                    <button type="button" class="btn btn-warning m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                        Sair da Partida
+                    </button>
+
+                    <div class="modal fade text-white" data-bs-theme="dark" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmModalLabel">Confirmação</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Você tem certeza que deseja sair da partida?</p>
+                                    <p>Para remover um convidado, contate um administrador.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <a href="{% url 'main:desconfirmar_presenca' slug=partida.slug %}" class="btn btn-warning">Sair</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             {% if now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
-                    <button class="btn btn-primary m-1 m-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar" aria-controls="offcanvasEditar">
+                    <button class="btn btn-warning m-1 m-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar" aria-controls="offcanvasEditar">
+                        <i class="bi bi-pencil"></i>
                         Editar
                     </button>
 
@@ -291,10 +322,12 @@
                     </div>
 
                     <a class="btn btn-success m-1 m-md-0" href="{% url 'main:pagamentos' object.slug %}">
-                        Pagamentos &#128176;
+                        <i class="bi bi-cash-coin"></i>
+                        Pagamentos
                     </a>
 
                     <button type="button" class="btn btn-danger m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#excluir">
+                        <i class="bi bi-trash"></i>
                         Excluir
                     </button>
 
@@ -332,7 +365,8 @@
                 {{ partida.razao_anulacao | safe }}
             </h3>
             <a class="btn btn-success mt-5" href="{% url 'main:pagamentos' object.slug %}">
-                Pagamentos &#128176;
+                <i class="bi bi-cash-coin"></i>
+                Pagamentos
             </a>
         </div>
         {% endif %}

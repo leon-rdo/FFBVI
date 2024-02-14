@@ -40,7 +40,10 @@
                     <input type="number" readonly class="form-control-plaintext" id="idade" placeholder="dummy" value="{{ user.partidas_jogadas }}">
                     <label for="floatingPlaintextInput">Partidas jogadas:</label>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Salvar</button>
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="bi bi-floppy me-1"></i>
+                    Salvar
+                </button>
             </form>
             <a class="text-white" href="{% url 'main:mudar_senha' %}">Deseja mudar sua senha?</a>
         </div>

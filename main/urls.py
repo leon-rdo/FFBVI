@@ -18,6 +18,7 @@ urlpatterns = [
     path('partidas/<slug:slug>/pagamentos/', PagamentosView.as_view(), name='pagamentos'),
     path('partidas/<slug:slug>/adicionar-convidado/novo', AdicionarConvidadoView.as_view(), name='adicionar_convidado'),
     path('partidas/<slug:slug>/adicionar-convidado/existente', AdicionarConvidadoExistenteView.as_view(), name='convidado_existente'),
+    path('partidas/<slug:slug>/desconfirmar-presenca/', desconfirmar_presenca, name='desconfirmar_presenca'),
     path('partidas/<slug:slug>/excluir/', PartidaDeleteView.as_view(), name='excluir_partida'),
     path('partidas/<slug:slug>/pagamento/', PagamentoView.as_view(), name='pagamento'),
     path('partidas/<slug:slug>/pagamento-convidado/<str:convidado_id>', PagamentoConvidadoView.as_view(), name='pagamento_convidado'),

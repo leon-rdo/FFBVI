@@ -505,7 +505,6 @@ class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, F
         convidado_id = self.request.POST.get('convidado')
         return reverse_lazy('main:pagamento_convidado', kwargs={'slug': partida.slug, 'convidado_id': convidado_id})
 
-
     DEFAULT_PASSWORD = 'CONVIDADO@23'
     
     def form_valid(self, form):
@@ -581,6 +580,14 @@ class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView
 
     def get_success_url(self):
         return reverse_lazy('main:partida', kwargs={'slug': self.partida.slug})
+
+
+def desconfirmar_presenca(request, slug):
+    partida = get_object_or_404(Partida, slug=slug)
+    jogador = get_object_or_404(User, id=request.user.id)
+    partida.relacionados.remove(jogador)
+    messages.warning(request, 'Você foi removido dos relacionados.')
+    return redirect('main:partida', slug=slug)
 
 
 class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
