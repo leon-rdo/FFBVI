@@ -22,6 +22,7 @@ urlpatterns = [
     path('partidas/<slug:slug>/excluir/', PartidaDeleteView.as_view(), name='excluir_partida'),
     path('partidas/<slug:slug>/pagamento/', PagamentoView.as_view(), name='pagamento'),
     path('partidas/<slug:slug>/pagamento-convidado/<str:convidado_id>', PagamentoConvidadoView.as_view(), name='pagamento_convidado'),
+    path('partidas/<slug:slug>/sortear', sortear_partida, name='sortear_partida'),
     path('gerenciar-federados/', GerenciarFederadosView.as_view(), name='gerenciar_federados'),
     path('gerenciar-federados/<slug:slug>', GerenciarFederadoView.as_view(), name='gerenciar_federado'),
     path('patrocinadores/', PatrocinadoresView.as_view(), name='patrocinadores'),

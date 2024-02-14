@@ -626,3 +626,84 @@ class CriarPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         return self.request.user.is_admin
+
+
+def sortear_partida(request, slug):
+    partida = get_object_or_404(Partida, slug=slug)
+    
+    # Lógica do sorteio
+    if partida.data == datetime.date.today() and not partida.sorteada:
+        # Crie uma lista com os usuários relacionados
+        relacionados = list(partida.relacionados.all())
+                    
+        # Separe os jogadores de posição "goleiro" dos jogadores restantes
+        goleiros = []
+        jogadores = []
+        
+        for relacionado in relacionados:
+            if relacionado.posicao == 'goleiro':
+                goleiros.append(relacionado)
+            else:
+                jogadores.append(relacionado)
+
+        # Embaralhe as duas listas separadamente
+        random.shuffle(goleiros)
+        random.shuffle(jogadores)
+
+        # Verifica a quantidade de goleiros e os distribui entre os times
+        match len(goleiros):
+            case 3:
+                # Caso haja três, coloca um em cada time
+                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                random.shuffle(times)
+                times[0].set([goleiros[0]])
+                times[1].set([goleiros[1]])
+                times[2].set([goleiros[2]])
+                messages.warning(request, f'Há {len(relacionados)} relacionados, três são goleiros.')
+
+            case 2:
+                # Caso haja dois, os coloca em dois times randomicamente
+                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                random.shuffle(times)
+                times[0].set([goleiros[0]])
+                times[1].set([goleiros[1]])
+                messages.warning(request, f'Há {len(relacionados)} relacionados, dois são goleiros.')
+
+            case 1:
+                # Caso haja apenas um, o coloca em um time aleatório
+                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                time_escolhido = random.choice(times)
+                time_escolhido.set([goleiros[0]])
+                messages.warning(request, f'Há {len(relacionados)} relacionados, apenas um goleiro.')
+
+            case _:
+                # Caso haja mais de três, coloca os três primeiros, um em cada time e o resto aleatoriamente
+                times = [partida.time_verde, partida.time_vermelho, partida.time_azul]
+                random.shuffle(times)
+                times[0].set([goleiros[0]])
+                times[1].set([goleiros[1]])
+                times[2].set([goleiros[2]])
+
+                for goleiro in goleiros[3:]:
+                    time_escolhido = random.choice(times)
+                    time_escolhido.add(goleiro)
+                
+                messages.warning(request, f'Há {len(relacionados)} relacionados, e mais de quatro goleiros.')
+
+        # Atribua os jogadores restantes aos times, de acordo com a lotação
+        for jogador in jogadores:
+            if partida.time_verde.count() < 6:
+                partida.time_verde.add(jogador)
+            elif partida.time_vermelho.count() < 6:
+                partida.time_vermelho.add(jogador)
+            else:
+                partida.time_azul.add(jogador)
+
+        # Marca a partida como sorteada
+        partida.sorteada = True
+        partida.save()
+        messages.success(request, 'Os relacionados foram distribuídos entre os times!')
+    else:
+        messages.error(request, 'Esta partida ocorrerá hoje ou ela já foi sorteada.')
+    
+    return redirect('main:partida', slug=slug)
