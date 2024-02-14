@@ -362,6 +362,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome_jogador)
         super().save(*args, **kwargs)
+
+    @property
+    def is_admin(self):
+        return self.tipo == 'admin'
     
     @property
     def idade(self):

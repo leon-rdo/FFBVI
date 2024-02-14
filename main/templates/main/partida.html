@@ -5,9 +5,9 @@
 {% block meta_titulo_twt %}Partida{% endblock meta_titulo_twt %}
 {% block meta_descricao_twt %}Veja os detalhes desta partida!{% endblock meta_descricao_twt %}
 {% block meta_descricao %}Veja os detalhes desta partida!{% endblock meta_descricao %}
-{% block og_url %}{% url 'main:partida' object.id %}{% endblock og_url %}
-{% block twt_url %}{% url 'main:partida' object.id %}{% endblock twt_url %}
-{% block canonical %}{% url 'main:partida' object.id %}{% endblock canonical %}
+{% block og_url %}{% url 'main:partida' partida.slug %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:partida' partida.slug %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:partida' partida.slug %}{% endblock canonical %}
 {% block content %}
 <div class="container-sm py-5">
     <div class="row justify-content-center mt-3 g-2 pt-5">
@@ -311,7 +311,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <form action="{% url 'main:excluir_partida' object.id %}" method="post">
+                                    <form action="{% url 'main:excluir_partida' partida.slug %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">Sim, desejo excluir.</button>
                                     </form>

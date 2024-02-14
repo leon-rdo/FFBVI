@@ -27,23 +27,22 @@ class IndexView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today = datetime.date.today()
 
         context['alerta'] = Configuracao.objects.first()
-        context['noticias'] = Noticia.objects.all()
+
+        context['noticias'] = Noticia.objects.all()[:3]
 
         ultima_partida = Partida.objects.filter(data__lt=datetime.date.today()).order_by('-data').first()
-            
-        context['cara_da_partida'] = ultima_partida.cara_da_partida 
-        context['artilheiro'] = ultima_partida.artilheiro
+        if ultima_partida:
+            context['cara_da_partida'] = ultima_partida.cara_da_partida 
+            context['artilheiro'] = ultima_partida.artilheiro
 
-        ultima_partida = Partida.objects.filter(data__lt=datetime.date.today()).order_by('-data').first()
-        partida_destaque = Partida.objects.filter(data__gte=datetime.date.today()).order_by('data').first() or ultima_partida
+            partida_destaque = Partida.objects.filter(data__gte=datetime.date.today()).order_by('data').first() or ultima_partida
 
-        context['partida_destaque'] = partida_destaque
-        context['anterior'] = partida_destaque == ultima_partida
+            context['partida_destaque'] = partida_destaque
+            context['anterior'] = partida_destaque == ultima_partida
 
-        context["votos_do_cara"] = Voto.objects.filter(partida=ultima_partida, votou_em=ultima_partida.cara_da_partida).count()
+            context["votos_do_cara"] = Voto.objects.filter(partida=ultima_partida, votou_em=ultima_partida.cara_da_partida).count()
 
         context['current_year'] = datetime.date.today().year
 
@@ -142,7 +141,7 @@ class GerenciarFederadosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     context_object_name = "users"
 
     def test_func(self):
-        return self.request.user.tipo == 'admin'
+        return self.request.user.is_admin
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -158,7 +157,7 @@ class GerenciarFederadoView(LoginRequiredMixin, UserPassesTestMixin, DetailView)
     slug_url_kwarg = "slug"
 
     def test_func(self):
-        return self.request.user.tipo == 'admin'
+        return self.request.user.is_admin
 
 
 class AdicionarFederadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
@@ -181,7 +180,7 @@ class AdicionarFederadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.tipo == 'admin'
+        return self.request.user.is_admin
 
 
 class PartidasView(ListView):
@@ -196,30 +195,25 @@ class PartidaView(DetailView, FormView):
     template_name = 'main/partida.html'
     model = Partida
     form_class = PartidaForm
-    
-    def get_partida(self):
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
-        return partida
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Partida, slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        partida = self.get_partida()
+        partida = self.object
         user = self.request.user
         if not user.is_authenticated:
             user = None
-        pagamento_usuario = Pagamento.objects.filter(jogador=user, partida=partida).exists()
+        pagamento_usuario = Pagamento.objects.filter(jogador=user, partida=partida).first()
         context["pagamento_usuario"] = pagamento_usuario
         now = datetime.datetime.today()
-        context["now"] = datetime.datetime.today()
+        context["now"] = now
         dia_anterior = partida.data - datetime.timedelta(days=1)
         context["dia_anterior"] = dia_anterior
         porcentagem_lotacao = (partida.relacionados.count() / 18) * 100
         context["porcentagem"] = int(porcentagem_lotacao)
-        partida_proxima = None
-        try:
-            partida_proxima = Partida.objects.filter(data__gte=now).order_by('data')[0]
-        except IndexError:
-            pass
+        partida_proxima = Partida.objects.filter(data__gte=now).order_by('data').first()
         context['partida_proxima'] = partida_proxima
         context["votos_do_cara"] = Voto.objects.filter(partida=partida, votou_em=partida.cara_da_partida).count()
         return context
@@ -265,10 +259,18 @@ class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Voto
     fields = ['votou_em']
     template_name ='main/cara_da_partida.html'
+
+    def test_func(self):
+        return self.request.user.tipo != 'convidado'
     
+    def get_partida(self):
+        if not hasattr(self, '_partida'):
+            self._partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
+        return self._partida
+
     def form_valid(self, form):
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])        
-        usuario_ja_votou = Voto.objects.filter(partida=partida, jogador=self.request.user).exists()
+        partida = self.get_partida()
+        usuario_ja_votou = Voto.objects.filter(partida=partida, jogador=self.request.user).first()
         
         if usuario_ja_votou:
             messages.warning(self.request, 'Você já votou nesta partida.')
@@ -297,14 +299,14 @@ class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
+        partida = self.get_partida()
         context['slug'] = partida.slug
-        user_vote = Voto.objects.filter(partida=partida, jogador=self.request.user)
+        user_vote = Voto.objects.filter(partida=partida, jogador=self.request.user).first()
 
-        context['usuario_ja_votou'] = user_vote.exists()
+        context['usuario_ja_votou'] = user_vote is not None
 
-        if user_vote.exists():
-            context['voto_usuario'] = user_vote.first()
+        if user_vote:
+            context['voto_usuario'] = user_vote
 
         return context
     
@@ -312,34 +314,31 @@ class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         partida_slug = self.kwargs['slug']
         return reverse_lazy('main:partida', kwargs={'slug': partida_slug})
     
-    def test_func(self):
-        return self.request.user.tipo != 'convidado'
-    
 
 class GolView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     model = Gol
     template_name = "main/gols.html"
     form_class = GolForm
+
+    def test_func(self):
+        return self.request.user.is_admin or self.request.user.is_staff
     
     def form_valid(self, form):
-        
-        if Gol.objects.filter(jogador=form.cleaned_data['jogador'], partida=self.kwargs['slug']).exists():
-            gol = Gol.objects.filter(jogador=form.cleaned_data['jogador'], partida=self.kwargs['slug']).first()
+        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
+        gol, created = Gol.objects.get_or_create(
+            jogador=form.cleaned_data['jogador'], 
+            partida=partida, 
+            defaults={'quantidade': form.cleaned_data['quantidade']}
+        )
+        if not created:
             gol.quantidade = form.cleaned_data['quantidade']
             gol.save()
-            messages.success(self.request, 'Quantidade de gols atualizada!')
+
+        if created:
+            messages.success(self.request, 'Gol(s) registrado(s)!')
         else:
-            gol = Gol()
-            gol.jogador=form.cleaned_data['jogador']
-            gol.partida=get_object_or_404(Partida, slug=self.kwargs['slug'])
-            gol.quantidade = form.cleaned_data['quantidade']
-            gol.save()
-            
-            if form.cleaned_data['quantidade'] > 1:
-                messages.success(self.request, 'Gols registrados!')
-            else:
-                messages.success(self.request, 'Gol registrado!')
-                
+            messages.success(self.request, 'Quantidade de gols atualizada!')
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -350,35 +349,44 @@ class GolView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['gols'] = Gol.objects.filter(partida=self.kwargs['slug'])
         return context
-    
-    def test_func(self):
-        return self.request.user.tipo == 'admin' or self.request.user.is_staff
   
 
 class MudarVotoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Voto
     fields = ['votou_em']
     template_name = "main/mudar_voto.html"
+
+    def test_func(self):
+        """Verifica se o usuário não é um convidado."""
+        return self.request.user.tipo != 'convidado'
     
     def get_success_url(self):
+        """Retorna a URL de sucesso após a atualização do voto."""
         partida_slug = self.kwargs['slug']
         return reverse_lazy('main:partida', kwargs={'slug': partida_slug})
     
     def form_valid(self, form):
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
-        if (partida.data + datetime.timedelta(days=1)) < timezone.now().date():
+        """Verifica se a form é válida e se o prazo para votar ainda não expirou."""
+        partida_slug = self.kwargs['slug']
+        partida = get_object_or_404(Partida, slug=partida_slug)
+        if self._prazo_votacao_expirou(partida.data):
             messages.error(self.request, 'O prazo para votar já expirou!')
-            return redirect('main:partida', slug=partida.slug)
+            return redirect('main:partida', slug=partida_slug)
         return super().form_valid(form)
     
-    def test_func(self):
-        return self.request.user.tipo != 'convidado'
+    def _prazo_votacao_expirou(self, data_partida):
+        """Verifica se o prazo para votação expirou."""
+        return (data_partida + datetime.timedelta(days=1)) < timezone.now().date()
 
 
 class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     template_name = 'main/pagamento.html'
     model = Pagamento
     form_class = PagamentoForm
+
+    def test_func(self):
+        """Verifica se o usuário não é um convidado."""
+        return self.request.user.tipo != 'convidado'
 
     def form_valid(self, form):
         pagamento = Pagamento()
@@ -407,9 +415,6 @@ class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         
         return super().form_invalid(form)
 
-    def test_func(self):
-        return self.request.user.tipo != 'convidado'
-
     def get_partida(self):
         partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
         return partida
@@ -433,6 +438,9 @@ class AdicionarConvidadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     template_name = 'main/adicionar_convidado.html'
     model = User
     form_class = AdicionarConvidadoForm
+
+    def test_func(self):
+        return self.request.user.tipo != 'convidado'
 
     def get_partida(self):
         partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
@@ -473,14 +481,14 @@ class AdicionarConvidadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         convidado_id = self.condidado.id
         return reverse_lazy('main:pagamento_convidado', kwargs={'slug': partida.slug, 'convidado_id': convidado_id})
 
-    def test_func(self):
-        return self.request.user.tipo != 'convidado'
-
 
 class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, FormView):
     template_name = 'main/adicionar_convidado_existente.html'
     model = User
     form_class = AdicionarConvidadoExistenteForm
+
+    def test_func(self):
+        return self.request.user.tipo != 'convidado'
 
     def get_partida(self):
         partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
@@ -521,24 +529,29 @@ class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, F
         messages.warning(self.request, 'Ocorreu um erro ao adicionar seu convidado.')
         return super().form_invalid(form)
 
-    def test_func(self):
-        return self.request.user.tipo != 'convidado'
-
 
 class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'main/pagamento_convidado.html'
     model = Pagamento
     form_class = PagamentoForm
 
+    def test_func(self):
+        return self.request.user.tipo != 'convidado'
+
     def dispatch(self, request, *args, **kwargs):
         convidado_id = kwargs.get('convidado_id')
         self.convidado = get_object_or_404(User, id=convidado_id)
+        self.partida = self.get_partida()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        if self.partida.relacionados.filter(id=self.convidado.id).exists():
+            messages.warning(self.request, 'O convidado já está relacionado a esta partida.')
+            return redirect('main:convidado_existente', slug=self.kwargs['slug'])
+
         pagamento = form.save(commit=False)
         pagamento.jogador = self.convidado
-        pagamento.partida = self.get_partida()
+        pagamento.partida = self.partida
         em_dinheiro = form.cleaned_data['em_dinheiro']
         
         if em_dinheiro:
@@ -546,38 +559,28 @@ class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView
             pagamento.comprovante = None
         else:
             comprovante = self.request.FILES.get('comprovante')
-            if comprovante:
-                pagamento.comprovante = comprovante
+            if not comprovante:
+                messages.error(self.request, 'Comprovante não fornecido.')
+                return self.form_invalid(form)
+            pagamento.comprovante = comprovante
 
         pagamento.save()
-        
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
-
-        if partida.relacionados.filter(id=self.convidado.id).exists():
-            messages.warning(self.request, 'O convidado já está relacionado a esta partida.')
-            return redirect('main:convidado_existente', slug=self.kwargs['slug'])
-
-        partida.relacionados.add(self.convidado)
+        self.partida.relacionados.add(self.convidado)
 
         return super().form_valid(form)
 
-    def test_func(self):
-        return self.request.user.tipo != 'convidado'
-
     def get_partida(self):
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
-        return partida
+        return get_object_or_404(Partida, slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['partida'] = self.get_partida()
+        context['partida'] = self.partida
         context['convidado'] = self.convidado
         context['config'] = Configuracao.objects.first()
         return context
 
     def get_success_url(self):
-        partida = self.get_partida()
-        return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
+        return reverse_lazy('main:partida', kwargs={'slug': self.partida.slug})
 
 
 class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -585,19 +588,18 @@ class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Pagamento
     context_object_name = "pagamentos"
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        slug = self.kwargs.get('slug')
-        filtered_queryset = queryset.filter(partida=slug)
-        return filtered_queryset
-
     def test_func(self):
         return self.request.user.tipo != 'convidado'
 
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        if not slug:
+            return self.model.objects.none()
+        return self.model.objects.filter(partida=slug)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        partida = get_object_or_404(Partida, slug=self.kwargs['slug'])
-        context['partida'] = partida
+        context['partida'] = get_object_or_404(Partida, slug=self.kwargs['slug'])
         return context
 
 
@@ -606,25 +608,14 @@ class PartidaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('main:partidas')
 
     def test_func(self):
-        return self.request.user.tipo == 'admin'
+        return self.request.user.is_admin
 
 
-class CriarPartidaView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class CriarPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'main/criar_partida.html'
     model = Partida
     form_class = PartidaForm
     success_url = reverse_lazy('main:partidas')
 
-    def form_valid(self, form):
-
-        partida = Partida()
-
-        partida.data = form.cleaned_data['data']
-        partida.hora = form.cleaned_data['hora']
-
-        partida.save()
-
-        return super().form_valid(form)
-
     def test_func(self):
-        return self.request.user.tipo == 'admin'
+        return self.request.user.is_admin

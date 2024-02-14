@@ -87,7 +87,7 @@ class RegistrationForm(forms.ModelForm):
         }
 
 
-class PartidaForm(forms.Form):
+class PartidaForm(forms.ModelForm):
 
     data = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}), label=_('Data'))
     hora = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}), label=_('Hora'))
