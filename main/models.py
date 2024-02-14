@@ -1,23 +1,31 @@
-from collections import defaultdict
-from django.db import models
-from django.urls import reverse
-from financeiro.models import Saida
-
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.utils.translation import gettext_lazy as _
-from django.utils.deconstruct import deconstructible
-from django.template.defaultfilters import slugify
-from django.core.validators import RegexValidator
-from django.forms import ValidationError
-from django.db.models import Count
-from django.utils import timezone
-from django.db.models import Sum
-
 from datetime import date
 from uuid import uuid4
 
+from django.core.validators import RegexValidator
+from django.db import models
+from django.db.models import Sum
+from django.forms import ValidationError
+from django.template.defaultfilters import slugify
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import gettext_lazy as _
+
+from financeiro.models import Saida
+
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.shortcuts import get_object_or_404
+
 
 class Configuracao(models.Model):
+    """
+    Modelo para armazenar as configurações do sistema.
+
+    Este modelo inclui informações de contato do diretor, detalhes de pagamento, configurações do site e um saldo financeiro calculado.
+    As configurações do site incluem regras da federação e um alerta personalizável com mensagem, link, cor e ícone.
+    O saldo é uma propriedade que calcula a diferença entre pagamentos confirmados e saídas totais.
+    O método `save` é sobrescrito para garantir que apenas um objeto Configuracao exista.
+    """
 
     ALERTA_CORES = (
         ('warning', 'Amarelo'),
@@ -72,7 +80,21 @@ class Configuracao(models.Model):
             return Configuracao.objects.first()
         return super().save(*args, **kwargs)
 
+
 class Administrador(BaseUserManager):
+    """
+    Modelo personalizado do gerenciador de usuários para o Django.
+
+    Este gerenciador define três métodos: `_create_user`, `create_user` e `create_superuser`.
+
+    `_create_user` é um método interno que cria e salva um usuário com o nome do jogador e a senha fornecidos.
+    Ele é usado por `create_user` e `create_superuser`.
+
+    `create_user` cria um usuário normal, que não é nem staff nem superusuário.
+
+    `create_superuser` cria um superusuário, que é tanto staff quanto superusuário.
+    """
+    
     def _create_user(self, nome_jogador, password, is_staff, is_superuser, **extra_fields):
         now = timezone.now()
         if not nome_jogador:
@@ -89,7 +111,11 @@ class Administrador(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
+    """
+    Modelo para representar os usuários do sistema.
+    """
 
     TIPO = (
         ('admin', 'Administrador'),
@@ -308,7 +334,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     # Informações de Login
-    nome_jogador = models.CharField(_('Nome de Jogador:'), default='', max_length=50, unique=True)
+    nome_jogador = models.CharField(_('Nome de Jogador:'), max_length=50, unique=True)
     is_staff = models.BooleanField(_('É administrador?'), default=False, help_text=_('Isso define se o usuário tem ou não acesso à esta administração do site.'))
     is_active = models.BooleanField(_('Está ativo?'), default=True, help_text=_('Isso defino se o usuário é ativo no sistema.'))
     date_joined = models.DateTimeField(_('Data de Registro:'), default=timezone.now)
@@ -336,6 +362,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome_jogador)
         super().save(*args, **kwargs)
+
+    @property
+    def is_admin(self):
+        return self.tipo == 'admin'
     
     @property
     def idade(self):
@@ -382,6 +412,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         
 class Partida(models.Model):
+    """
+    Modelo para representar uma partida de futebol. Os jogadores são divididos em três times: verde, vermelho e azul.
+
+    Uma partida pode ser marcada como sorteada ou anulada, e se for anulada, uma razão para a anulação pode ser fornecida.
+    
+    O modelo também inclui duas propriedades: `cara_da_partida` e `artilheiro`: `cara_da_partida` retorna o jogador que recebeu mais votos para essa partida, `artilheiro` retorna o jogador que marcou mais gols nessa partida.
+
+    Além disso, o modelo inclui um método estático `get_proxima_partida` que retorna a próxima partida que ainda não ocorreu.
+
+    O método `status_and_class` retorna o status da partida (Cancelada, Aberta, Fechada, Disputada) e a classe CSS correspondente.
+
+    O método `votacao_aberta` verifica se a votação do "Cara da Partida" ainda está aberta.
+    """
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
     data = models.DateField(_('Data:'), auto_now=False, auto_now_add=False, null=True)
@@ -394,7 +437,7 @@ class Partida(models.Model):
     anulada = models.BooleanField(_('Foi anulada?'), default=False)
     razao_anulacao = models.TextField(_("Qual a razão da anulação?"), blank=True)
 
-    slug = models.SlugField(max_length=50, unique=True, editable=False, default='')
+    slug = models.SlugField(max_length=50, unique=True, editable=False, db_index=True)
     
     @property
     def cara_da_partida(self):
@@ -416,7 +459,6 @@ class Partida(models.Model):
         jogador_mais_votado = max(contagem_votos, key=contagem_votos.get, default=None)
 
         return jogador_mais_votado
-    
 
     @property
     def artilheiro(self):
@@ -432,7 +474,7 @@ class Partida(models.Model):
         if artilheiro_info:
             jogador_id = artilheiro_info['jogador']
             total_gols_partida = artilheiro_info['total_gols']
-            jogador = User.objects.get(id=jogador_id)
+            jogador = get_object_or_404(User, id=jogador_id)
             
             todos_gols = (
                 Gol.objects
@@ -473,7 +515,7 @@ class Partida(models.Model):
         return hoje <= data_limite
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.id)
+        self.slug = slugify(f"{self.data}_{self.hora}")
         super().save(*args, **kwargs)
 
     class Meta:
@@ -488,11 +530,13 @@ class Partida(models.Model):
     
     def get_absolute_url(self):
         return reverse("main:partida", kwargs={"slug": self.slug})
-    
-        
+
 
 class Voto(models.Model):
-    
+    """
+    Modelo para representar os votos feitos por um jogador em outro relativos a uma partida.
+    """
+
     jogador = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votos_feitos')
     votou_em = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votos_recebidos')
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
@@ -506,23 +550,26 @@ class Voto(models.Model):
 
     
 class Gol(models.Model):
+    """
+    Modelo para representar os gols marcados por um jogador em uma partida.
+    """
     
     jogador = models.ForeignKey(User, on_delete=models.CASCADE)
     partida = models.ForeignKey(Partida, on_delete=models.CASCADE)
-    quantidade = models.PositiveSmallIntegerField("Quantos gols?")
+    quantidade = models.PositiveSmallIntegerField(_("Quantos gols?"))
 
     class Meta:
         verbose_name = _("Gol")
         verbose_name_plural = _("Gols")
 
     def __str__(self):
-        if self.quantidade > 1:
-            return f'{self.jogador} fez {str(self.quantidade)} gols na {self.partida}'
-        else:
-            return f'{self.jogador} fez {str(self.quantidade)} gol na {self.partida}'
+        return f'{self.jogador} fez {self.quantidade} {"gol" if self.quantidade == 1 else "gols"} na {self.partida}'
 
 
 class Pagamento(models.Model):
+    """
+    Modelo para representar os pagamentos (entradas de valores), sejam eles feitos por um jogador para uma partida ou pagamentos avulsos.
+    """
 
     comprovante = models.ImageField(_('Comprovante:'), upload_to='main/images/pagamentos', blank=True, null=True)
     jogador = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -546,7 +593,6 @@ class Pagamento(models.Model):
     def get_absolute_url(self):
         return reverse("main:pagamentos", kwargs={"slug": self.partida.slug})
     
-
 
 @deconstructible
 class MediaTypeUploadTo:
@@ -576,10 +622,13 @@ def validate_media_file(value):
 
 
 class Noticia(models.Model):
+    """
+    Modelo para representar publicações que aparecem na página inicial trazendo informativos aos usuários.
+    """
+        
     titulo = models.CharField(_('Título:'), max_length=100)
     texto = models.CharField(_('Texto da Notícia:'), max_length=255)
     midia = models.FileField(_('Imagem ou vídeo:'), upload_to=MediaTypeUploadTo(), validators=[validate_media_file])
-    duracao_video = models.PositiveSmallIntegerField(_('Duração do vídeo (em milissegundos):'), null=True, blank=True)
     desc_imagem = models.CharField(_('Descrição da Imagem:'), max_length=100, blank=True, null=True)
     
     class Meta:
@@ -591,10 +640,13 @@ class Noticia(models.Model):
 
     
 class Patrocinador(models.Model):
+    """
+    Modelo para representar os patrocinadores.
+    """
 
-    nome = models.CharField(_('Nome:'), max_length=18, default='')
+    nome = models.CharField(_('Nome:'), max_length=18)
     logo = models.ImageField(_('Logo:'), upload_to='main/images/patrocinadores')
-    link = models.URLField(_('Link:'), max_length=200, default='')
+    link = models.URLField(_('Link:'), max_length=200)
 
     def __str__(self):
         return self.nome
@@ -605,4 +657,3 @@ class Patrocinador(models.Model):
         
     def get_absolute_url(self):
         return reverse("main:patrocinadores")
-    

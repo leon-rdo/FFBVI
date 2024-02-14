@@ -20,8 +20,14 @@
           data-match-datetime="{{ partida_destaque.data|date:'Y/m/d' }} {{ partida_destaque.hora }}"></div>
         <p>
           <a href="{% url 'main:pagamento' partida_destaque.slug %}"
-            class="btn btn-primary py-3 px-4 me-3">Participar</a>
-          <a href="{{ partida_destaque.get_absolute_url }}" class="more light">Ver mais</a>
+            class="btn btn-primary py-3 px-4 me-3">
+            <i class="bi bi-box-arrow-in-left"></i>
+            Participar
+          </a>
+          <a href="{{ partida_destaque.get_absolute_url }}" class="more light">
+            <i class="bi bi-eye"></i>
+            Ver mais
+          </a>
         </p>
         {% else %}
         <h1 class="text-white">Partida Anterior</h1>

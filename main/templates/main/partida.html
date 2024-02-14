@@ -5,9 +5,9 @@
 {% block meta_titulo_twt %}Partida{% endblock meta_titulo_twt %}
 {% block meta_descricao_twt %}Veja os detalhes desta partida!{% endblock meta_descricao_twt %}
 {% block meta_descricao %}Veja os detalhes desta partida!{% endblock meta_descricao %}
-{% block og_url %}{% url 'main:partida' object.id %}{% endblock og_url %}
-{% block twt_url %}{% url 'main:partida' object.id %}{% endblock twt_url %}
-{% block canonical %}{% url 'main:partida' object.id %}{% endblock canonical %}
+{% block og_url %}{% url 'main:partida' partida.slug %}{% endblock og_url %}
+{% block twt_url %}{% url 'main:partida' partida.slug %}{% endblock twt_url %}
+{% block canonical %}{% url 'main:partida' partida.slug %}{% endblock canonical %}
 {% block content %}
 <div class="container-sm py-5">
     <div class="row justify-content-center mt-3 g-2 pt-5">
@@ -84,7 +84,7 @@
         {% endif %}
         {% if object.cara_da_partida is not None %}
         <div class="col-12 col-md-4 d-flex justify-content-center">
-            <div class="card text-center" style="max-width: 300px;">
+            <div data-bs-theme="dark" class="card text-center" style="max-width: 300px;">
                 <div class="card-header">
                     <h4 class="m-0 card-title text-success">O CARA DA PARTIDA</h4>
                     <hr class="my-1">
@@ -112,7 +112,7 @@
         {% endif %}
         {% if object.artilheiro is not None %}
         <div class="col-12 col-md-4 d-flex justify-content-center">
-            <div class="card text-center" style="max-width: 300px;">
+            <div data-bs-theme="dark" class="card text-center" style="max-width: 300px;">
                 <div class="card-header">
                     <h4 class="m-0 card-title text-success">O ARTILHEIRO</h4>
                     <hr class="my-1">
@@ -254,15 +254,47 @@
             {% if not now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
             <div class="col-12 d-flex justify-content-center mt-4">
                 <a class="btn btn-success mt-5" href="{% url 'main:pagamentos' object.slug %}">
-                    Pagamentos &#128176;
+                    <i class="bi bi-cash-coin me-1"></i>
+                    Pagamentos
                 </a>
             </div>
             {% endif %}
         </div>
+            {% if user in object.relacionados.all %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
+                    <button type="button" class="btn btn-warning m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                        Sair da Partida
+                    </button>
+
+                    <div class="modal fade text-white" data-bs-theme="dark" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmModalLabel">Confirmação</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Você tem certeza que deseja sair da partida?</p>
+                                    <p>Para remover um convidado, contate um administrador.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <a href="{% url 'main:desconfirmar_presenca' slug=partida.slug %}" class="btn btn-warning">Sair</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             {% if now|date:"Y-m-d" <= object.data|date:"Y-m-d" and user.tipo == 'admin' %}
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
-                    <button class="btn btn-primary m-1 m-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar" aria-controls="offcanvasEditar">
+                    <button class="btn btn-warning m-1 m-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar" aria-controls="offcanvasEditar">
+                        <i class="bi bi-pencil me-1"></i>
                         Editar
                     </button>
 
@@ -291,14 +323,16 @@
                     </div>
 
                     <a class="btn btn-success m-1 m-md-0" href="{% url 'main:pagamentos' object.slug %}">
-                        Pagamentos &#128176;
+                        <i class="bi bi-cash-coin me-1"></i>
+                        Pagamentos
                     </a>
 
                     <button type="button" class="btn btn-danger m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#excluir">
+                        <i class="bi bi-trash me-1"></i>
                         Excluir
                     </button>
 
-                    <div class="modal fade" id="excluir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                    <div class="modal fade text-white" id="excluir" data-bs-theme="dark" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                         aria-labelledby="excluirLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -311,7 +345,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <form action="{% url 'main:excluir_partida' object.id %}" method="post">
+                                    <form action="{% url 'main:excluir_partida' partida.slug %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">Sim, desejo excluir.</button>
                                     </form>
@@ -319,6 +353,35 @@
                             </div>
                         </div>
                     </div>
+
+                    {% if now|date:"Y-m-d" == object.data|date:"Y-m-d" %}                        
+                    <button type="button" class="btn btn-primary m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#sortear">
+                        <i class="bi bi-dice-3 me-1"></i>
+                        Sortear
+                    </button>
+
+                    <div class="modal fade text-white" id="sortear" data-bs-theme="dark" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                        aria-labelledby="sortearLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="sortearLabel">Realmente deseja sortear esta partida?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Esta ação não é reversível.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <form action="{% url 'main:sortear_partida' partida.slug %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">Sim, desejo sortear.</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
@@ -332,7 +395,8 @@
                 {{ partida.razao_anulacao | safe }}
             </h3>
             <a class="btn btn-success mt-5" href="{% url 'main:pagamentos' object.slug %}">
-                Pagamentos &#128176;
+                <i class="bi bi-cash-coin me-1"></i>
+                Pagamentos
             </a>
         </div>
         {% endif %}

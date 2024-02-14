@@ -30,7 +30,7 @@
                 <tbody>
                     {% for partida in partidas %}
                     <tr><td class="text-end">
-                            <a href="{% url 'main:partida' partida.id %}" class="btn btn-outline-light d-flex" style="width: min-content;"><span class="d-none d-md-block me-1">Ver</span> <i class="bi bi-eye"></i></a>
+                            <a href="{% url 'main:partida' partida.slug %}" class="btn btn-outline-light d-flex" style="width: min-content;"><span class="d-none d-md-block me-1">Ver</span> <i class="bi bi-eye"></i></a>
                         </td>
                         <td class="fs-6">
                             <time class="d-flex">{{ partida.data|date:"d/M/Y" }}<span class="hora-partida ms-1">às {{ partida.hora }}</span></time>

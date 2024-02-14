@@ -24,7 +24,7 @@
         <div class="col-12 col-md-9">
             <h1 class="display-1 text-center my-2">GOLS</h1>
         </div>
-        <form class="col-12 col-md-6 col-lg-4 d-flex flex-column align-items-center" method="post">
+        <form class="col-12 col-md-6 col-lg-4 d-flex flex-column align-items-center form-dark" method="post">
             <h4>Registre:</h4>
             {% csrf_token %}
             {% for field in form %}
@@ -40,7 +40,7 @@
             <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2">
                 {% for gol in gols %}
                 <div class="col">
-                    <div class="card text-center">
+                    <div class="card bg-success text-center text-white fw-bold">
                         <div class="card-header">{{ gol.jogador }}</div>
                         <div class="card-body">
                             <h4 class="card-title">
