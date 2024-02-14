@@ -585,10 +585,15 @@ class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView
 def desconfirmar_presenca(request, slug):
     partida = get_object_or_404(Partida, slug=slug)
     jogador = get_object_or_404(User, id=request.user.id)
+    
+    # Remover o jogador da partida
     partida.relacionados.remove(jogador)
-    messages.warning(request, 'Você foi removido dos relacionados.')
+    
+    # Remover o pagamento do jogador para esta partida
+    Pagamento.objects.filter(partida=partida, jogador=jogador).delete()
+    
+    messages.warning(request, 'Você foi removido dos relacionados e seu pagamento foi cancelado.')
     return redirect('main:partida', slug=slug)
-
 
 class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'main/pagamentos.html'
