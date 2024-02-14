@@ -201,7 +201,7 @@ class PartidaView(DetailView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        partida = self.object
+        partida = self.get_object()
         user = self.request.user
         if not user.is_authenticated:
             user = None
@@ -219,7 +219,7 @@ class PartidaView(DetailView, FormView):
         return context
 
     def form_valid(self, form):
-        partida = self.get_partida()
+        partida = self.get_object()
         partida.data = form.cleaned_data['data']
         partida.hora = form.cleaned_data['hora']
         partida.save()
@@ -231,7 +231,7 @@ class PartidaView(DetailView, FormView):
         return super().form_invalid(form)
 
     def confirmar_presenca(self, request, *args, **kwargs):
-        partida = self.get_partida()
+        partida = self.get_object()
         user = self.request.user
 
         if partida.relacionados.filter(id=user.id).exists():
@@ -251,8 +251,7 @@ class PartidaView(DetailView, FormView):
             return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
-        partida = self.get_partida()
-        return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
+        return reverse_lazy('main:partidas')
 
 
 class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
