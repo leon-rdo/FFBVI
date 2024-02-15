@@ -606,7 +606,11 @@ class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         slug = self.kwargs['slug']
         if not slug:
             return self.model.objects.none()
-        return self.model.objects.filter(partida=slug)
+        try:
+            slug_as_datetime = datetime.datetime.strptime(slug, '%Y-%m-%d_%H%M%S')
+            return self.model.objects.filter(partida__slug=slug_as_datetime)
+        except ValueError:
+            return self.model.objects.none()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

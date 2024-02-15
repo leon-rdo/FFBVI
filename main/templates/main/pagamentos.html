@@ -14,7 +14,7 @@
         {% if pagamentos %}
         {% for pagamento in pagamentos %}
         {% if pagamento.em_dinheiro %}
-        <div class="col card-pagamentos-container">
+        <div class="col card-pagamentos-container py-5">
             <div data-bs-theme="dark" class="card card-pagamentos">
                 <div class="card-header">
                     <h5 class="card-title text-center h5">Pagamento feito em dinheiro</h5>
@@ -29,7 +29,7 @@
             </div>
         </div>
         {% else %}
-        <div class="col card-pagamentos-container">
+        <div class="col card-pagamentos-container py-5">
             <div data-bs-theme="dark" class="card card-pagamentos">
                 <a class="ratio" style="--bs-aspect-ratio: 160%;" data-bs-toggle="modal" data-bs-target="#imagemModal{{ pagamento.id }}">
                     <img class="card-img-top img-fluid object-fit-cover" src="{{ pagamento.comprovante.url }}" alt="Comprovante de pagamento de {{ pagamento.jogador.nome_jogador }}">
