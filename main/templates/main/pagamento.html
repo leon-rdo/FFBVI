@@ -12,7 +12,7 @@
 {% load static %}
 <div class="container py-5">
     {% if messages %}
-    <div class="row justify-content-center align-items-center mt-2 py-5">
+    <div class="row justify-content-center align-items-center mt-2">
         <div class="col-12 col-md-10">
             {% for message in messages %}
             <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
@@ -26,7 +26,7 @@
     {% endif %}
     {% if object == partida_proxima %}
         {% if not pagamento_usuario %}
-            <div class="row justify-content-center align-items-center g-2">
+            <div class="row justify-content-center align-items-center g-2 pt-5">
                 <div class="col d-flex justify-content-center flex-wrap">
                     <h1 class="display-1 text-center w-100">Pagamento</h1>
                     <figure class="text-center">
@@ -52,7 +52,7 @@
                 </form>
             </div>
         {% else %}
-            <div class="row justify-content-center mt-5">
+            <div class="row justify-content-center mt-5 pt-5">
                 <div class="col-12 d-flex justify-content-center align-items-center">
                     <h1 class="display-1 text-center">Você já pagou a taxa dessa partida!</h1>
                 </div>
