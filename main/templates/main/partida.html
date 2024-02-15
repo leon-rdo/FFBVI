@@ -260,7 +260,7 @@
             </div>
             {% endif %}
         </div>
-            {% if user in object.relacionados.all %}
+            {% if user in object.relacionados.all and now|date:"Y-m-d" <= object.data|date:"Y-m-d" %}
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 d-flex flex-column flex-md-row justify-content-evenly mt-5">
                     <button type="button" class="btn btn-warning m-1 m-md-0" data-bs-toggle="modal" data-bs-target="#confirmModal">
