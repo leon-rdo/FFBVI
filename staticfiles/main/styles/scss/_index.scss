@@ -1,0 +1,69 @@
+.display-1,
+.display-2,
+.display-3,
+.display-4 {
+    color: $color1;
+}
+
+.card {
+    transition: all 0.5s ease-out;
+}
+
+.cols-cards:hover .card {
+    transform: scale(1.2);
+
+    .img-1 {
+        display: none;
+    }
+}
+
+.card-animation {
+    transform: scale(1.2);
+}
+
+#img-1 {
+    opacity: 1;
+}
+
+.cols-cards {
+    max-width: 315px;
+    max-height: 415px;
+}
+
+.carousel-federados {
+    overflow: hidden;
+
+    .carousel-inner {
+        overflow: visible;
+    }
+
+    button {
+        z-index: 999;
+    }
+}
+
+.card-body {
+    z-index: 3;
+    bottom: 12px;
+    left: 25px;
+}
+
+.moldura {
+    z-index: 2;
+    background-size: cover;
+    opacity: 1;
+}
+
+.row-federados {
+    overflow-x: scroll;
+}
+
+#cara-da-partida {
+    background-repeat: repeat;
+    background-size: 400px;
+    background-position: center;
+    .card {
+        max-width: 300px;
+        box-shadow: 15px 15px 25px black;
+    }
+}

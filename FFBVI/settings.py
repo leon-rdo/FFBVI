@@ -34,6 +34,17 @@ else:
     ALLOWED_HOSTS = []
 
 
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_HSTS_SECONDS = 3156000
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -126,11 +137,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-if os.environ.get('STATIC_ROOT'):
-    STATIC_ROOT = os.environ.get('STATIC_ROOT')
-else:
-    STATICFILES_DIRS = [BASE_DIR / "static/"]
-STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT') if os.environ.get('MEDIA_ROOT') else os.path.join(BASE_DIR, 'media')
 MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')

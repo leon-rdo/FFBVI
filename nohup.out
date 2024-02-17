@@ -1,0 +1,248 @@
+[2024-02-17 13:20:15 +0000] [46857] [INFO] Starting gunicorn 21.2.0
+[2024-02-17 13:20:15 +0000] [46857] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:15 +0000] [46857] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:16 +0000] [46857] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:16 +0000] [46857] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:17 +0000] [46857] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:17 +0000] [46857] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:18 +0000] [46857] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:18 +0000] [46857] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:19 +0000] [46857] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:19 +0000] [46857] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:20 +0000] [46857] [ERROR] Can't connect to ('0.0.0.0', 8000)
+[2024-02-17 13:20:56 +0000] [46865] [INFO] Starting gunicorn 21.2.0
+[2024-02-17 13:20:56 +0000] [46865] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:56 +0000] [46865] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:57 +0000] [46865] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:57 +0000] [46865] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:58 +0000] [46865] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:58 +0000] [46865] [ERROR] Retrying in 1 second.
+[2024-02-17 13:20:59 +0000] [46865] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:20:59 +0000] [46865] [ERROR] Retrying in 1 second.
+[2024-02-17 13:21:00 +0000] [46865] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2024-02-17 13:21:00 +0000] [46865] [ERROR] Retrying in 1 second.
+[2024-02-17 13:21:01 +0000] [46865] [ERROR] Can't connect to ('0.0.0.0', 8000)
+[2024-02-17 13:22:39 +0000] [46879] [INFO] Starting gunicorn 21.2.0
+[2024-02-17 13:22:39 +0000] [46879] [INFO] Listening at: http://0.0.0.0:8000 (46879)
+[2024-02-17 13:22:39 +0000] [46879] [INFO] Using worker: sync
+[2024-02-17 13:22:39 +0000] [46880] [INFO] Booting worker with pid: 46880
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /.vscode/sftp.json
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /about
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /debug/default/view
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /v2/_catalog
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /server-status
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /login.action
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /_all_dbs
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /.DS_Store
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /.env
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /.git/config
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /s/7393e21363e2235313e2436313/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /config.json
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /telescope/requests
+Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ubuntu/.local/lib/python3.10/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'www.ffbvi.com'. You may need to add 'www.ffbvi.com' to ALLOWED_HOSTS.
+Bad Request: /
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+[2024-02-17 10:34:51 -0300] [46880] [INFO] Worker exiting (pid: 46880)
+[2024-02-17 13:34:51 +0000] [46879] [INFO] Handling signal: term
+[2024-02-17 13:34:51 +0000] [46879] [INFO] Shutting down: Master
+[2024-02-17 13:35:28 +0000] [47722] [INFO] Starting gunicorn 21.2.0
+[2024-02-17 13:35:28 +0000] [47722] [INFO] Listening at: http://0.0.0.0:8000 (47722)
+[2024-02-17 13:35:28 +0000] [47722] [INFO] Using worker: sync
+[2024-02-17 13:35:28 +0000] [47723] [INFO] Booting worker with pid: 47723
+[2024-02-17 10:41:08 -0300] [47723] [INFO] Worker exiting (pid: 47723)
+[2024-02-17 13:41:08 +0000] [47722] [INFO] Handling signal: term
+[2024-02-17 13:41:08 +0000] [47722] [INFO] Shutting down: Master
+[2024-02-17 13:41:50 +0000] [47839] [INFO] Starting gunicorn 21.2.0
+[2024-02-17 13:41:50 +0000] [47839] [INFO] Listening at: http://0.0.0.0:8000 (47839)
+[2024-02-17 13:41:50 +0000] [47839] [INFO] Using worker: sync
+[2024-02-17 13:41:50 +0000] [47840] [INFO] Booting worker with pid: 47840
