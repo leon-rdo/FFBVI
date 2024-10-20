@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from .jazzmin import JAZZMIN_SETTINGS
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,14 +39,15 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'main.apps.MainConfig',
-    'financeiro.apps.FinanceiroConfig',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main.apps.MainConfig',
+    'financeiro.apps.FinanceiroConfig',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +157,7 @@ AUTH_USER_MODEL = 'main.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Jazzmin settings
+
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
