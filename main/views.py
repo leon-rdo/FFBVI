@@ -4,7 +4,7 @@ from django.contrib.auth.views import PasswordChangeView
 from .models import *
 from .forms import GolForm, PagamentoForm, PartidaForm, UserUpdateForm, RegistrationForm, AdicionarConvidadoForm, AdicionarConvidadoExistenteForm
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -76,7 +76,7 @@ class RegrasView(TemplateView):
         return context
 
 
-class MeuPerfilView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class MeuPerfilView(UserPassesTestMixin, FormView):
     template_name = "main/meu_perfil.html"
     form_class = UserUpdateForm
     success_url = reverse_lazy('main:homepage')
@@ -117,7 +117,7 @@ class MeuPerfilView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return self.request.user.tipo != 'convidado'
 
 
-class ChangePasswordView(LoginRequiredMixin, UserPassesTestMixin, PasswordChangeView):
+class ChangePasswordView(UserPassesTestMixin, PasswordChangeView):
     template_name = 'registration/mudar_senha.html'
     success_url = reverse_lazy('main:homepage')
 
@@ -134,7 +134,7 @@ class ChangePasswordView(LoginRequiredMixin, UserPassesTestMixin, PasswordChange
         return self.request.user.tipo != 'convidado'
 
 
-class GerenciarFederadosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class GerenciarFederadosView(UserPassesTestMixin, ListView):
     template_name = "main/gerenciar_federados.html"
     model = User
     ordering = ['nome_jogador']
@@ -149,7 +149,7 @@ class GerenciarFederadosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return filtered_queryset
 
 
-class GerenciarFederadoView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class GerenciarFederadoView(UserPassesTestMixin, DetailView):
     template_name = "main/gerenciar_federado.html"
     model = User
     context_object_name = "federado"
@@ -160,7 +160,7 @@ class GerenciarFederadoView(LoginRequiredMixin, UserPassesTestMixin, DetailView)
         return self.request.user.is_admin
 
 
-class AdicionarFederadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class AdicionarFederadoView(UserPassesTestMixin, FormView):
     template_name = "main/adicionar_federado.html"
     form_class = RegistrationForm
     success_url = reverse_lazy('main:gerenciar_federados')
@@ -254,7 +254,7 @@ class PartidaView(DetailView, FormView):
         return reverse_lazy('main:partidas')
 
 
-class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CaraDaPartidaView(UserPassesTestMixin, CreateView):
     model = Voto
     fields = ['votou_em']
     template_name ='main/cara_da_partida.html'
@@ -314,7 +314,7 @@ class CaraDaPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return reverse_lazy('main:partida', kwargs={'slug': partida_slug})
     
 
-class GolView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class GolView(UserPassesTestMixin, FormView):
     model = Gol
     template_name = "main/gols.html"
     form_class = GolForm
@@ -350,7 +350,7 @@ class GolView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return context
   
 
-class MudarVotoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class MudarVotoView(UserPassesTestMixin, UpdateView):
     model = Voto
     fields = ['votou_em']
     template_name = "main/mudar_voto.html"
@@ -378,7 +378,7 @@ class MudarVotoView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return (data_partida + datetime.timedelta(days=1)) < timezone.now().date()
 
 
-class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class PagamentoView(UserPassesTestMixin, FormView):
     template_name = 'main/pagamento.html'
     model = Pagamento
     form_class = PagamentoForm
@@ -433,7 +433,7 @@ class PagamentoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return reverse_lazy('main:partida', kwargs={'slug': partida.slug})
 
 
-class AdicionarConvidadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class AdicionarConvidadoView(UserPassesTestMixin, FormView):
     template_name = 'main/adicionar_convidado.html'
     model = User
     form_class = AdicionarConvidadoForm
@@ -481,7 +481,7 @@ class AdicionarConvidadoView(LoginRequiredMixin, UserPassesTestMixin, FormView):
         return reverse_lazy('main:pagamento_convidado', kwargs={'slug': partida.slug, 'convidado_id': convidado_id})
 
 
-class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, FormView):
+class AdicionarConvidadoExistenteView(UserPassesTestMixin, FormView):
     template_name = 'main/adicionar_convidado_existente.html'
     model = User
     form_class = AdicionarConvidadoExistenteForm
@@ -528,7 +528,7 @@ class AdicionarConvidadoExistenteView(LoginRequiredMixin, UserPassesTestMixin, F
         return super().form_invalid(form)
 
 
-class PagamentoConvidadoView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class PagamentoConvidadoView(UserPassesTestMixin, CreateView):
     template_name = 'main/pagamento_convidado.html'
     model = Pagamento
     form_class = PagamentoForm
@@ -594,7 +594,7 @@ def desconfirmar_presenca(request, slug):
     messages.warning(request, 'Você foi removido dos relacionados e seu pagamento foi cancelado.')
     return redirect('main:partida', slug=slug)
 
-class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class PagamentosView(UserPassesTestMixin, ListView):
     template_name = 'main/pagamentos.html'
     model = Pagamento
     context_object_name = "pagamentos"
@@ -618,7 +618,7 @@ class PagamentosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
 
-class PartidaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PartidaDeleteView(UserPassesTestMixin, DeleteView):
     model = Partida
     success_url = reverse_lazy('main:partidas')
 
@@ -626,7 +626,7 @@ class PartidaDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user.is_admin
 
 
-class CriarPartidaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CriarPartidaView(UserPassesTestMixin, CreateView):
     template_name = 'main/criar_partida.html'
     model = Partida
     form_class = PartidaForm

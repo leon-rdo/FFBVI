@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Sum, Value, DecimalField
 from django.db.models.functions import Coalesce
 from django.http import Http404
@@ -14,7 +14,7 @@ from main.models import Pagamento
 from .models import Saida
 
 
-class IndexView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+class IndexView(UserPassesTestMixin, TemplateView):
     template_name = "index.html"
 
     def test_func(self):
@@ -30,7 +30,7 @@ class IndexView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         return context
 
 
-class PagamentosPendentesView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class PagamentosPendentesView(UserPassesTestMixin, ListView):
     model = Pagamento
     template_name = "confirmar_pagamento.html"
 
@@ -47,7 +47,7 @@ class PagamentosPendentesView(LoginRequiredMixin, UserPassesTestMixin, ListView)
         return context
 
 
-class ConfirmarPagamentoView(LoginRequiredMixin, UserPassesTestMixin, View):
+class ConfirmarPagamentoView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_admin
     
@@ -61,7 +61,7 @@ class ConfirmarPagamentoView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect('financeiro:pagamentos_pendentes')
     
 
-class DeletarPagamentoView(LoginRequiredMixin, UserPassesTestMixin, View):
+class DeletarPagamentoView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_admin
     
@@ -80,7 +80,7 @@ class DeletarPagamentoView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect('financeiro:pagamentos_pendentes')
 
 
-class SaidaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class SaidaCreateView(UserPassesTestMixin, CreateView):
     model = Saida
     template_name = "lancar_saida.html"
     fields = ['descricao', 'valor', 'partida']
@@ -98,7 +98,7 @@ class SaidaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 
-class LancarEntradaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class LancarEntradaView(UserPassesTestMixin, CreateView):
     template_name = 'lancar_pagamento.html'
     model = Pagamento
     fields = ['comprovante', 'jogador', 'partida', 'em_dinheiro', 'valor', 'descricao']
@@ -120,7 +120,7 @@ class LancarEntradaView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_invalid(form)
 
 
-class PagamentoYearArchiveView(LoginRequiredMixin, UserPassesTestMixin, YearArchiveView):
+class PagamentoYearArchiveView(UserPassesTestMixin, YearArchiveView):
     queryset = Pagamento.objects.all()
     date_field = "data"
     make_object_list = True
@@ -138,7 +138,7 @@ class PagamentoYearArchiveView(LoginRequiredMixin, UserPassesTestMixin, YearArch
         return context
 
 
-class PagamentoMonthArchiveView(LoginRequiredMixin, UserPassesTestMixin, MonthArchiveView):
+class PagamentoMonthArchiveView(UserPassesTestMixin, MonthArchiveView):
     queryset = Pagamento.objects.all()
     date_field = "data"
     make_object_list = True
@@ -151,7 +151,7 @@ class PagamentoMonthArchiveView(LoginRequiredMixin, UserPassesTestMixin, MonthAr
         return self.request.user.is_admin
 
     
-class SaidasYearArchiveView(LoginRequiredMixin, UserPassesTestMixin, YearArchiveView):
+class SaidasYearArchiveView(UserPassesTestMixin, YearArchiveView):
     queryset = Saida.objects.all()
     date_field = "data"
     make_object_list = True
@@ -169,7 +169,7 @@ class SaidasYearArchiveView(LoginRequiredMixin, UserPassesTestMixin, YearArchive
         return context
 
 
-class SaidasMonthArchiveView(LoginRequiredMixin, UserPassesTestMixin, MonthArchiveView):
+class SaidasMonthArchiveView(UserPassesTestMixin, MonthArchiveView):
     queryset = Saida.objects.all()
     date_field = "data"
     make_object_list = True
