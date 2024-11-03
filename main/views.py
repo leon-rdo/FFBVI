@@ -403,8 +403,10 @@ class PagamentoView(UserPassesTestMixin, FormView):
                 pagamento.comprovante = comprovante
 
         pagamento.save()
+
+        pagamento.partida.relacionados.add(self.request.user)
         
-        messages.success(self.request, 'Pagamento efetuado com sucesso! Ingresse na partida.')
+        messages.success(self.request, 'Pagamento efetuado com sucesso! Você ingressou na partida.')
         return super().form_valid(form)
     
     def form_invalid(self, form):
