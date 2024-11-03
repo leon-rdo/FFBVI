@@ -632,10 +632,12 @@ class CriarPartidaView(UserPassesTestMixin, CreateView):
     template_name = 'main/criar_partida.html'
     model = Partida
     form_class = PartidaForm
-    success_url = reverse_lazy('main:partidas')
 
     def test_func(self):
         return self.request.user.is_admin
+    
+    def get_success_url(self):
+        return reverse_lazy('main:partida', kwargs={'slug': self.object.slug})
 
 
 def sortear_partida(request, slug):
